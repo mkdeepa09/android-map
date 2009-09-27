@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<settings>
+    <atlasOutputFormat>BigPlanet</atlasOutputFormat>
+    <connectionTimeout>10</connectionTimeout>
+    <customMapSources/>
+    <customProxyHost></customProxyHost>
+    <customProxyPort></customProxyPort>
+    <customTileSize>false</customTileSize>
+    <devMode>false</devMode>
+    <disabledMapSources/>
+    <downloadThreadCount>4</downloadThreadCount>
+    <googleLanguage>zh-TW</googleLanguage>
+    <mainWindow>
+        <size>1200/965</size>
+        <position>46/15</position>
+        <maximized>true</maximized>
+        <collapsedPanels/>
+    </mainWindow>
+    <mapviewCenterCoordinate lon="120.99243164062501" lat="23.61432859499168"/>
+    <mapviewMapSource>Google Maps</mapviewMapSource>
+    <mapviewZoom>8</mapviewZoom>
+    <maxMapSize>32767</maxMapSize>
+    <proxyType>SYSTEM</proxyType>
+    <selectionMax lon="122.036132" lat="25.324166"/>
+    <selectionMin lon="119.973703" lat="21.861499"/>
+    <tileImageFormat>PNG</tileImageFormat>
+    <tileSize>256/256</tileSize>
+    <tileStoreEnabled>true</tileStoreEnabled>
+    <userAgent>Mozilla/5.0 (Windows; U; Windows NT 5.1; en; rv:1.9.0.11) Gecko/2009060215 Firefox/3.0.11</userAgent>
+</settings>

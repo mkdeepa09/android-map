@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<atlas outputFormat="BigPlanet" name="android-map.blogspot.com" version="1">
+    <Layer name="Taiwan-00">
+        <Map name="Taiwan-00" zoom="0" mapSource="Google Maps" minTileCoordinate="0/0" maxTileCoordinate="255/255"/>
+    </Layer>
+    <Layer name="Taiwan-01">
+        <Map name="Taiwan-01" zoom="1" mapSource="Google Maps" minTileCoordinate="256/0" maxTileCoordinate="511/255"/>
+    </Layer>
+    <Layer name="Taiwan-02">
+        <Map name="Taiwan-02" zoom="2" mapSource="Google Maps" minTileCoordinate="768/256" maxTileCoordinate="1023/511"/>
+    </Layer>
+    <Layer name="Taiwan-03">
+        <Map name="Taiwan-03" zoom="3" mapSource="Google Maps" minTileCoordinate="1536/768" maxTileCoordinate="1791/1023"/>
+    </Layer>
+    <Layer name="Taiwan-04">
+        <Map name="Taiwan-04" zoom="4" mapSource="Google Maps" minTileCoordinate="3328/1536" maxTileCoordinate="3583/2047"/>
+    </Layer>
+    <Layer name="Taiwan-05">
+        <Map name="Taiwan-05" zoom="5" mapSource="Google Maps" minTileCoordinate="6656/3328" maxTileCoordinate="6911/3839"/>
+    </Layer>
+    <Layer name="Taiwan-06">
+        <Map name="Taiwan-06" zoom="6" mapSource="Google Maps" minTileCoordinate="13568/6912" maxTileCoordinate="13823/7423"/>
+    </Layer>
+    <Layer name="Taiwan-07">
+        <Map name="Taiwan-07" zoom="7" mapSource="Google Maps" minTileCoordinate="27136/13824" maxTileCoordinate="27647/14591"/>
+    </Layer>
+    <Layer name="Taiwan-08">
+        <Map name="Taiwan-08" zoom="8" mapSource="Google Maps" minTileCoordinate="54528/27904" maxTileCoordinate="55039/28927"/>
+    </Layer>
+    <Layer name="Taiwan-09">
+        <Map name="Taiwan-09" zoom="9" mapSource="Google Maps" minTileCoordinate="109056/55808" maxTileCoordinate="110079/57599"/>
+    </Layer>
+    <Layer name="Taiwan-10">
+        <Map name="Taiwan-10" zoom="10" mapSource="Google Maps" minTileCoordinate="218368/111872" maxTileCoordinate="220159/114943"/>
+    </Layer>
+    <Layer name="Taiwan-11">
+        <Map name="Taiwan-11" zoom="11" mapSource="Google Maps" minTileCoordinate="436736/224000" maxTileCoordinate="440063/229631"/>
+    </Layer>
+    <Layer name="Taiwan-12">
+        <Map name="Taiwan-12" zoom="12" mapSource="Google Maps" minTileCoordinate="873472/448000" maxTileCoordinate="879871/459007"/>
+    </Layer>
+    <Layer name="Taiwan-13">
+        <Map name="Taiwan-13" zoom="13" mapSource="Google Maps" minTileCoordinate="1747200/896000" maxTileCoordinate="1759487/918015"/>
+    </Layer>
+    <Layer name="Taiwan-14">
+        <Map name="Taiwan-14-00" zoom="14" mapSource="Google Maps" minTileCoordinate="3494656/1792000" maxTileCoordinate="3518974/1824511"/>
+        <Map name="Taiwan-14-01" zoom="14" mapSource="Google Maps" minTileCoordinate="3494656/1824512" maxTileCoordinate="3518974/1836030"/>
+    </Layer>
+    <Layer name="Taiwan-15">
+        <Map name="Taiwan-15-00" zoom="15" mapSource="Google Maps" minTileCoordinate="6989568/3584000" maxTileCoordinate="7022079/3616511"/>
+        <Map name="Taiwan-15-01" zoom="15" mapSource="Google Maps" minTileCoordinate="6989568/3616512" maxTileCoordinate="7022079/3649023"/>
+        <Map name="Taiwan-15-02" zoom="15" mapSource="Google Maps" minTileCoordinate="6989568/3649024" maxTileCoordinate="7022079/3672062"/>
+        <Map name="Taiwan-15-03" zoom="15" mapSource="Google Maps" minTileCoordinate="7022080/3584000" maxTileCoordinate="7037950/3616511"/>
+        <Map name="Taiwan-15-04" zoom="15" mapSource="Google Maps" minTileCoordinate="7022080/3616512" maxTileCoordinate="7037950/3649023"/>
+        <Map name="Taiwan-15-05" zoom="15" mapSource="Google Maps" minTileCoordinate="7022080/3649024" maxTileCoordinate="7037950/3672062"/>
+    </Layer>
+</atlas>
