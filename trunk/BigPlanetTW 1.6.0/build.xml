@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<project name="BigPlanetTW" default="sign">
+  <target name="sign">
+    <signjar jar="bin/*.apk"  destDir="." alias="tytung" keystore="../tytung@.keystore" verbose="yes" storepass="" preservelastmodified="false">
+  </signjar>
+  </target>
+</project>
