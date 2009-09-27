@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="all" name="Compile and build java classes plus jar archives">
+
+	<property file="src/tac/tac.properties" />
+	<property name="jar.name" value="TrekBuddy_Atlas_Creator.jar" />
+	<property name="zip.name" value="TrekBuddy_Atlas_Creator_${tac.version}.zip" />
+	<property name="zip_src.name" value="TrekBuddy_Atlas_Creator_${tac.version}_src.zip" />
+	<property name="main.class" value="tac.StartTAC" />
+
+	<target name="all" depends="clean_build,svnversion,build,create_jar,shrink,create_release,create_release_src" />
+
+	<target name="clean_workspace" description="Deletes the work directories ozi, atlases, atlasestared">
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="tac_tmp" includes="**/*" />
+			<fileset dir="atlases" includes="**/*" />
+			<fileset dir="build" includes="**/*" />
+			<fileset dir="tilestore" includes="**/*" />
+		</delete>
+	</target>
+
+	<target name="clean_build">
+		<delete includeEmptyDirs="true" failonerror="false">
+			<fileset dir="build" includes="**/*" />
+		</delete>
+	</target>
+
+	<target name="delete_build" description="Deleted the entire build folder">
+		<delete failonerror="yes" dir="build" />
+	</target>
+
+	<target name="build">
+		<mkdir dir="build" />
+		<path id="maincp">
+			<fileset dir="lib" includes="*.jar" />
+		</path>
+		<!-- Compile the starter class for Java 1.4 (shows an verbose --> 
+		<!-- error if the JRE requirements are not met -->
+		<javac srcdir="src" destdir="build" target="1.4" source="1.4" debug="true">
+			<classpath refid="maincp" />
+			<include name="tac/StartTAC.java" />
+		</javac>
+		<!-- Compile the rest for Java 1.6 -->
+		<javac srcdir="src" destdir="build" target="1.6" debug="true">
+			<classpath refid="maincp" />
+			<exclude name="tac/StartTAC.java" />
+			<include name="org/openstreetmap/**" />
+			<include name="tac/**" />
+		</javac>
+		<copy todir="build" overwrite="true">
+			<fileset dir="src">
+				<include name="**/*.properties" />
+				<include name="tac/resources/**" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="create_jar">
+		<delete file="${jar.name}" />
+		<jar destfile="${jar.name}" filesetmanifest="mergewithoutmain">
+			<manifest>
+				<attribute name="Main-Class" value="${main.class}" />
+				<attribute name="Class-Path" value=". jai_core.jar jai_codec.jar lib/jai_core.jar lib/jai_codec.jar jai_*.jar lib/jai_*.jar lib/sqlite.jar" />
+			</manifest>
+			<zipfileset src="lib/log4j-1.2.15.jar" />
+			<fileset dir="build">
+				<exclude name="**/unittest/**" />
+				<exclude name="**/*.java" />
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="shrink" depends="create_jar" description="Removes unused classes from compiled jar">
+		<move file="${jar.name}" tofile="build/temp.jar" overwrite="true" />
+		<java jar="lib/proguard.jar" fork="true">
+			<arg line=" -injars build/temp.jar " />
+			<arg line=" -outjars ${jar.name} " />
+			<arg line=" -libraryjars '${java.home}/lib/rt.jar' " />
+			<arg line=" -keepattributes *Annotation*" />
+			<arg line=" -keep class org.apache.log4j.Layout { public *; }" />
+			<arg line=" -keep class org.apache.log4j.Level { public *; }" />
+			<arg line=" -keep class org.apache.log4j.Category { public *; }" />
+			<arg line=" -keep class org.apache.log4j.Priority { public *; }" />
+			<arg line=" -keep class org.apache.log4j.spi.LoggingEvent { public *; }" />
+			<arg line=" -keep class org.apache.log4j.spi.ThrowableInformation { public *; }" />
+			<arg line=" -keep class org.apache.log4j.spi.LocationInfo { public *; }" />
+			<arg line=" -keep class org.apache.log4j.PatternLayout { public *; }" />
+			<arg line=" -keep class org.apache.log4j.FileAppender { public *; }" />
+			<arg line=" -keep class tac.program.model.package-info" />
+			<arg line=" -keep class tac.program.model.* { public *; }" />
+			<arg line=" -keep class ${main.class} { public static void main(java.lang.String[]); }" />
+			<arg line=" -dontwarn -dontoptimize -dontobfuscate " />
+		</java>
+		<delete file="build/temp.jar" />
+	</target>
+
+	<target name="create_svnversion_jar" description="helper function for creating a combined svnversion.jar out of the the different SVNKit jars">
+		<property name="svnkit.home" value="Enter path to SVNKit here" />
+		<available file="${svnkit.home}/svnkit.jar" property="svjkit.present" />
+		<fail unless="svjkit.present" message="SVNKit home dir not set" />
+		<delete file="lib/svnversion.jar" />
+
+		<java jar="lib/proguard.jar" fork="true">
+			<arg line=" -injars ${svnkit.home}/svnkit.jar;${svnkit.home}/svnkit-cli.jar;${svnkit.home}/svnkit-javahl.jar;${svnkit.home}/trilead.jar" />
+			<arg line=" -outjars lib/svnversion.jar " />
+			<arg line=" -libraryjars '${java.home}/lib/rt.jar' " />
+			<arg line=" -keep public class org.tmatesoft.svn.cli.svnversion.SVNVersion { public static void main(java.lang.String[]); }" />
+			<arg line=" -keep public class org.apache.log4j.PatternLayout { public *; } " />
+			<arg line=" -keep public class org.apache.log4j.FileAppender { public *; } " />
+			<arg line=" -keep public class org.apache.log4j.FileAppender { public *; } " />
+			<arg line=" -dontwarn -dontoptimize -dontobfuscate " />
+		</java>
+		<jar destfile="lib/svnversion.jar" update="true">
+			<manifest>
+				<attribute name="Main-Class" value="org.tmatesoft.svn.cli.svnversion.SVNVersion" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="svnversion" description="Updates the revision information in src/tac/tac.properties">
+		<java jar="lib/svnversion.jar" fork="true" outputproperty="tac.revision.new" />
+		<echo message="TAC revision: ${tac.revision.new}" />
+		<propertyfile file="src/tac/tac-rev.properties">
+			<entry key="tac.revision" value="${tac.revision.new}" />
+		</propertyfile>
+	</target>
+
+	<target name="create_release" description="Packs all necessary files for the binary release into one zip archive">
+		<zip destfile="${zip.name}" update="false">
+			<fileset dir="./">
+				<include name="${jar.name}" />
+				<include name="gpl.txt" />
+				<include name="README.HTM" />
+				<include name="CHANGELOG.txt" />
+				<include name="start.*" />
+				<include name="log4j.xml" />
+				<include name="settings.xml" />
+				<include name="tac-profile-*.xml" />
+				<include name="lib/sqlite.jar" />
+				<include name="lib/sqlite_jni.dll" />
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="create_release_src" description="Packs all necessary files for the source code release into one zip archive">
+		<zip destfile="${zip_src.name}" update="false">
+			<fileset dir="./">
+				<include name="src/tac/**" />
+				<include name="log4j.xml" />
+				<include name="build.xml" />
+				<include name="gpl.txt" />
+				<include name="README.HTM" />
+				<include name="README-DEV.HTM" />
+				<include name="CHANGELOG.txt" />
+				<include name="TODO.txt" />
+				<include name="start.*" />
+				<include name="lib/log4j-1.2.15.jar" />
+				<include name="lib/Tidy.jar" />
+				<include name="lib/jai_*.jar" />
+				<include name="lib/sqlite.jar" />
+				<include name="lib/sqlite_jni.dll" />
+			</fileset>
+		</zip>
+	</target>
+</project>
