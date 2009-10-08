@@ -472,76 +472,76 @@ public class MapControl extends RelativeLayout {
 				BigPlanet.disabledAutoFollow(MapControl.this.context);
 				break;
 			case MotionEvent.ACTION_UP:
-				if (dcDetector.process(event)) {
+				if (dcDetector.process(event)) { // double-tap
 					if (pmap.scaleFactor == 1) {
-						if (mapMode == MapControl.ZOOM_MODE) {
+						if (mapMode == MapControl.ZOOM_MODE) { // double-tap zoom-in
 							// точка, по которой будет производиться
 							// центирование
-							System.gc();
-							scalePoint.set((int) event.getX(), (int) event.getY());
-							final float STEP = 0.2f;
-							float sx = (pmap.getWidth() / 2 - event.getX());
-							float sy = (pmap.getHeight() / 2 - event.getY());
-							final float dx = (sx / (1f / STEP));
-							final float dy = (sy / (1f / STEP));
-
-							new Thread() {
-
-								@Override
-								public void run() {
-									float tx = 0;
-									float ty = 0;
-									int scaleX = scalePoint.x;
-									int scaleY = scalePoint.y;
-
-									float ox = pmap.getGlobalOffset().x;
-									float oy = pmap.getGlobalOffset().y;
-
-									float endScaleFactor = pmap.scaleFactor * 2;
-									while (pmap.scaleFactor <= endScaleFactor) {
-										try {
-											Thread.sleep(40);
-											pmap.scaleFactor += STEP;
-
-											tx += dx;
-											ty += dy;
-											scalePoint.set(
-													(int) (Math.round(scaleX + tx)),
-													(int) (Math.round
-															(scaleY + ty)));
-											ox += dx;
-											oy += dy;
-
-											pmap.getGlobalOffset().x = (int) Math
-													.floor(ox);
-											pmap.getGlobalOffset().y = (int) Math
-													.floor(oy);
-											postInvalidate();
-
-										} catch (InterruptedException e) {
-											// TODO Auto-generated catch block
-											e.printStackTrace();
-										}
-									}
-
-									try {
-										Thread.sleep(600);
-										pmap.zoomInCenter();
-										h.sendEmptyMessage(0);
-									} catch (InterruptedException e) {
-										e.printStackTrace();
-									}
-
-								}
-
-							}.start();
-						} else {
+//							System.gc();
+//							scalePoint.set((int) event.getX(), (int) event.getY());
+//							final float STEP = 0.2f;
+//							float sx = (pmap.getWidth() / 2 - event.getX());
+//							float sy = (pmap.getHeight() / 2 - event.getY());
+//							final float dx = (sx / (1f / STEP));
+//							final float dy = (sy / (1f / STEP));
+//
+//							new Thread() {
+//
+//								@Override
+//								public void run() {
+//									float tx = 0;
+//									float ty = 0;
+//									int scaleX = scalePoint.x;
+//									int scaleY = scalePoint.y;
+//
+//									float ox = pmap.getGlobalOffset().x;
+//									float oy = pmap.getGlobalOffset().y;
+//
+//									float endScaleFactor = pmap.scaleFactor * 2;
+//									while (pmap.scaleFactor <= endScaleFactor) {
+//										try {
+//											Thread.sleep(40);
+//											pmap.scaleFactor += STEP;
+//
+//											tx += dx;
+//											ty += dy;
+//											scalePoint.set(
+//													(int) (Math.round(scaleX + tx)),
+//													(int) (Math.round
+//															(scaleY + ty)));
+//											ox += dx;
+//											oy += dy;
+//
+//											pmap.getGlobalOffset().x = (int) Math
+//													.floor(ox);
+//											pmap.getGlobalOffset().y = (int) Math
+//													.floor(oy);
+//											postInvalidate();
+//
+//										} catch (InterruptedException e) {
+//											// TODO Auto-generated catch block
+//											e.printStackTrace();
+//										}
+//									}
+//
+//									try {
+//										Thread.sleep(600);
+//										pmap.zoomInCenter();
+//										h.sendEmptyMessage(0);
+//									} catch (InterruptedException e) {
+//										e.printStackTrace();
+//									}
+//
+//								}
+//
+//							}.start();
+						} else { // not double-tap zoom-in
 							if (onMapLongClickListener != null) {
 								onMapLongClickListener.onMapLongClick(0, 0);
 							}
 						}
 					}
-				} else {
+				} else { // not double-tap
 					if (pmap.inMove) {
 						pmap.inMove = false;
 						pmap.moveCoordinates(event.getX(), event.getY());
