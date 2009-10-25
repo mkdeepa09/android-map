@@ -147,6 +147,12 @@ public class BigPlanet extends Activity {
 			TileLoader.stop = false;
 			mAutoFollowRelativeLayout = getAutoFollowRelativeLayout();
 			mAutoFollowRelativeLayout.setVisibility(View.INVISIBLE);
+			
+			File mapsDBFolder = new File(SQLLocalStorage.DATA_PATH);
+			if (!mapsDBFolder.exists())
+				mapsDBFolder.mkdirs();
+			mapsDBFolder = null;
+
 			initializeMap();
 			mapControl.addView(mAutoFollowRelativeLayout); // We can just run it once.
 			
@@ -960,7 +966,10 @@ public class BigPlanet extends Activity {
 		}
 		if (sqliteMaps.isEmpty()) {
 			sqliteMaps.put(0, SQLLocalStorage.DATA_FILE);
+			if (!mapsDBFolder.exists())
+				mapsDBFolder.mkdirs();
 		}
+		mapsDBFolder = null;
 		for (Integer key : sqliteMaps.keySet()) {
 			String strSQLiteName = sqliteMaps.get(key);
 			sqliteRadioGroup.addView(
