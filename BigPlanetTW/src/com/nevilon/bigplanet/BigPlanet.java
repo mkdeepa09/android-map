@@ -108,6 +108,8 @@ public class BigPlanet extends Activity {
 	private MyUpdateScreenIntentReceiver updateScreenIntentReceiver;
 	
 	public static RelativeLayout mAutoFollowRelativeLayout;
+	
+	private static ImageView scaleImageView;
 
 	/**
 	 * Конструктор
@@ -154,7 +156,12 @@ public class BigPlanet extends Activity {
 			mapsDBFolder = null;
 
 			initializeMap();
+			/* Create a ImageView with a auto-follow icon. */
 			mapControl.addView(mAutoFollowRelativeLayout); // We can just run it once.
+			/* Create a ImageView with a scale image. */
+			scaleImageView = new ImageView(this);
+			scaleImageView.setImageResource(R.drawable.scale1);
+			mapControl.addView(scaleImageView);
 			
 			if (BigPlanetApp.isDemo) {
 				showTrialDialog(R.string.this_is_demo_title, R.string.this_is_demo_message);
@@ -308,7 +315,12 @@ public class BigPlanet extends Activity {
 		if (SDCARD_AVAILABLE) {
 			if (isFollowMode) {
 				isFollowMode = false;
-				followMyLocation();
+				new Handler().postDelayed(new Runnable(){
+					@Override
+					public void run() {
+						followMyLocation();
+					}
+				}, 100);
 			}
 		}
 	}
@@ -1012,6 +1024,9 @@ public class BigPlanet extends Activity {
 		title += " "+ locationType;
 		String zoom = String.valueOf(17-PhysicMap.getZoomLevel());
 		title += " ["+ zoom + "]";
-		activity.setTitle(title);					
+		activity.setTitle(title);
+		int imageID = activity.getResources().getIdentifier("scale"+zoom, "drawable", activity.getPackageName());
+		if (imageID != 0)
+			scaleImageView.setImageResource(imageID);
 	}
 }

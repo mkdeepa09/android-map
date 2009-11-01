@@ -42,7 +42,7 @@ public class OpenStreetMapStrategy extends MapStrategy {
 
 	@Override
 	public String getDescription() {
-		return "OpenStreet";
+		return "OpenStreetMap";
 	}
 
 }
