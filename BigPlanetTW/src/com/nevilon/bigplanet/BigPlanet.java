@@ -1026,7 +1026,6 @@ public class BigPlanet extends Activity {
 		title += " ["+ zoom + "]";
 		activity.setTitle(title);
 		int imageID = activity.getResources().getIdentifier("scale"+zoom, "drawable", activity.getPackageName());
-		if (imageID != 0)
-			scaleImageView.setImageResource(imageID);
+		scaleImageView.setImageResource(imageID);
 	}
 }
