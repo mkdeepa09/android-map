@@ -68,7 +68,7 @@
     <string name="DOWNLOAD_PROGRESS_MESSAGE_PATTERN">{0} km, {1} tile(s) / {2} KB</string>
     
     <string name="ABOUT_TITLE">Big Planet TW</string>
-    <string name="ABOUT_MESSAGE">Original copyright © 2008-2009 Vadim Bartko with GNU General Public License. \n\nTW edition is modified and released by\n \"Dr. TYT \'s Android Map\".\n{url}</string>
+    <string name="ABOUT_MESSAGE">BigPlanet is written by Vadim Bartko and released under GNU General Public License. \n\nBigPlanetTW edition is modified and released by\n \"Dr. TYT \'s Android Map\".\n{url}</string>
     <string name="ABOUT_URL">http://android-map.blogspot.com</string>
     
     <string name="sdcard_unavailable">Please insert SD card and restart application.</string>
