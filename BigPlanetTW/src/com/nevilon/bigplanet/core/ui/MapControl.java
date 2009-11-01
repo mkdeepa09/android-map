@@ -254,7 +254,7 @@ public class MapControl extends RelativeLayout {
 					Log.i("MapControl", "OnZoomInClick");
 					BigPlanet.isMapInCenter = false;
 					int zoomLevel = pmap.getZoomLevel();
-					if (zoomLevel <= 0) {
+					if (zoomLevel <= -2) {
 						return;
 					}
 					if (zoomLevel >= 15) {  // >= 15 doesn't zoom out anymore
@@ -320,7 +320,7 @@ public class MapControl extends RelativeLayout {
 			if (zoomLevel >= 16) {
 				zoomPanel.setIsZoomOutEnabled(false);
 				zoomPanel.setIsZoomInEnabled(true);
-			} else if (zoomLevel <= 0) {
+			} else if (zoomLevel <= -2) {
 				zoomPanel.setIsZoomOutEnabled(true);
 				zoomPanel.setIsZoomInEnabled(false);
 			} else {

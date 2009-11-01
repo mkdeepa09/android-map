@@ -66,7 +66,7 @@ public class SmoothZoomEngine {
 											? scaleFactor / 2 
 											: scaleFactor * 2);
 						int z = PhysicMap.getZoomLevel();
-						if ((scaleDirection == -1 && z < 16) || (scaleDirection == 1 && z > 0)) {
+						if ((scaleDirection == -1 && z < 16) || (scaleDirection == 1 && z > -2)) {
 							if (!(endScaleFactor > 8000 || endScaleFactor < 125)) {
 								System.out.println("smooth scaling");
 								synchronized (sze) {
