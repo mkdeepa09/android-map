@@ -431,12 +431,13 @@ public class BigPlanet extends Activity {
 		Display display = wm.getDefaultDisplay();
 		int height = display.getHeight();
 		int width = display.getWidth();
-		if(height==480){
-			height =430;
-		}
-		if(height==320){
-			height = 270;
-		}
+//		if(height==480){
+//			height =430;
+//		}
+//		if(height==320){
+//			height = 270;
+//		}
+		height = height - 50; // minus the space of the status bar
 		
 		if (mapControl == null) {
 			mapControl = new MapControl(this, width, height, tile, mm);
