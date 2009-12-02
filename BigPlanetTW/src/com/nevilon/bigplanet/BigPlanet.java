@@ -117,6 +117,8 @@ public class BigPlanet extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		boolean hasSD = false;
 		// проверка на доступность sd
 		String status = Environment.getExternalStorageState();
 		if (!status.equals(Environment.MEDIA_MOUNTED)) {
@@ -135,7 +137,8 @@ public class BigPlanet extends Activity {
 
 							}).show();
 		} else {
-
+			
+			hasSD = true;
 			intentReceiver = new MyIntentReceiver();
 			IntentFilter intentFilter = new IntentFilter("com.nevilon.bigplanet.INTENTS.GOTO");
 			registerReceiver(intentReceiver, intentFilter);
@@ -168,9 +171,11 @@ public class BigPlanet extends Activity {
 			}
 			setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
 		}
-
-		strSQLiteName = Preferences.getSQLiteName();
-		setActivityTitle(BigPlanet.this);
+		
+		if (hasSD) {
+			strSQLiteName = Preferences.getSQLiteName();
+			setActivityTitle(BigPlanet.this);
+		}
 	}
 	
 	public static void disabledAutoFollow(Context context) {
