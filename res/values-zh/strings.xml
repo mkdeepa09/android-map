@@ -68,7 +68,7 @@
     <string name="DOWNLOAD_PROGRESS_MESSAGE_PATTERN">{0} 公里\n{1} 地圖小檔案 / {2} KB</string>
     
     <string name="ABOUT_TITLE">Big Planet Track 中文版</string>
-    <string name="ABOUT_MESSAGE">BigPlanetTrack 修改自 BigPlanetTW，詳細請看 \"Dr. TYT 的 Android 地圖\"。\n{url}</string>
+    <string name="ABOUT_MESSAGE">Big Planet Track 修改自 Big Planet TW，詳細請看網站 \"Dr. TYT 的 Android 地圖\"。\n{url}</string>
     <string name="ABOUT_URL">http://android-map.blogspot.com</string>
 
     <string name="sdcard_unavailable">請放入 SD 卡並重新啟動程式。</string>

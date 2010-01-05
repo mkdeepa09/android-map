@@ -68,7 +68,7 @@
     <string name="DOWNLOAD_PROGRESS_MESSAGE_PATTERN">{0} km, {1} tile(s) / {2} KB</string>
     
     <string name="ABOUT_TITLE">Big Planet Track</string>
-    <string name="ABOUT_MESSAGE">BigPlanetTrack is based on BigPlanetTW, please visit \"Dr. TYT \'s Android Map\".\n{url}</string>
+    <string name="ABOUT_MESSAGE">Big Planet Track is based on Big Planet TW, please visit \"Dr. TYT \'s Android Map\" for more info.\n{url}</string>
     <string name="ABOUT_URL">http://android-map.blogspot.com</string>
     
     <string name="sdcard_unavailable">Please insert SD card and restart application.</string>
