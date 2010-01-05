@@ -32,7 +32,7 @@ public class SQLLocalStorage implements ILocalStorage {
 
 	public static String DATA_PATH = "/sdcard/RMaps/maps/";
 	
-	public static String DATA_FILE = "Big Planet TW.sqlitedb";
+	public static String DATA_FILE = "BigPlanetTrack.sqlitedb";
 
 	private static String DELETE_SQL = "DELETE FROM tiles";
 
