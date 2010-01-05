@@ -12,7 +12,7 @@
     <string name="search_label">Place Name</string>
     <string name="search_hint">e.g., Taipei</string>
     
-    <string name="app_name">Big Planet TW</string>
+    <string name="app_name">Big Planet Track</string>
 
     <string name="EDIT_MENU">Edit</string>
     <string name="DELETE_MENU">Delete</string>
@@ -67,8 +67,8 @@
     
     <string name="DOWNLOAD_PROGRESS_MESSAGE_PATTERN">{0} km, {1} tile(s) / {2} KB</string>
     
-    <string name="ABOUT_TITLE">Big Planet TW</string>
-    <string name="ABOUT_MESSAGE">BigPlanet is written by Vadim Bartko and released under GNU General Public License. \n\nBigPlanetTW edition is modified and released by\n \"Dr. TYT \'s Android Map\".\n{url}</string>
+    <string name="ABOUT_TITLE">Big Planet Track</string>
+    <string name="ABOUT_MESSAGE">BigPlanetTrack is based on BigPlanetTW, please visit \"Dr. TYT \'s Android Map\".\n{url}</string>
     <string name="ABOUT_URL">http://android-map.blogspot.com</string>
     
     <string name="sdcard_unavailable">Please insert SD card and restart application.</string>

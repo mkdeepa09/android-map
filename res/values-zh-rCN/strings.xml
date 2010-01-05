@@ -12,7 +12,7 @@
     <string name="search_label">地点</string>
     <string name="search_hint">例如，北京</string>
     
-    <string name="app_name">Big Planet TW</string>
+    <string name="app_name">Big Planet Track</string>
 
     <string name="EDIT_MENU">编辑</string>
     <string name="DELETE_MENU">删除</string>
@@ -67,8 +67,8 @@
     
     <string name="DOWNLOAD_PROGRESS_MESSAGE_PATTERN">{0} 公里\n{1} 地图小档案 / {2} KB</string>
     
-    <string name="ABOUT_TITLE">Big Planet TW 中文版</string>
-    <string name="ABOUT_MESSAGE">BigPlanet 原作者为 Vadim Bartko，程式为 GNU General Public License 授权。 \n\nBigPlanetTW 由 \"Dr. TYT 的 Android 地图\" 修改与重新发布。\n{url}</string>
+    <string name="ABOUT_TITLE">Big Planet Track 中文版</string>
+    <string name="ABOUT_MESSAGE">BigPlanetTrack 修改自 BigPlanetTW，详细请看 \"Dr. TYT 的 Android 地图\"。\n{url}</string>
     <string name="ABOUT_URL">http://android-map.blogspot.com</string>
 
     <string name="sdcard_unavailable">请放入SD卡并重新启动程式。</string>
