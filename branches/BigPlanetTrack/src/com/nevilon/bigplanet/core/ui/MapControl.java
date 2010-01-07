@@ -336,9 +336,13 @@ public class MapControl extends RelativeLayout {
 	 * @param canvas
 	 * @param paint
 	 */
-	private synchronized void doDraw(Canvas c, Paint paint) {
+	private synchronized void doDraw(Canvas c, Paint paint, boolean isScalable) {
 		if (cb == null || cb.getHeight() != pmap.getHeight()) {
-			cs = new Canvas();
+			if (isScalable) {
+				cs = new Canvas();
+			} else {
+				cs = c;
+			}
 			cb = Bitmap.createBitmap(pmap.getWidth(), pmap.getHeight(),
 					Bitmap.Config.RGB_565);
 			cs.setBitmap(cb);
@@ -401,12 +405,13 @@ public class MapControl extends RelativeLayout {
 			}
 		}
 
-		Matrix matr = new Matrix();
-		matr.postScale((float) pmap.scaleFactor, (float) pmap.scaleFactor,
-				scalePoint.x, scalePoint.y);
-		c.drawColor(BitmapUtils.BACKGROUND_COLOR);
-		c.drawBitmap(cb, matr, paint);
-		// canvas.restore();
+		if (isScalable) {
+			Matrix matr = new Matrix();
+			matr.postScale((float) pmap.scaleFactor, (float) pmap.scaleFactor,
+					scalePoint.x, scalePoint.y);
+			c.drawColor(BitmapUtils.BACKGROUND_COLOR);
+			c.drawBitmap(cb, matr, paint);
+		}
 	}
 
 	@Override
@@ -446,8 +451,16 @@ public class MapControl extends RelativeLayout {
 		@Override
 		protected void onDraw(Canvas canvas) {
 			super.onDraw(canvas);
-			doDraw(canvas, paint);
-
+			if (this.getHeight() == 480-50) {
+				// scale map when zooming in/out
+				// for 320x480 (e.g. HTC Magic, Hero)
+				doDraw(canvas, paint, true);
+			} else {
+				// don't scale map when zooming in/out
+				// for 240x320 (e.g. HTC Tattoo) and 480x854 (e.g. Motorola Droid)
+				// because the effect of scaling map will cause wrong map resolution after zooming in/out
+				doDraw(canvas, paint, false);
+			}
 		}
 
 		/**
