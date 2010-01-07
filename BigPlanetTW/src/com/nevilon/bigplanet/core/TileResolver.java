@@ -66,7 +66,7 @@ public class TileResolver {
 				}
 				if (bitmap != null) { // если тайл есть в файловом кеше
 					if (tile.s == strategyId
-							&& tile.z == physicMap.getZoomLevel()) {
+							&& tile.z == PhysicMap.getZoomLevel()) {
 						loaded++;
 					}
 					cacheProvider.putToCache(tile, bitmap);

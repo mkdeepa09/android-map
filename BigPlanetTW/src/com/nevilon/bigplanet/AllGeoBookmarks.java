@@ -83,7 +83,6 @@ public class AllGeoBookmarks extends ListActivity {
 
 				@Override
 				public void onCancelClick() {
-					// TODO Auto-generated method stub
 
 				}
 

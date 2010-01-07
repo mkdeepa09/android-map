@@ -235,8 +235,8 @@ public class MapControl extends RelativeLayout {
 				public void onClick(View v) {
 					Log.i("MapControl", "OnZoomOutClick");
 					BigPlanet.isMapInCenter = false;
-					int zoomLevel = pmap.getZoomLevel();
-					if (zoomLevel >= 16) {
+					int zoomLevel = PhysicMap.getZoomLevel();
+					if (zoomLevel >= 17) {
 						return;
 					}
 					if (zoomLevel >= 13) {  // >= 13 doesn't zoom out anymore
@@ -253,7 +253,7 @@ public class MapControl extends RelativeLayout {
 				public void onClick(View v) {
 					Log.i("MapControl", "OnZoomInClick");
 					BigPlanet.isMapInCenter = false;
-					int zoomLevel = pmap.getZoomLevel();
+					int zoomLevel = PhysicMap.getZoomLevel();
 					if (zoomLevel <= -2) {
 						return;
 					}
@@ -270,7 +270,7 @@ public class MapControl extends RelativeLayout {
 					LayoutParams.WRAP_CONTENT));
 
 		}
-		zoomPanel.setPadding((width - 160) / 2, height - 112 + 50, 0, 0);
+		zoomPanel.setPadding((width - 160) / 2, height - 50, 0, 0);
 
 		if (pmap == null) { // если не был создан раньше
 			pmap = new PhysicMap(startTile, new AbstractCommand() {
@@ -311,13 +311,13 @@ public class MapControl extends RelativeLayout {
 	public void updateZoomControls() {
 		pmap.getTileResolver().clearCache();
 		System.gc();
-		int zoomLevel = pmap.getZoomLevel();
+		int zoomLevel = PhysicMap.getZoomLevel();
 		markerManager.updateAll(zoomLevel);
 		if (getMapMode() == MapControl.SELECT_MODE) {
 			zoomPanel.setVisibility(View.INVISIBLE);
 		} else {
 			zoomPanel.setVisibility(View.VISIBLE);
-			if (zoomLevel >= 16) {
+			if (zoomLevel >= 17) {
 				zoomPanel.setIsZoomOutEnabled(false);
 				zoomPanel.setIsZoomInEnabled(true);
 			} else if (zoomLevel <= -2) {
@@ -336,9 +336,14 @@ public class MapControl extends RelativeLayout {
 	 * @param canvas
 	 * @param paint
 	 */
-	private synchronized void doDraw(Canvas c, Paint paint) {
+	private synchronized void doDraw(Canvas c, Paint paint, boolean isScalable) {
+		c.save();
 		if (cb == null || cb.getHeight() != pmap.getHeight()) {
-			cs = new Canvas();
+			if (isScalable) {
+				cs = new Canvas();
+			} else {
+				cs = c;
+			}
 			cb = Bitmap.createBitmap(pmap.getWidth(), pmap.getHeight(),
 					Bitmap.Config.RGB_565);
 			cs.setBitmap(cb);
@@ -401,12 +406,13 @@ public class MapControl extends RelativeLayout {
 			}
 		}
 
-		Matrix matr = new Matrix();
-		matr.postScale((float) pmap.scaleFactor, (float) pmap.scaleFactor,
-				scalePoint.x, scalePoint.y);
-		c.drawColor(BitmapUtils.BACKGROUND_COLOR);
-		c.drawBitmap(cb, matr, paint);
-		// canvas.restore();
+		if (isScalable) {
+			Matrix matr = new Matrix();
+			matr.postScale((float) pmap.scaleFactor, (float) pmap.scaleFactor,
+					scalePoint.x, scalePoint.y);
+			c.drawColor(BitmapUtils.BACKGROUND_COLOR);
+			c.drawBitmap(cb, matr, paint);
+		}
 	}
 
 	@Override
@@ -420,7 +426,6 @@ public class MapControl extends RelativeLayout {
 						Thread.sleep(200);
 						postInvalidate();
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -447,8 +452,16 @@ public class MapControl extends RelativeLayout {
 		@Override
 		protected void onDraw(Canvas canvas) {
 			super.onDraw(canvas);
-			doDraw(canvas, paint);
-
+			if (this.getHeight() == 480-50) {
+				// scale map when zooming in/out
+				// for 320x480 (e.g. HTC Magic, Hero)
+				doDraw(canvas, paint, true);
+			} else {
+				// don't scale map when zooming in/out
+				// for 240x320 (e.g. HTC Tattoo) and 480x854 (e.g. Motorola Droid)
+				// because the effect of scaling map will cause wrong map resolution after zooming in/out
+				doDraw(canvas, paint, false);
+			}
 		}
 
 		/**
@@ -519,7 +532,6 @@ public class MapControl extends RelativeLayout {
 //											postInvalidate();
 //
 //										} catch (InterruptedException e) {
-//											// TODO Auto-generated catch block
 //											e.printStackTrace();
 //										}
 //									}
