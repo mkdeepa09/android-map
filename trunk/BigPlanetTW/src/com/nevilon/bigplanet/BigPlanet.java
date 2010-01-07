@@ -439,9 +439,6 @@ public class BigPlanet extends Activity {
 //		if(height==480){
 //			height =430;
 //		}
-//		if(height==320){
-//			height = 270;
-//		}
 		height = height - 50; // minus the space of the status bar
 		
 		if (mapControl == null) {
@@ -467,7 +464,6 @@ public class BigPlanet extends Activity {
 
 								@Override
 								public void onCancelClick() {
-									// TODO Auto-generated method stub
 
 								}
 
@@ -528,10 +524,12 @@ public class BigPlanet extends Activity {
 			selectNetworkMode();
 			break;
 		case 42:
-			if (BigPlanetApp.isDemo && mapControl.getPhysicalMap().getZoomLevel() <= 6) {
-				showTrialDialog(R.string.try_demo_title, R.string.try_demo_message);
-			} else {
-				showMapSaver();
+			if (BigPlanetApp.isDemo) {
+				if (PhysicMap.getZoomLevel() <= 6) {
+					showTrialDialog(R.string.try_demo_title, R.string.try_demo_message);
+				} else {
+					showMapSaver();
+				}
 			}
 			break;
 		case 43:
@@ -607,7 +605,6 @@ public class BigPlanet extends Activity {
 						handler.sendMessage(message);
 
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 
@@ -709,7 +706,7 @@ public class BigPlanet extends Activity {
 			goToMyLocation(location, PhysicMap.getZoomLevel());
 			currentLocation = location;
 			inHome = true;
-			BigPlanet.this.locationType = location.getProvider();
+			locationType = location.getProvider();
 			setActivityTitle(BigPlanet.this);
 			// gpsLocationListener has higher priority than networkLocationListener
 			if (locationType.equals("gps")) {
@@ -833,7 +830,7 @@ public class BigPlanet extends Activity {
 	 */
 	private void showMapSaver() {
 		MapSaverUI mapSaverUI = new MapSaverUI(this, 
-				mapControl.getPhysicalMap().getZoomLevel(), 
+				PhysicMap.getZoomLevel(), 
 				mapControl.getPhysicalMap().getAbsoluteCenter(), 
 				mapControl.getPhysicalMap().getTileResolver().getMapSourceId());
 		mapSaverUI.show();
