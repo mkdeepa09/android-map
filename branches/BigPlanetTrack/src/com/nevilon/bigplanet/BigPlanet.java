@@ -97,8 +97,6 @@ public class BigPlanet extends Activity {
 	
 	public static boolean isMapInCenter = false;
 	
-	private static String strSQLiteName = "";
-	
 	private static String locationType = "";
 	
 	private boolean SDCARD_AVAILABLE = true;
@@ -173,7 +171,6 @@ public class BigPlanet extends Activity {
 		}
 		
 		if (hasSD) {
-			strSQLiteName = Preferences.getSQLiteName();
 			setActivityTitle(BigPlanet.this);
 		}
 	}
@@ -182,9 +179,8 @@ public class BigPlanet extends Activity {
 		if (isFollowMode) {
 			Toast.makeText(context, R.string.auto_follow_disabled, Toast.LENGTH_SHORT).show();
 			mAutoFollowRelativeLayout.setVisibility(View.VISIBLE);
-			finishGPSLocationListener(false);
+			isFollowMode = false;
 		}
-		strSQLiteName = Preferences.getSQLiteName();
 		setActivityTitle((Activity) context);
 	}
 	
@@ -192,9 +188,9 @@ public class BigPlanet extends Activity {
 		if (!isFollowMode) {
 			Toast.makeText(context, R.string.auto_follow_enabled, Toast.LENGTH_SHORT).show();
 			mAutoFollowRelativeLayout.setVisibility(View.INVISIBLE);
-			startGPSLocationListener();
+			isFollowMode = true;
+			goToMyLocation(currentLocation, PhysicMap.getZoomLevel());
 		}
-		strSQLiteName = Preferences.getSQLiteName();
 		setActivityTitle((Activity) context);
 	}
 	
@@ -291,9 +287,6 @@ public class BigPlanet extends Activity {
 				}
 			}
 			// refresh the activity title
-			if (strSQLiteName == null) {
-				strSQLiteName = Preferences.getSQLiteName();
-			}
 			setActivityTitle(BigPlanet.this);
 		}
 	}
@@ -315,21 +308,14 @@ public class BigPlanet extends Activity {
 	}
 	
 	@Override
-	protected void onResume() {
-		super.onResume();
+	protected void onStart() {
+		super.onStart();
 		if (SDCARD_AVAILABLE) {
-			if (isFollowMode) {
-				isFollowMode = false;
-				new Handler().postDelayed(new Runnable(){
-					@Override
-					public void run() {
-						followMyLocation();
-					}
-				}, 100);
-			}
+			startGPSLocationListener();
+			followMyLocation();
 		}
 	}
-
+	
 	/**
 	 * Запоминает текущий тайл и отступ при выгрузке приложения
 	 */
@@ -340,13 +326,12 @@ public class BigPlanet extends Activity {
 		SmoothZoomEngine.sze = null; // release the variable
 		SmoothZoomEngine.stop = true; // stop the thread
 		TileLoader.stop = true; // stop the thread
-		isFollowMode = true; // enable auto follow when executing next time
-		if(intentReceiver!=null){
+		if (intentReceiver != null){
 			unregisterReceiver(intentReceiver);
 			Preferences.putTile(mapControl.getPhysicalMap().getDefaultTile());
 			Preferences.putOffset(mapControl.getPhysicalMap().getGlobalOffset());
 		}
-		if(updateScreenIntentReceiver!=null){
+		if (updateScreenIntentReceiver != null){
 			unregisterReceiver(updateScreenIntentReceiver);
 		}
 		if (textMessage != null) {
@@ -467,7 +452,6 @@ public class BigPlanet extends Activity {
 
 								@Override
 								public void onCancelClick() {
-									// TODO Auto-generated method stub
 
 								}
 
@@ -528,10 +512,12 @@ public class BigPlanet extends Activity {
 			selectNetworkMode();
 			break;
 		case 42:
-			if (BigPlanetApp.isDemo && mapControl.getPhysicalMap().getZoomLevel() <= 6) {
-				showTrialDialog(R.string.try_demo_title, R.string.try_demo_message);
-			} else {
-				showMapSaver();
+			if (BigPlanetApp.isDemo) {
+				if (PhysicMap.getZoomLevel() <= 6) {
+					showTrialDialog(R.string.try_demo_title, R.string.try_demo_message);
+				} else {
+					showMapSaver();
+				}
 			}
 			break;
 		case 43:
@@ -607,7 +593,6 @@ public class BigPlanet extends Activity {
 						handler.sendMessage(message);
 
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 
@@ -651,9 +636,8 @@ public class BigPlanet extends Activity {
 				Location location = locationManager.getLastKnownLocation(provider);
 				if (location != null) {
 					currentLocation = location;
-					goToMyLocation(currentLocation, PhysicMap.getZoomLevel());
+					goToMyLocation(location, PhysicMap.getZoomLevel());
 				}
-				inHome = true;
 			}
 		} else { // gps and network are both disabled
 			Toast.makeText(this, R.string.msg_unable_to_get_current_location, 3000).show();
@@ -662,16 +646,18 @@ public class BigPlanet extends Activity {
 		/* GPS_PROVIDER */
 		if (gpsLocationListener == null) {
 			gpsLocationListener = new MyLocationListener("gps");
+			// LocationManager.GPS_PROVIDER = "gps"
+			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 
+					minTime, minDistance, gpsLocationListener);
 		}
-		String gpsProvider = LocationManager.GPS_PROVIDER; // gps
-		locationManager.requestLocationUpdates(gpsProvider, minTime, minDistance, gpsLocationListener);
 
 		/* NETWORK_PROVIDER */
 		if (networkLocationListener == null) {
 			networkLocationListener = new MyLocationListener("network");
+			// LocationManager.NETWORK_PROVIDER = "network"
+			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 
+					minTime, minDistance, networkLocationListener);
 		}
-		String networkProvider = LocationManager.NETWORK_PROVIDER; // network
-		locationManager.requestLocationUpdates(networkProvider, minTime, minDistance, networkLocationListener);
 	}
 	
 	public static void finishGPSLocationListener(boolean isSetNull) {
@@ -706,10 +692,14 @@ public class BigPlanet extends Activity {
 			String longitude = String.valueOf(location.getLongitude());
 			String latitude = String.valueOf(location.getLatitude());
 			Log.i("Location", location.getProvider()+" onLocationChanged(): longitude="+longitude+", latitude="+latitude);
-			goToMyLocation(location, PhysicMap.getZoomLevel());
 			currentLocation = location;
-			inHome = true;
-			BigPlanet.this.locationType = location.getProvider();
+			if (isFollowMode) {
+				goToMyLocation(location, PhysicMap.getZoomLevel());
+			} else {
+				addMarker(location.getLatitude(), location.getLongitude(), PhysicMap.getZoomLevel());
+				mapControl.invalidate();
+			}
+			locationType = location.getProvider();
 			setActivityTitle(BigPlanet.this);
 			// gpsLocationListener has higher priority than networkLocationListener
 			if (locationType.equals("gps")) {
@@ -745,23 +735,26 @@ public class BigPlanet extends Activity {
 	}
 	
 	private void followMyLocation() {
-		if (!isFollowMode) { // isFollowMode = false;
-			//new Thread(new StartGPSLocationThread(), "GPSLocationListener").start();
-			//startGPSLocationListener(); // isFollowMode = true;
+		if (!isFollowMode) {
 			enabledAutoFollow(this);
-		} else { // isFollowMode = true
-			//finishGPSLocationListener(false); // isFollowMode = false;
-			disabledAutoFollow(this);
 		}
 	}
 
 	private void goToMyLocation(Location location, int zoom) {
 		double lat = location.getLatitude();
 		double lon = location.getLongitude();
+		goToMyLocation(lat, lon, zoom);
+	}
+	
+	private void goToMyLocation(double lat, double lon, int zoom) {
 		com.nevilon.bigplanet.core.geoutils.Point p = GeoUtils.toTileXY(lat, lon, zoom);
 		com.nevilon.bigplanet.core.geoutils.Point off = GeoUtils.getPixelOffsetInTile(lat, lon, zoom);
 		mapControl.goTo((int) p.x, (int) p.y, zoom, (int) off.x, (int) off.y);
-
+		inHome = true;
+		addMarker(lat, lon, zoom);
+	}
+	
+	private void addMarker(double lat, double lon, int zoom) {
 		Place place = new Place();
 		place.setLat(lat);
 		place.setLon(lon);
@@ -833,7 +826,7 @@ public class BigPlanet extends Activity {
 	 */
 	private void showMapSaver() {
 		MapSaverUI mapSaverUI = new MapSaverUI(this, 
-				mapControl.getPhysicalMap().getZoomLevel(), 
+				PhysicMap.getZoomLevel(), 
 				mapControl.getPhysicalMap().getAbsoluteCenter(), 
 				mapControl.getPhysicalMap().getTileResolver().getMapSourceId());
 		mapSaverUI.show();
@@ -999,7 +992,7 @@ public class BigPlanet extends Activity {
 
 		sqliteRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 					public void onCheckedChanged(RadioGroup group, int checkedId) {
-						strSQLiteName = sqliteMaps.get(checkedId);
+						String strSQLiteName = sqliteMaps.get(checkedId);
 						Preferences.putSQLiteName(strSQLiteName);
 						// switch SQLite DB
 						LocalStorageWrapper.switchLocalStorage();
@@ -1018,16 +1011,11 @@ public class BigPlanet extends Activity {
 	}
 	
 	public static void setActivityTitle(Activity activity) {
+		String strSQLiteName = Preferences.getSQLiteName();
 		// remove ".sqlitedb"
-		String mSQLiteName = strSQLiteName.substring(0, strSQLiteName.lastIndexOf("."));
+		strSQLiteName = strSQLiteName.substring(0, strSQLiteName.lastIndexOf("."));
 		// add more info
-		String title = "";
-		if (isFollowMode) {
-			title = mSQLiteName + " @";
-		} else {
-			title = mSQLiteName;
-		}
-		title += " "+ locationType;
+		String title = strSQLiteName + " @ "+ locationType;
 		String zoom = String.valueOf(17-PhysicMap.getZoomLevel());
 		title += " ["+ zoom + "]";
 		activity.setTitle(title);
