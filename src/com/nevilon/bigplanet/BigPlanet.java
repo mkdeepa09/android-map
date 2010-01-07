@@ -424,9 +424,6 @@ public class BigPlanet extends Activity {
 //		if(height==480){
 //			height =430;
 //		}
-//		if(height==320){
-//			height = 270;
-//		}
 		height = height - 50; // minus the space of the status bar
 		
 		if (mapControl == null) {
