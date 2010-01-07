@@ -235,7 +235,7 @@ public class MapControl extends RelativeLayout {
 				public void onClick(View v) {
 					Log.i("MapControl", "OnZoomOutClick");
 					BigPlanet.isMapInCenter = false;
-					int zoomLevel = pmap.getZoomLevel();
+					int zoomLevel = PhysicMap.getZoomLevel();
 					if (zoomLevel >= 16) {
 						return;
 					}
@@ -253,7 +253,7 @@ public class MapControl extends RelativeLayout {
 				public void onClick(View v) {
 					Log.i("MapControl", "OnZoomInClick");
 					BigPlanet.isMapInCenter = false;
-					int zoomLevel = pmap.getZoomLevel();
+					int zoomLevel = PhysicMap.getZoomLevel();
 					if (zoomLevel <= -2) {
 						return;
 					}
@@ -270,7 +270,7 @@ public class MapControl extends RelativeLayout {
 					LayoutParams.WRAP_CONTENT));
 
 		}
-		zoomPanel.setPadding((width - 160) / 2, height - 112 + 50, 0, 0);
+		zoomPanel.setPadding((width - 160) / 2, height - 50, 0, 0);
 
 		if (pmap == null) { // если не был создан раньше
 			pmap = new PhysicMap(startTile, new AbstractCommand() {
@@ -311,7 +311,7 @@ public class MapControl extends RelativeLayout {
 	public void updateZoomControls() {
 		pmap.getTileResolver().clearCache();
 		System.gc();
-		int zoomLevel = pmap.getZoomLevel();
+		int zoomLevel = PhysicMap.getZoomLevel();
 		markerManager.updateAll(zoomLevel);
 		if (getMapMode() == MapControl.SELECT_MODE) {
 			zoomPanel.setVisibility(View.INVISIBLE);
@@ -420,7 +420,6 @@ public class MapControl extends RelativeLayout {
 						Thread.sleep(200);
 						postInvalidate();
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -519,7 +518,6 @@ public class MapControl extends RelativeLayout {
 //											postInvalidate();
 //
 //										} catch (InterruptedException e) {
-//											// TODO Auto-generated catch block
 //											e.printStackTrace();
 //										}
 //									}
