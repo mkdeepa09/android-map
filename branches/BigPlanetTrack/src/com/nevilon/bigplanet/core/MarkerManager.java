@@ -85,8 +85,11 @@ public class MarkerManager {
 		}
 		Marker marker = new Marker(place, images.get(imageType), isGPS);
 		Marker_G marker_G = new Marker_G(place, images.get(imageType), isGPS);
+		Marker_G marker_leader = new Marker_G(place, images.get(imageType), isGPS);
+		Marker_G marker_DB = new Marker_G(place, images.get(imageType), isGPS);
 		updateParams(marker, zoom);
 		updateParams(marker_G, zoom);
+		
 		if(trackType == 1){
 			if(BigPlanet.isGPS_track){
 				markers_G.add(marker_G);

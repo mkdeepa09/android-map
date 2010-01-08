@@ -862,7 +862,7 @@ public class BigPlanet extends Activity {
 		mm.addMarker(place, zoom, 1, MarkerManager.MY_LOCATION_MARKER);
 	}
 	
-	private void addMarkersFromDB(List<Place> placeList, int type) {
+	private void addMarkersForDrawing(List<Place> placeList, int type) {
 		// type : 2 -> from DB, 3 -> trackLeader //
 		int zoom = PhysicMap.getZoomLevel();
 		for (int i=0;i<placeList.size();i++)
