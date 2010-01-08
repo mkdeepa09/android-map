@@ -2,6 +2,7 @@ package com.nevilon.bigplanet;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
@@ -95,6 +96,10 @@ public class BigPlanet extends Activity {
 
 	public static boolean isFollowMode = true; // default value is auto follow
 	
+	public static boolean isGPS_track = false;  // default false
+	
+	public static boolean isGPS_track_save = false;  // default false
+	
 	public static boolean isMapInCenter = false;
 	
 	private static String locationType = "";
@@ -106,6 +111,8 @@ public class BigPlanet extends Activity {
 	private MyUpdateScreenIntentReceiver updateScreenIntentReceiver;
 	
 	public static RelativeLayout mAutoFollowRelativeLayout;
+	
+	public static RelativeLayout mTrackRelativeLayout;
 	
 	private static ImageView scaleImageView;
 
@@ -151,6 +158,9 @@ public class BigPlanet extends Activity {
 			mAutoFollowRelativeLayout = getAutoFollowRelativeLayout();
 			mAutoFollowRelativeLayout.setVisibility(View.INVISIBLE);
 			
+			mTrackRelativeLayout = getTrackRelativeLayout();
+			mTrackRelativeLayout.setVisibility(View.VISIBLE);
+			
 			File mapsDBFolder = new File(SQLLocalStorage.DATA_PATH);
 			if (!mapsDBFolder.exists())
 				mapsDBFolder.mkdirs();
@@ -159,6 +169,8 @@ public class BigPlanet extends Activity {
 			initializeMap();
 			/* Create a ImageView with a auto-follow icon. */
 			mapControl.addView(mAutoFollowRelativeLayout); // We can just run it once.
+			/* Create a ImageView with a Track icon. */
+			mapControl.addView(mTrackRelativeLayout); // We can just run it once.
 			/* Create a ImageView with a scale image. */
 			scaleImageView = new ImageView(this);
 			scaleImageView.setImageResource(R.drawable.scale1);
@@ -218,6 +230,60 @@ public class BigPlanet extends Activity {
 		
 		return relativeLayout;
 	}
+	
+	public void enabledTrack(Context context) {
+		if (isGPS_track) {
+			Toast.makeText(context, R.string.track_enabled, Toast.LENGTH_SHORT).show();
+			//startGPSLocationListener();
+		}
+		setActivityTitle((Activity) context);
+	}
+	
+	public void disabledTrack(Context context) {
+		if (!isGPS_track) {
+			Toast.makeText(context, R.string.track_disabled, Toast.LENGTH_SHORT).show();
+			//finishGPSLocationListener(false);
+		}
+		mm.saveMarkerGTrack();
+		isGPS_track_save = true;
+		//TODO: save to DB      getLocationList();
+		
+		setActivityTitle((Activity) context);
+	}
+	
+		
+	private RelativeLayout getTrackRelativeLayout() {
+		final RelativeLayout relativeLayout = new RelativeLayout(this);
+		
+		/* Create a ImageView with a track icon. */
+		final ImageView ivAutoFollow = new ImageView(this);
+		ivAutoFollow.setImageResource(R.drawable.globe);
+		
+		ivAutoFollow.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				if(!isGPS_track){
+					isGPS_track = true;
+					ivAutoFollow.setImageResource(R.drawable.autofollow);
+					enabledTrack(BigPlanet.this);
+				}else{
+					isGPS_track = false;
+					ivAutoFollow.setImageResource(R.drawable.globe);
+					disabledTrack(BigPlanet.this);
+				}
+			}
+        });
+		
+		/* Create RelativeLayoutParams, that position in in the bottom right corner. */
+		final RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.WRAP_CONTENT,
+				RelativeLayout.LayoutParams.WRAP_CONTENT);
+		params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+		params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+		relativeLayout.addView(ivAutoFollow, params);
+		
+		return relativeLayout;
+	}
 
 	private void initializeMap() {
 		// создание карты
@@ -256,7 +322,7 @@ public class BigPlanet extends Activity {
 			int z = SEARCH_ZOOM;
 			Place place = (Place) intent.getSerializableExtra("place");
 			mm.clearMarkerManager();
-			mm.addMarker(place, z, false, MarkerManager.SEARCH_MARKER);
+			mm.addMarker(place, z, 0, MarkerManager.SEARCH_MARKER);
 			com.nevilon.bigplanet.core.geoutils.Point p = GeoUtils.toTileXY(
 					place.getLat(), place.getLon(), z);
 			com.nevilon.bigplanet.core.geoutils.Point off = GeoUtils
@@ -633,7 +699,12 @@ public class BigPlanet extends Activity {
 				Location location = locationManager.getLastKnownLocation(provider);
 				if (location != null) {
 					currentLocation = location;
-					goToMyLocation(location, PhysicMap.getZoomLevel());
+					if (!isGPS_track){
+						goToMyLocation(currentLocation, PhysicMap.getZoomLevel());
+					}
+					if (isGPS_track){
+						trackMyLocation(currentLocation, PhysicMap.getZoomLevel());
+					}
 				}
 			}
 		} else { // gps and network are both disabled
@@ -660,12 +731,14 @@ public class BigPlanet extends Activity {
 	public static void finishGPSLocationListener(boolean isSetNull) {
 		isFollowMode = false;
 		locationType = "";
-		if (locationManager != null) {
-			locationManager.removeUpdates(networkLocationListener);
-			locationManager.removeUpdates(gpsLocationListener);
-			if (isSetNull) {
-				networkLocationListener = null;
-				gpsLocationListener = null;
+		if (!isGPS_track) {
+			if (locationManager != null) {
+				locationManager.removeUpdates(networkLocationListener);
+				locationManager.removeUpdates(gpsLocationListener);
+				if (isSetNull) {
+					networkLocationListener = null;
+					gpsLocationListener = null;
+				}
 			}
 		}
 //		if (mHandler != null) {
@@ -675,7 +748,7 @@ public class BigPlanet extends Activity {
 	
 	private static LocationListener gpsLocationListener;
 	private static LocationListener networkLocationListener;
-	private final long minTime = 100; // ms
+	private final long minTime = 5000; // ms
 	private final float minDistance = 5; // m
 	
 	class MyLocationListener implements LocationListener {
@@ -690,12 +763,23 @@ public class BigPlanet extends Activity {
 			String latitude = String.valueOf(location.getLatitude());
 			Log.i("Location", location.getProvider()+" onLocationChanged(): longitude="+longitude+", latitude="+latitude);
 			currentLocation = location;
-			if (isFollowMode) {
-				goToMyLocation(location, PhysicMap.getZoomLevel());
-			} else {
-				addMarker(location.getLatitude(), location.getLongitude(), PhysicMap.getZoomLevel());
-				mapControl.invalidate();
+			if (!isGPS_track){
+				if (isFollowMode) {
+					goToMyLocation(location, PhysicMap.getZoomLevel());
+				} else {
+					addMarker(location, PhysicMap.getZoomLevel());
+					mapControl.invalidate();
+				}
 			}
+			if(isGPS_track){
+				if (isFollowMode) {
+					trackMyLocation(location, PhysicMap.getZoomLevel());
+				} else {
+					addMarker(location, PhysicMap.getZoomLevel());
+					mapControl.invalidate();
+				}
+			}
+			
 			locationType = location.getProvider();
 			setActivityTitle(BigPlanet.this);
 			// gpsLocationListener has higher priority than networkLocationListener
@@ -740,22 +824,52 @@ public class BigPlanet extends Activity {
 	private void goToMyLocation(Location location, int zoom) {
 		double lat = location.getLatitude();
 		double lon = location.getLongitude();
-		goToMyLocation(lat, lon, zoom);
-	}
-	
-	private void goToMyLocation(double lat, double lon, int zoom) {
 		com.nevilon.bigplanet.core.geoutils.Point p = GeoUtils.toTileXY(lat, lon, zoom);
 		com.nevilon.bigplanet.core.geoutils.Point off = GeoUtils.getPixelOffsetInTile(lat, lon, zoom);
 		mapControl.goTo((int) p.x, (int) p.y, zoom, (int) off.x, (int) off.y);
-		inHome = true;
-		addMarker(lat, lon, zoom);
-	}
-	
-	private void addMarker(double lat, double lon, int zoom) {
+
 		Place place = new Place();
 		place.setLat(lat);
 		place.setLon(lon);
-		mm.addMarker(place, zoom, true, MarkerManager.MY_LOCATION_MARKER);
+		mm.addMarker(place, zoom, 1, MarkerManager.MY_LOCATION_MARKER);
+	}
+	
+	private void trackMyLocation(Location location, int zoom) {
+		double lat = location.getLatitude();
+		double lon = location.getLongitude();
+		long time = location.getTime();
+		com.nevilon.bigplanet.core.geoutils.Point p = GeoUtils.toTileXY(lat, lon, zoom);
+		com.nevilon.bigplanet.core.geoutils.Point off = GeoUtils.getPixelOffsetInTile(lat, lon, zoom);
+		mapControl.goTo((int) p.x, (int) p.y, zoom, (int) off.x, (int) off.y);
+
+		Place place = new Place();
+		place.setLat(lat);
+		place.setLon(lon);
+		place.setLocation(location);
+//		SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd G 'at' hh:mm:ss a zzz");
+//		List<String> items = new ArrayList<String>();
+//		items.add(formatter.format(time));
+		mm.addMarker(place, zoom, 1, MarkerManager.MY_LOCATION_MARKER);
+	}
+	
+	private void addMarker(Location location, int zoom) {
+		double lat = location.getLatitude();
+		double lon = location.getLongitude();
+		Place place = new Place();
+		place.setLat(lat);
+		place.setLon(lon);
+		place.setLocation(location);
+		mm.addMarker(place, zoom, 1, MarkerManager.MY_LOCATION_MARKER);
+	}
+	
+	private void addMarkersFromDB(List<Place> placeList, int type) {
+		// type : 2 -> from DB, 3 -> trackLeader //
+		int zoom = PhysicMap.getZoomLevel();
+		for (int i=0;i<placeList.size();i++)
+		{
+			Place place = placeList.get(i);
+			mm.addMarker(place, zoom, type, MarkerManager.MY_LOCATION_MARKER);
+		}
 	}
 	
 	/* End of the GPS LocationListener code */
