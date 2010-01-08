@@ -2,6 +2,8 @@ package com.nevilon.bigplanet.core;
 
 import java.io.Serializable;
 
+import android.location.Location;
+
 public class Place implements Serializable{
 
 	
@@ -38,6 +40,16 @@ public class Place implements Serializable{
 	}
 
 	private double lon;
+	
+	private Location location;
+	
+	public Location getLocation() {
+		return location;
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
+	}
 
 	public void setAddress(String address) {
 		this.address = address;

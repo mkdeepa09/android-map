@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
@@ -25,6 +26,7 @@ import com.nevilon.bigplanet.core.MarkerManager;
 import com.nevilon.bigplanet.core.PhysicMap;
 import com.nevilon.bigplanet.core.RawTile;
 import com.nevilon.bigplanet.core.MarkerManager.Marker;
+import com.nevilon.bigplanet.core.MarkerManager.Marker_G;
 
 /**
  * Виджет, реализующий карту
@@ -400,6 +402,112 @@ public class MapControl extends RelativeLayout {
 													.getOffsetY(), paint);
 						}
 
+					}
+				}
+			}
+		}
+		
+		if (BigPlanet.isGPS_track && MarkerManager.markers_G.size()!=0){	
+			float x1=0,x2=0,y1=0,y2=0;
+			paint.setColor(Color.BLUE);
+			paint.setStrokeWidth(5);
+			for (int i2=0;i2<MarkerManager.markers_G.size();i2++) {
+				for (int i = 0; i < 7; i++) {
+					for (int j = 0; j < 7; j++) {
+						if ((i > 1 && i < 5) && ((j > 1 && j < 5))) {
+							RawTile tile = pmap.getDefaultTile();
+							int z =PhysicMap.getZoomLevel();
+							int tileX = tile.x + (i - 2);
+							int tileY = tile.y + (j - 2);
+							List<Marker_G> markers_G = markerManager.getMarkers_G(tileX,tileY, z,i2);
+							if (i2==0){
+								for (Marker_G marker_G : markers_G) {
+									x1 = (i - 2)* TILE_SIZE
+									   + pmap.getGlobalOffset().x
+									   + (int) marker_G.getOffset().x;
+									y1 = (j - 2)* TILE_SIZE
+										+ pmap.getGlobalOffset().y
+										+ (int) marker_G.getOffset().y+3;
+									
+									cs.drawBitmap(marker_G.getMarkerImage().getImage(),
+											x1- marker_G.getMarkerImage().getOffsetX(),
+											y1- marker_G.getMarkerImage().getOffsetY(),paint);
+								}
+
+							}else{
+								for (Marker_G marker_G : markers_G) {
+									x2 = (i - 2)* TILE_SIZE
+										+ pmap.getGlobalOffset().x
+										+ (int) marker_G.getOffset().x;
+									y2 = (j - 2)* TILE_SIZE
+										+ pmap.getGlobalOffset().y
+										+ (int) marker_G.getOffset().y+3;
+
+									cs.drawLine(x1,y1,x2,y2,paint);
+									x1 = x2;
+									y1 = y2;
+									
+									if (i2==MarkerManager.markers_G.size()-1){
+										cs.drawBitmap(marker_G.getMarkerImage().getImage(),
+													x2- marker_G.getMarkerImage().getOffsetX(),
+													y2- marker_G.getMarkerImage().getOffsetY(),paint);
+										}
+									}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		if (BigPlanet.isGPS_track_save && markerManager.saveTracks_G.size()!=0){	
+			float x1=0,x2=0,y1=0,y2=0;
+			paint.setColor(Color.GREEN);
+			paint.setStrokeWidth(5);
+			for (int i2=0;i2<markerManager.saveTracks_G.size();i2++) {
+				for (int i = 0; i < 7; i++) {
+					for (int j = 0; j < 7; j++) {
+						if ((i > 1 && i < 5) && ((j > 1 && j < 5))) {
+							RawTile tile = pmap.getDefaultTile();
+							int z =PhysicMap.getZoomLevel();
+							int tileX = tile.x + (i - 2);
+							int tileY = tile.y + (j - 2);
+							List<Marker_G> saveTracks_G = markerManager.getSaveTrack_G(tileX,tileY, z,i2);
+							if (i2==0){
+								for (Marker_G saveTrack_G : saveTracks_G) {
+									x1 = (i - 2)* TILE_SIZE
+									   + pmap.getGlobalOffset().x
+									   + (int) saveTrack_G.getOffset().x;
+									y1 = (j - 2)* TILE_SIZE
+										+ pmap.getGlobalOffset().y
+										+ (int) saveTrack_G.getOffset().y+3;
+									
+									cs.drawBitmap(saveTrack_G.getMarkerImage().getImage(),
+											x1- saveTrack_G.getMarkerImage().getOffsetX(),
+											y1- saveTrack_G.getMarkerImage().getOffsetY(),paint);
+								}
+	
+							}else{
+								for (Marker_G saveTrack_G : saveTracks_G) {
+									x2 = (i - 2)* TILE_SIZE
+										+ pmap.getGlobalOffset().x
+										+ (int) saveTrack_G.getOffset().x;
+									y2 = (j - 2)* TILE_SIZE
+										+ pmap.getGlobalOffset().y
+										+ (int) saveTrack_G.getOffset().y+3;
+	
+									cs.drawLine(x1,y1,x2,y2,paint);
+									x1 = x2;
+									y1 = y2;
+									
+									if (i2==MarkerManager.saveTracks_G.size()-1){
+										cs.drawBitmap(saveTrack_G.getMarkerImage().getImage(),
+													x2- saveTrack_G.getMarkerImage().getOffsetX(),
+													y2- saveTrack_G.getMarkerImage().getOffsetY(),paint);
+										}
+									}
+							}
+						}
 					}
 				}
 			}
