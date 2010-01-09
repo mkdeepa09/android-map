@@ -24,6 +24,10 @@ public class MarkerManager {
 	
 	public static final int SEARCH_MARKER = 2;
 	
+	public static final int START_POINT_MARKER = 3;
+	
+	public static final int END_POINT_MARKER = 4;
+	
 	private  HashMap<Integer,MarkerImage> images = new HashMap<Integer,MarkerImage>(); 
 		
 	private List<Marker> markers = new ArrayList<Marker>();
@@ -43,6 +47,8 @@ public class MarkerManager {
 		images.put(MY_LOCATION_MARKER, new MarkerImage(decodeBitmap(R.drawable.person),24,39));
 	    images.put(BOOKMARK_MARKER,new MarkerImage(decodeBitmap(R.drawable.bookmark_marker),12,32));
 		images.put(SEARCH_MARKER, new MarkerImage(decodeBitmap(R.drawable.location_marker),12,32));	
+		images.put(START_POINT_MARKER, new MarkerImage(decodeBitmap(R.drawable.ic_maps_indicator_startpoint),17,36));	
+		images.put(END_POINT_MARKER, new MarkerImage(decodeBitmap(R.drawable.ic_maps_indicator_endpoint),17,36));	
 	}
 	
 	public void clearMarkerManager() {

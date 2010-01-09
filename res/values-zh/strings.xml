@@ -37,6 +37,7 @@
     <string name="ABOUT_MENU">關於</string>
     <string name="MAP_SOURCE_MENU">地圖來源</string>
     <string name="SQLiteDB_MENU">SQLite地圖資料庫</string>
+    <string name="SHARE_MENU">分享位置</string>
     <string name="TOOLS_MENU">更多</string>
     <string name="CACHE_MAP_MENU">儲存地圖供離線使用</string>
     <string name="NETWORK_MODE_MENU">網路模式</string>
@@ -87,6 +88,10 @@
     <string name="bookmark_name">名稱</string>
     <string name="bookmark_description">描述</string>
 
-
+    <string name="share_location_groupname">群組名稱:</string>
+    <string name="share_location_account">Google 帳號:</string>
+    <string name="share_location_password">Google 密碼:</string>
+    <string name="share_location_checkbox">傳送/接收 GPS 座標</string>
+    <string name="share_location_note"></string>
 
 </resources>

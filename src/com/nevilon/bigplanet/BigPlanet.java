@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.travel.track_manage.file.database.TravelDataBaseAdapter;
-import org.traveler.track_manage.file.operate.ImportFileProcessing;
+import org.traveler.googleclientlogin.GoogleAccountClient;
+import org.traveler.track_manage.file.database.TravelDataBaseAdapter;
 import org.traveler.track_manage.view.ExtendedCheckBoxListActivity;
 import org.traveler.track_manage.view.TrackListViewActivity;
 
@@ -53,7 +53,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.RadioGroup.OnCheckedChangeListener;
-
 
 import com.nevilon.bigplanet.core.BigPlanetApp;
 import com.nevilon.bigplanet.core.MarkerManager;
@@ -183,6 +182,9 @@ public class BigPlanet extends Activity {
 			TileLoader.stop = false;
 			mAutoFollowRelativeLayout = getAutoFollowRelativeLayout();
 			mAutoFollowRelativeLayout.setVisibility(View.INVISIBLE);
+			mTrackRelativeLayout = getTrackRelativeLayout();
+			mTrackRelativeLayout.setVisibility(View.VISIBLE);
+			
 			//Add by Taiyu
 			File trackImportFolder = new File(SQLLocalStorage.TRACK_IMPORT_PATH);
 			if(!trackImportFolder.exists())
@@ -191,9 +193,6 @@ public class BigPlanet extends Activity {
 				Log.i("Message", "trackImportFolder creates="+trackImportFolder);
 			}	
 			trackImportFolder = null;
-			
-			mTrackRelativeLayout = getTrackRelativeLayout();
-			mTrackRelativeLayout.setVisibility(View.VISIBLE);
 			
 			File mapsDBFolder = new File(SQLLocalStorage.DATA_PATH);
 			if (!mapsDBFolder.exists())
@@ -294,25 +293,24 @@ public class BigPlanet extends Activity {
 		
 		setActivityTitle((Activity) context);
 	}
-	
 		
 	private RelativeLayout getTrackRelativeLayout() {
 		final RelativeLayout relativeLayout = new RelativeLayout(this);
 		
 		/* Create a ImageView with a track icon. */
 		final ImageView ivAutoFollow = new ImageView(this);
-		ivAutoFollow.setImageResource(R.drawable.globe);
+		ivAutoFollow.setImageResource(R.drawable.btn_record_start);
 		
 		ivAutoFollow.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v) {
 				if(!isGPS_track){
 					isGPS_track = true;
-					ivAutoFollow.setImageResource(R.drawable.autofollow);
+					ivAutoFollow.setImageResource(R.drawable.btn_record_stop);
 					enabledTrack(BigPlanet.this);
 				}else{
 					isGPS_track = false;
-					ivAutoFollow.setImageResource(R.drawable.globe);
+					ivAutoFollow.setImageResource(R.drawable.btn_record_start);
 					disabledTrack(BigPlanet.this);
 				}
 			}
@@ -495,19 +493,19 @@ public class BigPlanet extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 		menu.add(1, 11, 0, R.string.SEARCH_MENU).setIcon(R.drawable.search);
+
 		/* Add by Taiyu */
 		SubMenu sub = menu.addSubMenu(5, 101, 0, R.string.TRACK_MANAGE_MENU).setIcon(R.drawable.track_manage);
         sub.add(6, 102, 0, R.string.BROWSE_TRACK_MENU);
         sub.add(6, 103, 1, R.string.IMPORT_TRACK_MENU);
-        
-        
-        
-        
+
 		sub = menu.addSubMenu(0, 6, 0, R.string.BOOKMARKS_MENU).setIcon(R.drawable.bookmark);
 		sub.add(2, 21, 0, R.string.BOOKMARK_ADD_MENU);
 		sub.add(2, 22, 1, R.string.BOOKMARKS_VIEW_MENU);
 
-		menu.add(3, 33, 0, R.string.MY_LOCATION_MENU).setIcon(R.drawable.globe_download);
+		menu.add(3, 33, 0, R.string.MY_LOCATION_MENU).setIcon(R.drawable.home);
+
+		menu.add(5, 51, 0, R.string.SHARE_MENU).setIcon(R.drawable.friends_icon);
 
 		// add More menu
 		sub = menu.addSubMenu(0, 1, 0, R.string.TOOLS_MENU).setIcon(R.drawable.tools);
@@ -515,7 +513,7 @@ public class BigPlanet extends Activity {
 		sub.add(4, 42, 1, R.string.CACHE_MAP_MENU);
 		sub.add(4, 43, 2, R.string.MAP_SOURCE_MENU);
 		sub.add(4, 44, 3, R.string.SQLiteDB_MENU);
-		sub.add(4, 45, 10, R.string.ABOUT_MENU);
+		sub.add(4, 49, 10, R.string.ABOUT_MENU);
 
 		return true;
 	}
@@ -640,15 +638,21 @@ public class BigPlanet extends Activity {
 		case 44:
 			selectSQLiteDBFile();
 			break;
-		case 45:
+		case 49:
 			showAbout();
 			break;
+
+		case 51:
+			shareLocation();
+			break;
+
 		case 102: //browse tracks in SqliteDB
 			browseTracks();
 			break;
 		case 103: //import tracks from SD card
 			importTracks();
 			break;
+
 		}
 		return false;
 
@@ -1199,6 +1203,12 @@ public class BigPlanet extends Activity {
 		mSQLiteDBFileDialog.show();
 	}
 	
+	private void shareLocation() {
+		Intent intent = new Intent();
+		intent.setClass(this, GoogleAccountClient.class);
+		startActivity(intent);
+	}
+
 	public static void setActivityTitle(Activity activity) {
 		String strSQLiteName = Preferences.getSQLiteName();
 		// remove ".sqlitedb"

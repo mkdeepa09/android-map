@@ -22,6 +22,8 @@
 		<activity android:configChanges="keyboardHidden|orientation"
 			android:name=".AllGeoBookmarks">
 		</activity>
+		
+		<activity android:name="org.traveler.googleclientlogin.GoogleAccountClient"/>
 
 		<activity android:configChanges="keyboardHidden|orientation" android:theme="@android:style/Theme.Dialog"
 			android:name=".FindPlace" android:launchMode="singleTop">

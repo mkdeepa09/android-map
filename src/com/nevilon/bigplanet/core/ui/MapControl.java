@@ -692,13 +692,20 @@ public class MapControl extends RelativeLayout {
 		protected void onDraw(Canvas canvas) {
 			super.onDraw(canvas);
 			if (this.getHeight() == 480-50) {
-				// scale map when zooming in/out
-				// for 320x480 (e.g. HTC Magic, Hero)
+				/**
+				 * scale map when zooming in/out
+				 * for 320x480 (e.g. HTC Dream, HTC Magic, HTC Hero, Samsung i7500)
+				 */
 				doDraw(canvas, paint, true);
 			} else {
-				// don't scale map when zooming in/out
-				// for 240x320 (e.g. HTC Tattoo) and 480x854 (e.g. Motorola Droid)
-				// because the effect of scaling map will cause wrong map resolution after zooming in/out
+				/** 
+				 * don't scale map when zooming in/out
+				 * because the effect of scaling map will cause wrong map resolution after zooming in/out
+				 * for following devices:
+				 * 240x320 (e.g. HTC Tattoo)
+				 * 480x800(e.g. Acer Liquid, Google Nexus One)
+				 * 480x854 (e.g. Motorola Droid)
+				 */
 				doDraw(canvas, paint, false);
 			}
 		}

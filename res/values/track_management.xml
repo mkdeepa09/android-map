@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="BROWSE_TRACK_MENU">Brose Tracks</string>
+<string name="BROWSE_TRACK_MENU">Browse Tracks</string>
 <string name="TRACK_MANAGE_MENU">Manage Tracks</string>
 <string name="IMPORT_TRACK_MENU">Import Tracks</string>
 <string name="des_edit_text">Track Description</string>
@@ -32,7 +32,7 @@
 <string name="have_yet_select_track_message">You have yet selected any tracks!</string>
 <string name="save_successfully">Save Successfully!</string>
 <string name="save_fail">Fail to Save</string>
-<string name="what_do_you_want_to_do">What dou you want ?</string>
+<string name="what_do_you_want_to_do">What do you want ?</string>
 
 <string name="sure_to_delete_track">Are you sure to delete this track?</string>
 <string name="no_stored_tracks">No existed tracks</string>

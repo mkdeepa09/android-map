@@ -4,8 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.travel.track_manage.file.database.TravelDataBaseAdapter;
-import org.travel.track_manage.file.database.TravelerTrackDataBaseHelper;
+import org.traveler.track_manage.file.database.TravelDataBaseAdapter;
+import org.traveler.track_manage.file.database.TravelerTrackDataBaseHelper;
 import org.traveler.track_manage.view.ExtendedCheckBox;
 
 import com.nevilon.bigplanet.core.storage.SQLLocalStorage;
