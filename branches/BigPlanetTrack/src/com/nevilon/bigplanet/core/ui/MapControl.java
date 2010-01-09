@@ -407,11 +407,24 @@ public class MapControl extends RelativeLayout {
 			}
 		}
 		
-		if (BigPlanet.isGPS_track && MarkerManager.markers_G.size()!=0){	
-			float x1=0,x2=0,y1=0,y2=0;
-			paint.setColor(Color.BLUE);
-			paint.setStrokeWidth(5);
-			for (int i2=0;i2<MarkerManager.markers_G.size();i2++) {
+		boolean markers_G_draw = false;
+		boolean saveTracks_G_draw = false;
+		boolean markers_DB_draw = false;
+		boolean markers_leader_draw = false;
+		if (BigPlanet.isGPS_track && markerManager.markers_G.size()!=0){
+			markers_G_draw = true;}
+		if (BigPlanet.isGPS_track_save && markerManager.saveTracks_G.size()!=0){
+			saveTracks_G_draw = true;}
+		if (markerManager.markers_DB.size()!=0){
+			markers_DB_draw = true;}
+		if (markerManager.markers_leader.size()!=0){
+			markers_leader_draw = true;}
+		int MaxSize = FindMaxSize(MarkerManager.markers_G.size(),markerManager.saveTracks_G.size(),markerManager.markers_DB.size(),markerManager.markers_leader.size());
+		
+		if (markers_G_draw || saveTracks_G_draw || markers_DB_draw || markers_leader_draw){
+			float x11=0,x12=0,y11=0,y12=0,x21=0,x22=0,y21=0,y22=0,x31=0,x32=0,y31=0,y32=0,x41=0,x42=0,y41=0,y42=0;
+			
+			for (int i2=0;i2<MaxSize;i2++) {
 				for (int i = 0; i < 7; i++) {
 					for (int j = 0; j < 7; j++) {
 						if ((i > 1 && i < 5) && ((j > 1 && j < 5))) {
@@ -419,48 +432,167 @@ public class MapControl extends RelativeLayout {
 							int z =PhysicMap.getZoomLevel();
 							int tileX = tile.x + (i - 2);
 							int tileY = tile.y + (j - 2);
-							List<Marker_G> markers_G = markerManager.getMarkers_G(tileX,tileY, z,i2);
-							if (i2==0){
-								for (Marker_G marker_G : markers_G) {
-									x1 = (i - 2)* TILE_SIZE
-									   + pmap.getGlobalOffset().x
-									   + (int) marker_G.getOffset().x;
-									y1 = (j - 2)* TILE_SIZE
-										+ pmap.getGlobalOffset().y
-										+ (int) marker_G.getOffset().y+3;
-									
-									cs.drawBitmap(marker_G.getMarkerImage().getImage(),
-											x1- marker_G.getMarkerImage().getOffsetX(),
-											y1- marker_G.getMarkerImage().getOffsetY(),paint);
-								}
-
-							}else{
-								for (Marker_G marker_G : markers_G) {
-									x2 = (i - 2)* TILE_SIZE
-										+ pmap.getGlobalOffset().x
-										+ (int) marker_G.getOffset().x;
-									y2 = (j - 2)* TILE_SIZE
-										+ pmap.getGlobalOffset().y
-										+ (int) marker_G.getOffset().y+3;
-
-									cs.drawLine(x1,y1,x2,y2,paint);
-									x1 = x2;
-									y1 = y2;
-									
-									if (i2==MarkerManager.markers_G.size()-1){
+							
+							if(markers_G_draw){
+								paint.setColor(Color.BLUE);
+								paint.setStrokeWidth(5);
+								List<Marker_G> markers_G = markerManager.getMarkers_G(tileX,tileY, z,i2);
+								if (i2==0){
+									for (Marker_G marker_G : markers_G) {
+										x11 = (i - 2)* TILE_SIZE
+										   + pmap.getGlobalOffset().x
+										   + (int) marker_G.getOffset().x;
+										y11 = (j - 2)* TILE_SIZE
+											+ pmap.getGlobalOffset().y
+											+ (int) marker_G.getOffset().y+3;
+										
 										cs.drawBitmap(marker_G.getMarkerImage().getImage(),
-													x2- marker_G.getMarkerImage().getOffsetX(),
-													y2- marker_G.getMarkerImage().getOffsetY(),paint);
+												x11- marker_G.getMarkerImage().getOffsetX(),
+												y11- marker_G.getMarkerImage().getOffsetY(),paint);
+									}
+								}else{
+									for (Marker_G marker_G : markers_G) {
+										x12 = (i - 2)* TILE_SIZE
+											+ pmap.getGlobalOffset().x
+											+ (int) marker_G.getOffset().x;
+										y12 = (j - 2)* TILE_SIZE
+											+ pmap.getGlobalOffset().y
+											+ (int) marker_G.getOffset().y+3;
+	
+										cs.drawLine(x11,y11,x12,y12,paint);
+										x11 = x12;
+										y11 = y12;
+										
+										if (i2==MarkerManager.markers_G.size()-1){
+											cs.drawBitmap(marker_G.getMarkerImage().getImage(),
+														x12- marker_G.getMarkerImage().getOffsetX(),
+														y12- marker_G.getMarkerImage().getOffsetY(),paint);
+											}
 										}
 									}
-							}
+								}
+							if(saveTracks_G_draw){
+								paint.setColor(Color.GREEN);
+								paint.setStrokeWidth(5);
+								List<Marker_G> SaveTracks_G = markerManager.getSaveTrack_G(tileX,tileY, z,i2);
+								if (i2==0){
+									for (Marker_G SaveTrack_G : SaveTracks_G) {
+										x21 = (i - 2)* TILE_SIZE
+										   + pmap.getGlobalOffset().x
+										   + (int) SaveTrack_G.getOffset().x;
+										y21 = (j - 2)* TILE_SIZE
+											+ pmap.getGlobalOffset().y
+											+ (int) SaveTrack_G.getOffset().y+3;
+										
+										cs.drawBitmap(SaveTrack_G.getMarkerImage().getImage(),
+												x21- SaveTrack_G.getMarkerImage().getOffsetX(),
+												y21- SaveTrack_G.getMarkerImage().getOffsetY(),paint);
+									}
+								}else{
+									for (Marker_G SaveTrack_G : SaveTracks_G) {
+										x22 = (i - 2)* TILE_SIZE
+											+ pmap.getGlobalOffset().x
+											+ (int) SaveTrack_G.getOffset().x;
+										y22 = (j - 2)* TILE_SIZE
+											+ pmap.getGlobalOffset().y
+											+ (int) SaveTrack_G.getOffset().y+3;
+	
+										cs.drawLine(x21,y21,x22,y22,paint);
+										x21 = x22;
+										y21 = y22;
+										
+										if (i2==MarkerManager.markers_G.size()-1){
+											cs.drawBitmap(SaveTrack_G.getMarkerImage().getImage(),
+														x22- SaveTrack_G.getMarkerImage().getOffsetX(),
+														y22- SaveTrack_G.getMarkerImage().getOffsetY(),paint);
+											}
+										}
+									}
+								}
+							
+							if(markers_DB_draw){
+								paint.setColor(Color.CYAN);
+								paint.setStrokeWidth(5);
+								List<Marker_G> markers_DB = markerManager.getMarkers_DB(tileX,tileY, z,i2);
+								if (i2==0){
+									for (Marker_G marker_DB : markers_DB) {
+										x31 = (i - 2)* TILE_SIZE
+										   + pmap.getGlobalOffset().x
+										   + (int) marker_DB.getOffset().x;
+										y31 = (j - 2)* TILE_SIZE
+											+ pmap.getGlobalOffset().y
+											+ (int) marker_DB.getOffset().y+3;
+										
+										cs.drawBitmap(marker_DB.getMarkerImage().getImage(),
+												x31- marker_DB.getMarkerImage().getOffsetX(),
+												y31- marker_DB.getMarkerImage().getOffsetY(),paint);
+									}
+								}else{
+									for (Marker_G marker_DB : markers_DB) {
+										x32 = (i - 2)* TILE_SIZE
+											+ pmap.getGlobalOffset().x
+											+ (int) marker_DB.getOffset().x;
+										y32 = (j - 2)* TILE_SIZE
+											+ pmap.getGlobalOffset().y
+											+ (int) marker_DB.getOffset().y+3;
+	
+										cs.drawLine(x31,y31,x32,y32,paint);
+										x31 = x32;
+										y31 = y32;
+										
+										if (i2==MarkerManager.markers_DB.size()-1){
+											cs.drawBitmap(marker_DB.getMarkerImage().getImage(),
+														x32- marker_DB.getMarkerImage().getOffsetX(),
+														y32- marker_DB.getMarkerImage().getOffsetY(),paint);
+											}
+										}
+									}
+								}
+							if(markers_leader_draw){
+								paint.setColor(Color.RED);
+								paint.setStrokeWidth(5);
+								List<Marker_G> markers_leader = markerManager.getMarkers_leader(tileX,tileY, z,i2);
+								if (i2==0){
+									for (Marker_G marker_leader : markers_leader) {
+										x41 = (i - 2)* TILE_SIZE
+										   + pmap.getGlobalOffset().x
+										   + (int) marker_leader.getOffset().x;
+										y41 = (j - 2)* TILE_SIZE
+											+ pmap.getGlobalOffset().y
+											+ (int) marker_leader.getOffset().y+3;
+										
+										cs.drawBitmap(marker_leader.getMarkerImage().getImage(),
+												x41- marker_leader.getMarkerImage().getOffsetX(),
+												y41- marker_leader.getMarkerImage().getOffsetY(),paint);
+									}
+								}else{
+									for (Marker_G marker_leader : markers_leader) {
+										x32 = (i - 2)* TILE_SIZE
+											+ pmap.getGlobalOffset().x
+											+ (int) marker_leader.getOffset().x;
+										y32 = (j - 2)* TILE_SIZE
+											+ pmap.getGlobalOffset().y
+											+ (int) marker_leader.getOffset().y+3;
+	
+										cs.drawLine(x41,y41,x42,y42,paint);
+										x41 = x42;
+										y41 = y42;
+										
+										if (i2==MarkerManager.markers_leader.size()-1){
+											cs.drawBitmap(marker_leader.getMarkerImage().getImage(),
+														x32- marker_leader.getMarkerImage().getOffsetX(),
+														y32- marker_leader.getMarkerImage().getOffsetY(),paint);
+											}
+										}
+									}
+								}
 						}
 					}
 				}
 			}
 		}
 
-		if (BigPlanet.isGPS_track_save && markerManager.saveTracks_G.size()!=0){	
+		/*if (BigPlanet.isGPS_track_save && markerManager.saveTracks_G.size()!=0){	
 			float x1=0,x2=0,y1=0,y2=0;
 			paint.setColor(Color.GREEN);
 			paint.setStrokeWidth(5);
@@ -511,7 +643,7 @@ public class MapControl extends RelativeLayout {
 					}
 				}
 			}
-		}
+		}*/
 
 		if (isScalable) {
 			Matrix matr = new Matrix();
@@ -675,7 +807,6 @@ public class MapControl extends RelativeLayout {
 
 			return true;
 		}
-
 	}
 
 	public void setMapSource(int sourceId) {
@@ -683,5 +814,7 @@ public class MapControl extends RelativeLayout {
 		getPhysicalMap().reloadTiles();
 		updateScreen();
 	}
-
+	public int FindMaxSize(int a, int b, int c,int d){
+		return Math.max(Math.max(Math.max(a, b),c),d);
+	}
 }

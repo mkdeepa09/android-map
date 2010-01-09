@@ -913,7 +913,6 @@ public class BigPlanet extends Activity {
 	private void trackMyLocation(Location location, int zoom) {
 		double lat = location.getLatitude();
 		double lon = location.getLongitude();
-		long time = location.getTime();
 		com.nevilon.bigplanet.core.geoutils.Point p = GeoUtils.toTileXY(lat, lon, zoom);
 		com.nevilon.bigplanet.core.geoutils.Point off = GeoUtils.getPixelOffsetInTile(lat, lon, zoom);
 		mapControl.goTo((int) p.x, (int) p.y, zoom, (int) off.x, (int) off.y);
@@ -922,6 +921,7 @@ public class BigPlanet extends Activity {
 		place.setLat(lat);
 		place.setLon(lon);
 		place.setLocation(location);
+		
 //		SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd G 'at' hh:mm:ss a zzz");
 //		List<String> items = new ArrayList<String>();
 //		items.add(formatter.format(time));
