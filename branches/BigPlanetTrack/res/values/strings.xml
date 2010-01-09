@@ -37,6 +37,7 @@
     <string name="ABOUT_MENU">About</string>
     <string name="MAP_SOURCE_MENU">Map source</string>
     <string name="SQLiteDB_MENU">SQLite Database</string>
+    <string name="SHARE_MENU">Share Location</string>
     <string name="TOOLS_MENU">More</string>
     <string name="CACHE_MAP_MENU">Save map for offline use</string>
     <string name="NETWORK_MODE_MENU">Network mode</string>
@@ -87,6 +88,10 @@
     <string name="bookmark_name">Name</string>
     <string name="bookmark_description">Description</string>
     
-
+    <string name="share_location_groupname">Group Name:</string>
+    <string name="share_location_account">Google Account:</string>
+    <string name="share_location_password">Google Password:</string>
+    <string name="share_location_checkbox">Sent/Receive GPS coordinates</string>
+    <string name="share_location_note"></string>
 
 </resources>

@@ -15,32 +15,17 @@
  */
 package org.traveler.track_manage.view;
 
-
-
-
-
-
-
-
-
-
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
-import org.travel.track_manage.file.database.TravelDataBaseAdapter;
 //import org.traveler.file.database.TravelerTrackDataBaseHelper;
+import org.traveler.track_manage.file.database.TravelDataBaseAdapter;
 import org.traveler.track_manage.file.operate.ImportFileProcessing;
 import org.traveler.track_manage.file.operate.myParseThread;
 
-
 import com.nevilon.bigplanet.BigPlanet;
 import com.nevilon.bigplanet.R;
-
-
-
 
 import android.app.Activity;
 import android.app.AlertDialog;

@@ -19,8 +19,8 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 
-import org.travel.track_manage.file.database.TravelDataBaseAdapter;
-import org.travel.track_manage.file.database.TravelerTrackDataBaseHelper;
+import org.traveler.track_manage.file.database.TravelDataBaseAdapter;
+import org.traveler.track_manage.file.database.TravelerTrackDataBaseHelper;
 import org.traveler.track_manage.view.ExtendedCheckBox;
 import org.traveler.track_manage.view.ExtendedCheckBoxListActivity;
 import org.xml.sax.InputSource;

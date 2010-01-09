@@ -20,7 +20,7 @@ package org.traveler.track_manage.view;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
-import org.travel.track_manage.file.database.TravelDataBaseAdapter;
+import org.traveler.track_manage.file.database.TravelDataBaseAdapter;
 import org.traveler.track_manage.file.export.DBRecordToGpxFile;
 import org.traveler.track_manage.file.operate.TrackPoint;
 
