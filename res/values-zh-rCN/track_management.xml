@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="BROWSE_TRACK_MENU">浏览路径</string>
+<string name="TRACK_MANAGE_MENU">管理路径</string>
+<string name="IMPORT_TRACK_MENU">汇入路径</string>
+<string name="des_edit_text">路径描述</string>
+<string name="name_edit_text">路径名称</string>
+
+<string name="str_export_dialog_body">请稍后片刻...</string>
+<string name="track_list_view">汇入路径页面</string>
+<string name="str_dialog_title">正在汇入路径</string>
+<string name="str_dialog_body">请稍待片刻...</string>
+<string name="track_importing_result">路径汇入情况</string>
+<string name="track_importing_successfully">成功!</string>
+<string name="import_no_items">目前尚无侦测到任何以GPX格式存在之路径档案!\n请将档案放置在tracks/import目录下,谢谢。</string>
+<string name="track_browse_view">浏览路径页面</string>
+<string name="browse_no_items">目前尚无任何汇入之路径。</string>
+<string name="some_error">部分档案内容有错误:</string>
+<string name="OK">确定</string>
+<string name="some_successful">部分成功</string>
+<string name="import_track">汇入路径</string>
+<string name="find_exised_track_dialog_title">发现已存在之路径</string>
+<string name="find_exised_track_dialog_message">底下路径已存在资料库中，您确定还要再重复汇入相同之路径?</string>
+<string name="cancel">取消</string>
+<string name="have_yet_select_track_message">您尚未选取任何路径!</string>
+<string name="save_successfully">储存成功</string>
+<string name="save_fail">储存失败</string>
+<string name="what_do_you_want_to_do">您要做什么?</string>
+<string-array name="items_track_what_to_do_dialog"><item>显示路径於地图</item>
+<item>编辑路径</item>
+<item>删除路径</item>
+<item>储存路径於SD卡</item>
+</string-array>
+
+<string name="sure_to_delete_track">您确定要删除此路径?</string>
+<string name="no_stored_tracks">没有任何储存的路径</string>
+</resources>

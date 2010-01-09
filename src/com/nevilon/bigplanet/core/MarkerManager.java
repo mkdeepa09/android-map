@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.util.Log;
 
 import com.nevilon.bigplanet.BigPlanet;
 import com.nevilon.bigplanet.R;
@@ -77,6 +78,7 @@ public class MarkerManager {
 	
 	public void addMarker(Place place, int zoom,int trackType , int imageType){
 		// 0 -> search, 1 -> track, 2 -> trackDB, 3 -> trackLeader //
+		
 		boolean isGPS;
 		if (trackType == 0){
 			isGPS = false;
@@ -103,7 +105,7 @@ public class MarkerManager {
 			}
 		}
 		else if(trackType == 2){
-			
+			Log.i("Message","At addMarker, lat="+place.getLocation().getLatitude()+",lon="+place.getLocation().getLongitude());
 		}
 		else if(trackType == 3){
 			

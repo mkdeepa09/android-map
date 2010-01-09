@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="BROWSE_TRACK_MENU">Brose Tracks</string>
+<string name="TRACK_MANAGE_MENU">Manage Tracks</string>
+<string name="IMPORT_TRACK_MENU">Import Tracks</string>
+<string name="des_edit_text">Track Description</string>
+<string name="name_edit_text">Track Name</string>
+<string-array name="items_track_what_to_do_dialog">
+<item>Show track on the map</item>
+<item>Edit track</item>
+<item>Delete track</item>
+<item>Save track into SD-Card</item>
+</string-array>
+<string name="str_export_dialog_title">Export Track Now</string>
+<string name="str_export_dialog_body">Please wait for a moment...</string>
+<string name="track_list_view">Track Importing Panel</string>
+<string name="str_dialog_title">Import Tracks Now</string>
+<string name="str_dialog_body">Please wait for a moment...</string>
+<string name="track_importing_result">Track Importing Result</string>
+<string name="track_importing_successfully">Successfully!</string>
+<string name="import_no_items">There are no GPX-format track files existed!\nPlease put those files in the directory named &quot;tracks/import&quot;. Thanks a lot!</string>
+<string name="track_browse_view">Track Browsing Panel</string>
+<string name="browse_no_items">There are no imported tracks here!</string>
+<string name="some_error">Some files get failed:</string>
+<string name="OK">OK</string>
+<string name="some_successful">Not all tracks imported successful!</string>
+<string name="select_all">Select All</string>
+<string name="import_track">Import Tracks</string>
+<string name="find_exised_track_dialog_title">Find Existed Tracks</string>
+<string name="find_exised_track_dialog_message">There are already the same tracks existed in DataBase. Do you want to import those again?</string>
+<string name="cancel">Cancel</string>
+<string name="have_yet_select_track_message">You have yet selected any tracks!</string>
+<string name="save_successfully">Save Successfully!</string>
+<string name="save_fail">Fail to Save</string>
+<string name="what_do_you_want_to_do">What dou you want ?</string>
+
+<string name="sure_to_delete_track">Are you sure to delete this track?</string>
+<string name="no_stored_tracks">No existed tracks</string>
+</resources>

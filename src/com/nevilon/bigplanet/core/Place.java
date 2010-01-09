@@ -44,6 +44,7 @@ public class Place implements Serializable{
 	private Location location;
 	
 	public Location getLocation() {
+		
 		return location;
 	}
 
