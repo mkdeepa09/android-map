@@ -32,6 +32,10 @@ public class MarkerManager {
 	
 	public static List<Marker_G> saveTracks_G = new ArrayList<Marker_G>();
 	
+	public static List<Marker_G> markers_DB = new ArrayList<Marker_G>();
+	
+	public static List<Marker_G> markers_leader = new ArrayList<Marker_G>();
+	
 	private Resources resources;
 	
 	public MarkerManager(Resources resources){	
@@ -74,10 +78,29 @@ public class MarkerManager {
 			saveTrack_G.tile.z = z;
 			// пересчет координат тайла и отступа
 		}
+		for(Marker_G marker_DB: markers_DB){
+			Point tileXY = GeoUtils.toTileXY(marker_DB.place.getLat(), marker_DB.place.getLon(), z);
+			Point offsetXY = GeoUtils.getPixelOffsetInTile(marker_DB.place.getLat(), marker_DB.place.getLon(), z);
+			marker_DB.offset = offsetXY;
+			marker_DB.tile.x = (int) tileXY.x;
+			marker_DB.tile.y = (int) tileXY.y;
+			marker_DB.tile.z = z;
+			// пересчет координат тайла и отступа
+		}
+		for(Marker_G marker_leader: markers_leader){
+			Point tileXY = GeoUtils.toTileXY(marker_leader.place.getLat(), marker_leader.place.getLon(), z);
+			Point offsetXY = GeoUtils.getPixelOffsetInTile(marker_leader.place.getLat(), marker_leader.place.getLon(), z);
+			marker_leader.offset = offsetXY;
+			marker_leader.tile.x = (int) tileXY.x;
+			marker_leader.tile.y = (int) tileXY.y;
+			marker_leader.tile.z = z;
+			// пересчет координат тайла и отступа
+		}
+		
 	}
 	
 	public void addMarker(Place place, int zoom,int trackType , int imageType){
-		// 0 -> search, 1 -> track, 2 -> trackDB, 3 -> trackLeader //
+		// trackType : 0 -> search, 1 -> track, 2 -> trackDB, 3 -> trackLeader //
 		
 		boolean isGPS;
 		if (trackType == 0){
@@ -91,6 +114,8 @@ public class MarkerManager {
 		Marker_G marker_DB = new Marker_G(place, images.get(imageType), isGPS);
 		updateParams(marker, zoom);
 		updateParams(marker_G, zoom);
+		updateParams(marker_leader, zoom);
+		updateParams(marker_DB, zoom);
 		
 		if(trackType == 1){
 			if(BigPlanet.isGPS_track){
@@ -105,17 +130,18 @@ public class MarkerManager {
 			}
 		}
 		else if(trackType == 2){
+
+			markers_DB.add(marker_DB);
+
 			Log.i("Message","At addMarker, lat="+place.getLocation().getLatitude()+",lon="+place.getLocation().getLongitude());
+
 		}
 		else if(trackType == 3){
-			
+			markers_leader.add(marker_leader);
 		}
-		
 		if(!BigPlanet.isGPS_track){
 			markers.add(marker);
 		}
-		
-		
 	}
 	
 	public void updateParams(Marker marker, int zoom){
@@ -144,6 +170,12 @@ public class MarkerManager {
 		for(Marker_G saveTrack_G : saveTracks_G){
 			updateParams(saveTrack_G, zoom);
 		}
+		for(Marker_G marker_DB : markers_DB){
+			updateParams(marker_DB, zoom);
+		}
+		for(Marker_G marker_leader : markers_leader){
+			updateParams(marker_leader, zoom);
+		}
 	}
 	
 	public List<Marker> getMarkers(int x, int y, int z){
@@ -157,7 +189,8 @@ public class MarkerManager {
 	}
 	
 	public List<Marker_G> getMarkers_G(int x, int y, int z, int i){
-		List<Marker_G> result_G = new ArrayList<Marker_G>();
+		// tracktype : 1 -> track, 2 -> trackDB, 3 -> trackLeader //
+		List<Marker_G> result_G = new ArrayList<Marker_G>();	
 		if(markers_G.get(i).tile.x ==x && markers_G.get(i).tile.y ==y && markers_G.get(i).tile.z ==z){
 			Iterator<Marker_G> it = result_G.iterator();
 			while(it.hasNext()){
@@ -178,6 +211,30 @@ public class MarkerManager {
 			result_save_G.add(saveTracks_G.get(i));
 		}
 		return result_save_G;
+	}
+	
+	public List<Marker_G> getMarkers_DB(int x, int y, int z, int i){
+		List<Marker_G> result_DB = new ArrayList<Marker_G>();
+		if(markers_DB.get(i).tile.x ==x && markers_DB.get(i).tile.y ==y && markers_DB.get(i).tile.z ==z){
+			Iterator<Marker_G> it = result_DB.iterator();
+			while(it.hasNext()){
+					it.remove();
+			}
+			result_DB.add(markers_DB.get(i));
+		}
+		return result_DB;
+	}
+	
+	public List<Marker_G> getMarkers_leader(int x, int y, int z, int i){
+		List<Marker_G> result_leader = new ArrayList<Marker_G>();
+		if(markers_leader.get(i).tile.x ==x && markers_leader.get(i).tile.y ==y && markers_leader.get(i).tile.z ==z){
+			Iterator<Marker_G> it = result_leader.iterator();
+			while(it.hasNext()){
+					it.remove();
+			}
+			result_leader.add(markers_leader.get(i));
+		}
+		return result_leader;
 	}
 	
 	public void saveMarkerGTrack() {
