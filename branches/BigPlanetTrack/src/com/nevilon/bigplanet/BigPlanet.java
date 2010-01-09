@@ -5,6 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.travel.track_manage.file.database.TravelDataBaseAdapter;
+import org.traveler.track_manage.file.operate.ImportFileProcessing;
+import org.traveler.track_manage.view.ExtendedCheckBoxListActivity;
+import org.traveler.track_manage.view.TrackListViewActivity;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -49,6 +54,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
+
 import com.nevilon.bigplanet.core.BigPlanetApp;
 import com.nevilon.bigplanet.core.MarkerManager;
 import com.nevilon.bigplanet.core.PhysicMap;
@@ -86,7 +92,7 @@ public class BigPlanet extends Activity {
 	 */
 	private MapControl mapControl;
 
-	private MarkerManager mm;
+	private static MarkerManager mm;
 
 	private static LocationManager locationManager;
 	
@@ -115,6 +121,9 @@ public class BigPlanet extends Activity {
 	public static RelativeLayout mTrackRelativeLayout;
 	
 	private static ImageView scaleImageView;
+	
+	public static TravelDataBaseAdapter DBAdapter;
+	private String drawing_mode = null;
 
 	/**
 	 * Конструктор
@@ -122,6 +131,23 @@ public class BigPlanet extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		Log.i("BigPlanet:", "At BigPlanet,Now!");
+		Log.i("Message", "new a DBAdapter instance");
+		Bundle extras = getIntent().getExtras(); 
+        if(extras !=null)
+        {
+         this.drawing_mode = extras.getString("drawing_mode");
+         if(this.drawing_mode != null){
+        	 Log.i("drawing_mode", this.drawing_mode);
+        	 //if(TrackListViewActivity.placeList != null)
+        	//	 addMarkersForDrawing(TrackListViewActivity.placeList, 2);
+        	// else
+        	//	 Log.e("Error", "TrackListViewActivity.placeList is Null");
+        	 
+         }
+        }
+        DBAdapter = new TravelDataBaseAdapter(this);
 		
 		boolean hasSD = false;
 		// проверка на доступность sd
@@ -157,6 +183,14 @@ public class BigPlanet extends Activity {
 			TileLoader.stop = false;
 			mAutoFollowRelativeLayout = getAutoFollowRelativeLayout();
 			mAutoFollowRelativeLayout.setVisibility(View.INVISIBLE);
+			//Add by Taiyu
+			File trackImportFolder = new File(SQLLocalStorage.TRACK_IMPORT_PATH);
+			if(!trackImportFolder.exists())
+			{
+				trackImportFolder.mkdirs();
+				Log.i("Message", "trackImportFolder creates="+trackImportFolder);
+			}	
+			trackImportFolder = null;
 			
 			mTrackRelativeLayout = getTrackRelativeLayout();
 			mTrackRelativeLayout.setVisibility(View.VISIBLE);
@@ -185,6 +219,16 @@ public class BigPlanet extends Activity {
 		if (hasSD) {
 			setActivityTitle(BigPlanet.this);
 		}
+		
+		if(this.drawing_mode!=null)
+		{	
+			if(this.drawing_mode.equals("2")&&TrackListViewActivity.placeList != null)
+				addMarkersForDrawing(TrackListViewActivity.placeList, 2);
+			else
+				Log.e("Error", "TrackListViewActivity.placeList is Null");
+		}
+        
+        
 	}
 	
 	public static void disabledAutoFollow(Context context) {
@@ -451,8 +495,15 @@ public class BigPlanet extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 		menu.add(1, 11, 0, R.string.SEARCH_MENU).setIcon(R.drawable.search);
-
-		SubMenu sub = menu.addSubMenu(0, 6, 0, R.string.BOOKMARKS_MENU).setIcon(R.drawable.bookmark);
+		/* Add by Taiyu */
+		SubMenu sub = menu.addSubMenu(5, 101, 0, R.string.TRACK_MANAGE_MENU).setIcon(R.drawable.track_manage);
+        sub.add(6, 102, 0, R.string.BROWSE_TRACK_MENU);
+        sub.add(6, 103, 1, R.string.IMPORT_TRACK_MENU);
+        
+        
+        
+        
+		sub = menu.addSubMenu(0, 6, 0, R.string.BOOKMARKS_MENU).setIcon(R.drawable.bookmark);
 		sub.add(2, 21, 0, R.string.BOOKMARK_ADD_MENU);
 		sub.add(2, 22, 1, R.string.BOOKMARKS_VIEW_MENU);
 
@@ -592,9 +643,34 @@ public class BigPlanet extends Activity {
 		case 45:
 			showAbout();
 			break;
+		case 102: //browse tracks in SqliteDB
+			browseTracks();
+			break;
+		case 103: //import tracks from SD card
+			importTracks();
+			break;
 		}
 		return false;
 
+	}
+	
+	
+	private void browseTracks(){
+		
+		Log.i("Message", "Press--Browse Track function");
+		Intent myIntent = new Intent();
+		myIntent.setClass(BigPlanet.this, TrackListViewActivity.class);
+        Log.i("Message", "calling TrackListViewActivity");
+        startActivity(myIntent);
+	}
+	
+	private void importTracks(){
+		
+		Log.i("Message", "Press--Import Track function");
+		Intent importTrackIntent = new Intent(this, ExtendedCheckBoxListActivity.class);
+		startActivity(importTrackIntent);
+		
+		
 	}
 
 	private void showTrialDialog(int title, int message) {
@@ -862,8 +938,10 @@ public class BigPlanet extends Activity {
 		mm.addMarker(place, zoom, 1, MarkerManager.MY_LOCATION_MARKER);
 	}
 	
-	private void addMarkersForDrawing(List<Place> placeList, int type) {
+	public static void addMarkersForDrawing(List<Place> placeList, int type) {
 		// type : 2 -> from DB, 3 -> trackLeader //
+		Log.i("Message", "At addMarkerForDrawing........Type="+type);
+		
 		int zoom = PhysicMap.getZoomLevel();
 		for (int i=0;i<placeList.size();i++)
 		{

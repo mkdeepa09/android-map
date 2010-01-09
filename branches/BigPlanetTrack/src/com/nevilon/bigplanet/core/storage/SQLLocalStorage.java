@@ -31,6 +31,7 @@ public class SQLLocalStorage implements ILocalStorage {
 	private static String INDEX_DDL = "CREATE INDEX IF NOT EXISTS IND on tiles (x,y,z,s)";
 
 	public static String DATA_PATH = "/sdcard/RMaps/maps/";
+	public static String TRACK_IMPORT_PATH = "/sdcard/RMaps/tracks/import/";
 	
 	public static String DATA_FILE = "BigPlanetTrack.sqlitedb";
 

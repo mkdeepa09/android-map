@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/layout_root"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:orientation="vertical">
+	<TextView android:text="@string/name_edit_text" 
+		      android:id="@+id/name_edit_view" 
+		      android:layout_width="wrap_content" 
+		      android:layout_height="wrap_content"
+		      >
+    </TextView>
+	<EditText android:text=""
+			  android:id="@+id/name_edit_text"  
+			  android:layout_height="wrap_content"
+			  android:layout_width="220dip">
+	</EditText>
+	
+	<TextView android:text="@string/des_edit_text" 
+		      android:id="@+id/des_edit_view" 
+		      android:layout_width="wrap_content" 
+		      android:layout_height="wrap_content"
+		      >
+    </TextView>
+	<EditText android:text=""
+			  android:id="@+id/des_edit_text"  
+			  android:layout_height="wrap_content"
+			  android:layout_width="220dip"
+			  android:inputType="textMultiLine">
+	</EditText>
+	
+	
+	
+</LinearLayout>

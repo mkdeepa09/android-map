@@ -31,6 +31,12 @@
 			</intent-filter>
 			<meta-data android:name="android.app.searchable" android:resource="@xml/searchable" />
 		</activity>
+		<activity android:name="org.traveler.track_manage.view.ExtendedCheckBoxListActivity"
+                  android:label="@string/track_list_view">
+        </activity>
+        <activity android:name="org.traveler.track_manage.view.TrackListViewActivity"
+                  android:label="@string/track_browse_view">
+        </activity>
 
 	</application>
 </manifest> 
