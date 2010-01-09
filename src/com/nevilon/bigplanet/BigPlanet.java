@@ -949,7 +949,11 @@ public class BigPlanet extends Activity {
 		int zoom = PhysicMap.getZoomLevel();
 		for (int i=0;i<placeList.size();i++)
 		{
+			double lat = placeList.get(i).getLocation().getLatitude();
+			double lon = placeList.get(i).getLocation().getLongitude();
 			Place place = placeList.get(i);
+			place.setLat(lat);
+			place.setLon(lon);
 			mm.addMarker(place, zoom, type, MarkerManager.MY_LOCATION_MARKER);
 		}
 	}
