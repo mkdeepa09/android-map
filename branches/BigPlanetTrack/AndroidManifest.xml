@@ -39,6 +39,10 @@
         <activity android:name="org.traveler.track_manage.view.TrackListViewActivity"
                   android:label="@string/track_browse_view">
         </activity>
+        
+        <activity android:name="org.traveler.track_manage.simulate.GpsTrackStorageSimulatorActivity"
+                  android:label="@string/Gps_track_storage_simu_view">
+        </activity>
 
 	</application>
 </manifest> 
