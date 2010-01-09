@@ -41,4 +41,9 @@
 
 <string name="sure_to_delete_track">您確定要刪除此路徑?</string>
 <string name="no_stored_tracks">沒有任何儲存的路徑</string>
+<string name="RECORD_GPS_TRACK_MENU">模擬GPS Track儲存</string>
+<string name="Gps_track_storage_simu_view">Gps路徑儲存模擬頁面</string>
+<string name="fail">儲存失敗</string>
+<string name="str_store_gps_location_to_db_title">正在儲存GPS Locations</string>
+<string name="str_store_gps_location_to_db_body">請稍候片刻...</string>
 </resources>

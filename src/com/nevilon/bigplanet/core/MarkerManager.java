@@ -248,8 +248,8 @@ public class MarkerManager {
 		markers_G.clear();
 	}
 	
-	public static List<Location> getLocationList(){
-		List<Location> list = new ArrayList<Location>();
+	public static ArrayList<Location> getLocationList(){
+		ArrayList<Location> list = new ArrayList<Location>();
 		for(int i=0; i<saveTracks_G.size();i++)
 		{
 			list.add(saveTracks_G.get(i).place.getLocation());

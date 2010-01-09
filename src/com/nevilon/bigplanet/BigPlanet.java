@@ -1,18 +1,26 @@
 package com.nevilon.bigplanet;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.traveler.googleclientlogin.GoogleAccountClient;
+import org.traveler.track_manage.file.database.GpsLocationStoringThread;
 import org.traveler.track_manage.file.database.TravelDataBaseAdapter;
+import org.traveler.track_manage.simulate.GpsLocationLogParsingThread;
+import org.traveler.track_manage.simulate.GpsTrackStorageSimulatorActivity;
 import org.traveler.track_manage.view.ExtendedCheckBoxListActivity;
 import org.traveler.track_manage.view.TrackListViewActivity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -123,7 +131,9 @@ public class BigPlanet extends Activity {
 	
 	public static TravelDataBaseAdapter DBAdapter;
 	private String drawing_mode = null;
-
+	public static ProgressDialog myGPSDialog = null;
+    Handler handler;
+    Handler myHandler;
 	/**
 	 * Конструктор
 	 */
@@ -147,6 +157,49 @@ public class BigPlanet extends Activity {
          }
         }
         DBAdapter = new TravelDataBaseAdapter(this);
+        
+        
+        
+        myHandler = new Handler(){
+			
+			
+			public void handleMessage(Message msg) {
+               
+				Log.i("Message", "flag="+msg.what); //1:全部import成功;0:部分import失敗
+				switch (msg.what)
+				{
+				  
+				   case GpsLocationStoringThread.SUCCESSFULLY:
+					   /*成功*/
+					    
+					    Intent myIntent = new Intent();
+				        myIntent.setClass(BigPlanet.this, TrackListViewActivity.class);
+				        Log.i("Message", "calling TrackListViewActivity");
+				        startActivity(myIntent);
+						
+						break;
+						
+					case GpsLocationLogParsingThread.FAIL:
+						/*有錯*/
+						Toast.makeText(
+							    BigPlanet.this,
+	            		        getString(R.string.fail),
+	            		        Toast.LENGTH_LONG).show();
+						
+						
+				         break;
+				
+				
+				
+				}
+				//((Activity)ctx).setTitle((String)msg.obj);
+				
+
+         }};
+         myHandler.removeMessages(0);
+        
+        
+        
 		
 		boolean hasSD = false;
 		// проверка на доступность sd
@@ -312,6 +365,66 @@ public class BigPlanet extends Activity {
 					isGPS_track = false;
 					ivAutoFollow.setImageResource(R.drawable.btn_record_start);
 					disabledTrack(BigPlanet.this);
+					Log.i("Message","Stop Recording GPS Location...");
+					Log.i("Message","Start to Store GPS Location to DB...");
+				
+				/*	測試用
+					ArrayList<Location> locationList = new ArrayList<Location>();
+					
+					String gpsLogFilePath = "/sdcard/RMaps/tracks/import/gps1.log"; // need to create the folder
+					File gpsLogFile = new File(gpsLogFilePath);
+					FileInputStream file_stream;
+					try{
+						Log.i("Message:","GPS_Log_File_Path="+gpsLogFilePath);
+						Log.i("Message:","Parsing Log begins...");
+						file_stream = new FileInputStream(gpsLogFile);
+						//reader = new InputStreamReader(file_stream,"UTF-8");
+						BufferedReader in = new BufferedReader(new InputStreamReader(file_stream,"UTF-8"));
+						String str;
+						in.readLine();
+			
+						while ((str = in.readLine()) != null) {
+							String[] second_line = in.readLine().split("	");
+							Location location = new Location("NTU Traveler");
+							location.setLongitude(Double.parseDouble(second_line[0]));
+							
+							location.setLatitude(Double.parseDouble(second_line[1]));
+							location.setAltitude(Double.parseDouble(second_line[2]));
+							location.setTime(Long.parseLong(second_line[3]));
+							location.setSpeed(Float.parseFloat(second_line[4]));
+							location.setBearing(Float.parseFloat(second_line[5]));
+							location.setAccuracy(Float.parseFloat(second_line[6]));
+							Log.i("Message:","lan="+location.getLatitude()+",lon="+location.getLongitude()+",Altitude="+location.getAltitude()
+									+",time="+location.getTime()+",speed="+location.getSpeed()+",bearing="+location.getBearing()+
+									",accuracy="+location.getAccuracy());
+							locationList.add(location);
+							
+						}
+					}
+					catch(Exception e){
+						e.printStackTrace();
+					}
+					
+				  */
+					
+					// 顯示Progress對話方塊
+					final CharSequence strDialogTitle = getString(R.string.str_store_gps_location_to_db_title);
+					final CharSequence strDialogBody = getString(R.string.str_store_gps_location_to_db_body);
+					myGPSDialog = ProgressDialog.show
+			                 (
+			                   BigPlanet.this,
+			                   strDialogTitle,
+			                   strDialogBody, 
+			                   true
+			                 );
+					
+					
+					GpsLocationStoringThread storingThread = new GpsLocationStoringThread();
+					storingThread.setMainHandler(myHandler);
+					storingThread.setLocationList(MarkerManager.getLocationList());
+					//storingThread.setLocationList(locationList);
+					storingThread.start();
+					
 				}
 			}
         });
@@ -499,6 +612,12 @@ public class BigPlanet extends Activity {
         sub.add(6, 102, 0, R.string.BROWSE_TRACK_MENU);
         sub.add(6, 103, 1, R.string.IMPORT_TRACK_MENU);
 
+        //sub.add(6, 104, 2, R.string.RECORD_GPS_TRACK_MENU);
+        
+        
+        
+        
+
 		sub = menu.addSubMenu(0, 6, 0, R.string.BOOKMARKS_MENU).setIcon(R.drawable.bookmark);
 		sub.add(2, 21, 0, R.string.BOOKMARK_ADD_MENU);
 		sub.add(2, 22, 1, R.string.BOOKMARKS_VIEW_MENU);
@@ -653,6 +772,10 @@ public class BigPlanet extends Activity {
 			importTracks();
 			break;
 
+		case 104: //simulate GPS track storage
+			recordGpsTracks();
+			break;
+
 		}
 		return false;
 
@@ -673,6 +796,17 @@ public class BigPlanet extends Activity {
 		Log.i("Message", "Press--Import Track function");
 		Intent importTrackIntent = new Intent(this, ExtendedCheckBoxListActivity.class);
 		startActivity(importTrackIntent);
+		
+		
+	}
+	
+	private void recordGpsTracks(){
+		
+		Log.i("Message", "Press--Simulate GPS Track Storage function");
+		Intent importTrackIntent = new Intent(this,GpsTrackStorageSimulatorActivity.class);
+		startActivity(importTrackIntent);
+		
+		
 		
 		
 	}
@@ -700,8 +834,7 @@ public class BigPlanet extends Activity {
 		paramsDialog.setContentView(v);
 
 		paramsDialog.show();
-
-		final Handler handler = new Handler() {
+		handler = new Handler() {
 
 			@Override
 			public void handleMessage(Message msg) {
@@ -710,13 +843,34 @@ public class BigPlanet extends Activity {
 				if (okValue == 0) {
 					okBtn.setText(R.string.OK_LABEL);
 					okBtn.setEnabled(true);
-				} else {
+				}else if(okValue == 1)
+				{
+					
+					Intent myIntent = new Intent();
+			        myIntent.setClass(BigPlanet.this, TrackListViewActivity.class);
+			        Log.i("Message", "calling TrackListViewActivity");
+			        startActivity(myIntent);
+					
+					
+					
+				}
+				else if(okValue == 2)
+				{
+					
+					
+					Toast.makeText(
+							    BigPlanet.this,
+	            		        getString(R.string.fail),
+	            		        Toast.LENGTH_LONG).show();
+				}
+				else {
 					okBtn.setText(String.valueOf(okValue));
 				}
 
 			}
 		};
 
+		
 		new Thread() {
 
 			int count = 5;

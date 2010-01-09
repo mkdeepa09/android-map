@@ -36,4 +36,10 @@
 
 <string name="sure_to_delete_track">Are you sure to delete this track?</string>
 <string name="no_stored_tracks">No existed tracks</string>
+<string name="RECORD_GPS_TRACK_MENU">Simulate GPS Track Storage</string>
+<string name="Gps_track_storage_simu_view">GpsTrackStorageSimulation</string>
+<string name="string_gps_track_storage_simu">Simulate_GPS_Track_Storage</string>
+<string name="fail">Fail to store!</string>
+<string name="str_store_gps_location_to_db_title">Storing GPS Locations to Database</string>
+<string name="str_store_gps_location_to_db_body">Please wait...</string>
 </resources>
