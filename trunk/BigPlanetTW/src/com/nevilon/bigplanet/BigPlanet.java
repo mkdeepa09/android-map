@@ -530,6 +530,8 @@ public class BigPlanet extends Activity {
 				} else {
 					showMapSaver();
 				}
+			} else {
+				showMapSaver();
 			}
 			break;
 		case 43:
