@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="share_location_note">分享位置:
+  組長上傳自己的連續 GPS 座標給同群組的其他成員。
+  並在這些成員的地圖上畫出 GPS 軌跡。</string>
+  <string name="share_location_account">Google 帳號: </string>
+  <string name="share_location_password">Google 密碼: </string>
+  <string name="share_location_groupname">群組名稱: </string>
+  <string name="btn_update_group_list">取得該帳號所屬群組清單</string>
+  <string name="checkbox_SentReceiveGPS">傳送/接收 GPS 座標</string>
+  <string name="msg_wait">請稍候</string>
+  <string name="msg_get_group_info">取得群組資訊</string>
+  <string name="msg_connecting">連線中...</string>
+  <string name="msg_account_password_empty">帳號或密碼空白。</string>
+  <string name="msg_account_password_error">帳號或密碼錯誤。</string>
+  <string name="msg_leader">組長:</string>
+  <string name="msg_not_connect_to_server">無法連線至伺服器。</string>
+  <string name="msg_enable_sending">開始傳送 GPS 座標。</string>
+  <string name="msg_enable_receiving">開始接收 GPS 座標。</string>
+</resources>

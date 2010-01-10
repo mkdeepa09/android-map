@@ -9,7 +9,7 @@
 		android:layout_height="wrap_content">
 		
 		<TextView
-			android:id="@+id/mTextView_URL"
+			android:id="@+id/mTextView_Note"
 			android:text="@string/share_location_note"
 			android:padding="5dip"
 			android:layout_width="wrap_content"
@@ -22,29 +22,12 @@
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content">
 			<TextView
-				android:text="@string/share_location_groupname"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"/>
-			<Spinner
-				android:id="@+id/mSpinner_Groupname"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:drawSelectorOnTop="true"/>
-		</LinearLayout>
-		
-		<LinearLayout
-			android:orientation="horizontal"
-			android:layout_marginLeft="5dip"
-			android:layout_marginRight="5dip"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content">
-			<TextView
 				android:text="@string/share_location_account"
-				android:hint="example@gmail.com"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"/>
 			<EditText
 				android:id="@+id/mEditText_Email"
+				android:hint="example@gmail.com"
 				android:textAppearance="?android:attr/textAppearanceSmall"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"/>
@@ -68,9 +51,34 @@
 				android:layout_height="wrap_content"/>
 		</LinearLayout>
 		
+		<Button
+			android:id="@+id/mButton"
+			android:text="@string/btn_update_group_list"
+			android:layout_gravity="center"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"/>
+		
+		<LinearLayout
+			android:id="@+id/mGroupnameView"
+			android:orientation="horizontal"
+			android:layout_marginLeft="5dip"
+			android:layout_marginRight="5dip"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content">
+			<TextView
+				android:text="@string/share_location_groupname"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"/>
+			<Spinner
+				android:id="@+id/mSpinner_Groupname"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:drawSelectorOnTop="true"/>
+		</LinearLayout>
+		
 		<CheckBox
-			android:id="@+id/mCheckBox"
-			android:text="@string/share_location_checkbox"
+			android:id="@+id/mCheckBox_SentReceiveGPS"
+			android:text="@string/checkbox_SentReceiveGPS"
 			android:layout_marginLeft="5dip"
 			android:layout_marginRight="5dip"
 			android:checked="false"
@@ -78,12 +86,10 @@
 			android:layout_height="wrap_content"/>
 		
 		<TextView
-			android:id="@+id/mTextView_AuthToken"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"/>
-		
-		<TextView
-			android:id="@+id/mTextView_AuthCookie"
+			android:id="@+id/mTextView_Message"
+			android:layout_marginLeft="5dip"
+			android:layout_marginRight="5dip"
+			android:layout_gravity="center"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"/>
 		

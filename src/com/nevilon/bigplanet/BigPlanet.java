@@ -1,15 +1,12 @@
 package com.nevilon.bigplanet;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.traveler.googleclientlogin.GoogleAccountClient;
+import org.jivesoftware.smack.XMPPException;
+import org.traveler.googleclientlogin.GoogleAccountActivity;
 import org.traveler.track_manage.file.database.GpsLocationStoringThread;
 import org.traveler.track_manage.file.database.TravelDataBaseAdapter;
 import org.traveler.track_manage.simulate.GpsLocationLogParsingThread;
@@ -620,12 +617,7 @@ public class BigPlanet extends Activity {
 		SubMenu sub = menu.addSubMenu(5, 101, 0, R.string.TRACK_MANAGE_MENU).setIcon(R.drawable.track_manage);
         sub.add(6, 102, 0, R.string.BROWSE_TRACK_MENU);
         sub.add(6, 103, 1, R.string.IMPORT_TRACK_MENU);
-
         //sub.add(6, 104, 2, R.string.RECORD_GPS_TRACK_MENU);
-        
-        
-        
-        
 
 		sub = menu.addSubMenu(0, 6, 0, R.string.BOOKMARKS_MENU).setIcon(R.drawable.bookmark);
 		sub.add(2, 21, 0, R.string.BOOKMARK_ADD_MENU);
@@ -758,6 +750,8 @@ public class BigPlanet extends Activity {
 				} else {
 					showMapSaver();
 				}
+			} else {
+				showMapSaver();
 			}
 			break;
 		case 43:
@@ -769,30 +763,24 @@ public class BigPlanet extends Activity {
 		case 49:
 			showAbout();
 			break;
-
 		case 51:
 			shareLocation();
 			break;
-
 		case 102: //browse tracks in SqliteDB
 			browseTracks();
 			break;
 		case 103: //import tracks from SD card
 			importTracks();
 			break;
-
 		case 104: //simulate GPS track storage
 			recordGpsTracks();
 			break;
 
 		}
 		return false;
-
 	}
 	
-	
 	private void browseTracks(){
-		
 		Log.i("Message", "Press--Browse Track function");
 		Intent myIntent = new Intent();
 		myIntent.setClass(BigPlanet.this, TrackListViewActivity.class);
@@ -801,23 +789,15 @@ public class BigPlanet extends Activity {
 	}
 	
 	private void importTracks(){
-		
 		Log.i("Message", "Press--Import Track function");
 		Intent importTrackIntent = new Intent(this, ExtendedCheckBoxListActivity.class);
 		startActivity(importTrackIntent);
-		
-		
 	}
 	
 	private void recordGpsTracks(){
-		
 		Log.i("Message", "Press--Simulate GPS Track Storage function");
 		Intent importTrackIntent = new Intent(this,GpsTrackStorageSimulatorActivity.class);
 		startActivity(importTrackIntent);
-		
-		
-		
-		
 	}
 
 	private void showTrialDialog(int title, int message) {
@@ -854,19 +834,13 @@ public class BigPlanet extends Activity {
 					okBtn.setEnabled(true);
 				}else if(okValue == 1)
 				{
-					
 					Intent myIntent = new Intent();
 			        myIntent.setClass(BigPlanet.this, TrackListViewActivity.class);
 			        Log.i("Message", "calling TrackListViewActivity");
 			        startActivity(myIntent);
-					
-					
-					
 				}
 				else if(okValue == 2)
 				{
-					
-					
 					Toast.makeText(
 							    BigPlanet.this,
 	            		        getString(R.string.fail),
@@ -875,15 +849,12 @@ public class BigPlanet extends Activity {
 				else {
 					okBtn.setText(String.valueOf(okValue));
 				}
-
 			}
 		};
-
 		
 		new Thread() {
 
 			int count = 5;
-
 			boolean exec = true;
 
 			@Override
@@ -901,10 +872,8 @@ public class BigPlanet extends Activity {
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-
 				}
 			}
-
 		}.start();
 	}
 
@@ -1022,7 +991,21 @@ public class BigPlanet extends Activity {
 					mapControl.invalidate();
 				}
 			}
-			
+			// sent GPS location if connecting to XMPP server and the role is Leader
+			// TODO: send out when getting more GPS coordinates, see GoogleAccountActivity.xmppHandler if modified
+			if (GoogleAccountActivity.xmppService.isConnected()) {
+				if (GoogleAccountActivity.isLeader) {
+					String groupname = GoogleAccountActivity.Groupname;
+					String gps = longitude+","+latitude;
+					String message = "group:"+groupname+";"+"gps:"+gps;
+					Log.i("onLocationChanged", "xmppService.sendMessage("+ message +")");
+					try {
+						GoogleAccountActivity.xmppService.sendMessage(message);
+					} catch (XMPPException e) {
+						e.printStackTrace();
+					}
+				}
+			}
 			locationType = location.getProvider();
 			setActivityTitle(BigPlanet.this);
 			// gpsLocationListener has higher priority than networkLocationListener
@@ -1378,7 +1361,7 @@ public class BigPlanet extends Activity {
 	
 	private void shareLocation() {
 		Intent intent = new Intent();
-		intent.setClass(this, GoogleAccountClient.class);
+		intent.setClass(this, GoogleAccountActivity.class);
 		startActivity(intent);
 	}
 
