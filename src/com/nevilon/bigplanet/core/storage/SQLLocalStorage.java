@@ -32,6 +32,7 @@ public class SQLLocalStorage implements ILocalStorage {
 
 	public static String DATA_PATH = "/sdcard/RMaps/maps/";
 	public static String TRACK_IMPORT_PATH = "/sdcard/RMaps/tracks/import/";
+	public static String TRACK_EXPORT_PATH = "/sdcard/RMaps/tracks/export/";
 	
 	public static String DATA_FILE = "BigPlanetTrack.sqlitedb";
 
