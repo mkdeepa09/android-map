@@ -574,7 +574,7 @@ public class TrackListViewActivity extends ListActivity{
 		}
 	 
 	 
-	 private String FileterOutForFileNameRule(String trackName)
+	 public static String FileterOutForFileNameRule(String trackName)
 	 {
 		 
 		 trackName = trackName.replaceAll("[/:*><|?\"]", "");
