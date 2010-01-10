@@ -115,6 +115,8 @@ public class BigPlanet extends Activity {
 	
 	public static boolean isMapInCenter = false;
 	
+	public static boolean isDBdrawclear = false; // default false for DB clear
+	
 	private static String locationType = "";
 	
 	private boolean SDCARD_AVAILABLE = true;
@@ -185,12 +187,9 @@ public class BigPlanet extends Activity {
 							    BigPlanet.this,
 	            		        getString(R.string.fail),
 	            		        Toast.LENGTH_LONG).show();
-						
-						
+					
 				         break;
-				
-				
-				
+
 				}
 				//((Activity)ctx).setTitle((String)msg.obj);
 				
@@ -1099,8 +1098,11 @@ public class BigPlanet extends Activity {
 	public static void addMarkersForDrawing(List<Place> placeList, int type) {
 		// type : 2 -> from DB, 3 -> trackLeader //
 		Log.i("Message", "At addMarkerForDrawing........Type="+type);
-		
 		int zoom = PhysicMap.getZoomLevel();
+		int imageType = 2; 
+		if (type == 3){
+			
+		}
 		for (int i=0;i<placeList.size();i++)
 		{
 			double lat = placeList.get(i).getLocation().getLatitude();
@@ -1109,6 +1111,9 @@ public class BigPlanet extends Activity {
 			place.setLat(lat);
 			place.setLon(lon);
 			mm.addMarker(place, zoom, type, MarkerManager.MY_LOCATION_MARKER);
+		}
+		if(!isDBdrawclear){
+			isDBdrawclear = true;
 		}
 	}
 	
