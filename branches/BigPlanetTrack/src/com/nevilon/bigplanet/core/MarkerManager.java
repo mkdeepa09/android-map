@@ -255,6 +255,7 @@ public class MarkerManager {
 	}
 	
 	public void saveMarkerGTrack() {
+		saveTracks_G.clear();
 		saveTracks_G.addAll(markers_G);
 		markers_G.clear();
 	}
