@@ -69,7 +69,7 @@ public class XMPPService {
 			roster.setSubscriptionMode(Roster.SubscriptionMode.accept_all);
 			Collection<RosterEntry> entries = roster.getEntries();
 			for (RosterEntry entry : entries) {
-				System.out.println(entry.getUser() +" "+entry.getType());
+				System.out.println("Roster: "+entry.getUser()+" ("+entry.getType()+")");
 			}
 		}
 	}
@@ -82,6 +82,7 @@ public class XMPPService {
 			PacketFilter packetFilter = new AndFilter(
 					new PacketTypeFilter(Message.class), 
 					new FromContainsFilter(xmppReceiver));
+			packetFilter = null;
 			
 			connection.addPacketListener(packetListener, packetFilter);
 		}

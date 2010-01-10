@@ -60,7 +60,7 @@ public class SQLLocalStorage implements ILocalStorage {
 	 * Конструктор Инициализация файлового кеша(если необходимо)
 	 */
 	private SQLLocalStorage() {
-		// for dynamically loading different DBs from GooglePreferences.getSQLitePath()
+		// for dynamically loading different DBs from Preferences.getSQLitePath()
 		String sqliteFilePath = DATA_PATH + Preferences.getSQLiteName();
 		db = SQLiteDatabase.openDatabase(sqliteFilePath, null,
 				SQLiteDatabase.CREATE_IF_NECESSARY);
