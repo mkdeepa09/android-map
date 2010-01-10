@@ -674,12 +674,16 @@ public class GoogleAccountActivity extends Activity {
 			} else if (msg.what == XMPP_Packet)  {
 				// packet
 				Packet packet = (Packet) msg.obj;
-				org.jivesoftware.smack.packet.Message xmppMessage =
-					(org.jivesoftware.smack.packet.Message) packet;
-				String body = xmppMessage.getBody();
+				String body = null;
+				if (packet.getClass() == org.jivesoftware.smack.packet.Message.class) {
+					org.jivesoftware.smack.packet.Message xmppMessage =
+						(org.jivesoftware.smack.packet.Message) packet;
+					body = xmppMessage.getBody();
+				}
 				//TODO: see BigPlanet MyLocationListener.onLocationChanged() for more info
 				if (body != null) {
 					if (body.startsWith("gps:")) { //gps:121.54,25.018
+						// only non-leaders receive this kind of message
 						String gps = body.substring("gps:".length());
 						String[] array = gps.split(",");
 						try {
