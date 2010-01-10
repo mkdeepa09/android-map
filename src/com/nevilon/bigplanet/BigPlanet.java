@@ -197,9 +197,7 @@ public class BigPlanet extends Activity {
          }};
          myHandler.removeMessages(0);
         
-        
-        
-		
+
 		boolean hasSD = false;
 		// проверка на доступность sd
 		String status = Environment.getExternalStorageState();
@@ -1122,7 +1120,7 @@ public class BigPlanet extends Activity {
 			Place place = placeList.get(i);
 			place.setLat(lat);
 			place.setLon(lon);
-			mm.addMarker(place, zoom, type, MarkerManager.MY_LOCATION_MARKER);
+			mm.addMarker(place, zoom, imageType, MarkerManager.MY_LOCATION_MARKER);
 		}
 		if(!isDBdrawclear){
 			isDBdrawclear = true;
