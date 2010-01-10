@@ -45,6 +45,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -85,6 +86,8 @@ public class TrackListViewActivity extends ListActivity{
 		operatedTrackCursor = null;
 		editTrackDialogLayout = null;
 		
+		
+		
 		if(myTrackDBAdapter != null)
 		{
 			Log.i("Message","myTrackDBAdapter != null" );
@@ -95,6 +98,8 @@ public class TrackListViewActivity extends ListActivity{
 		else
 			
 			Log.e("Error","myTrackHelper == null" );
+		
+		
 		
        trackListViewHandler = new Handler(){
 			
@@ -131,20 +136,79 @@ public class TrackListViewActivity extends ListActivity{
 
          }};
          trackListViewHandler.removeMessages(0);
+         
+         
+         ListView lv = getListView();
+         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+			@Override    //AdapterView's Method
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				Log.i( "TAG", "onItemClick id=" + id);
+				TrackListViewActivity.operatedTrackID = id;
+				
+				//Show this track on the map, this is the same as Case 0 function of alert_dialog_selection() below
+				
+					myTrackDBAdapter.open();
+					operatedTrackCursor = myTrackDBAdapter.getTrack(TrackListViewActivity.operatedTrackID);
+					String track_name = operatedTrackCursor.getString(1);
+					String track_coordinates = operatedTrackCursor.getString(3);
+					String track_times = operatedTrackCursor.getString(4);
+					String track_elevations = operatedTrackCursor.getString(5);
+					Log.i("Message","track_name="+track_name);
+					Log.i("Message","track_coordinates="+track_coordinates);
+					myTrackDBAdapter.close();
+					
+					placeList = ConvertToPlaceList(track_coordinates,track_times,track_elevations);
+					Log.i("Message", "placeList has been created.......");
+					
+					Intent myIntent = new Intent();
+			        myIntent.setClass(TrackListViewActivity.this, BigPlanet.class);
+			        myIntent.putExtra("drawing_mode", "2");
+			        Log.i("Message", "calling BigPlanet...........");
+			        startActivity(myIntent);
+				
+			}
+		});
+                 //AdapterView's Method
+ 		lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				onLongListItemClick(view,position,id); 
+				return false;
+			}});
+ 		
+ 		
+ 		
+
 	}
 	
-	@Override
+	
+	protected void onLongListItemClick(View v,int pos,long id) { 
+	      Log.i( "TAG", "onItemLongClick id=" + id);
+	      LinearLayout lay = (LinearLayout)v;
+			TextView textView = (TextView)lay.findViewById(R.id.icontext);
+			Log.i("Message", "onItemLongClick TextView selected is="+textView.getText());
+			TrackListViewActivity.operatedTrackID = id;
+			alert_dialog_selection();
+	} 
+	
+	@Override  //ListActivity's Method
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		// TODO Auto-generated method stub
 		super.onListItemClick(l, v, position, id);
 		LinearLayout lay = (LinearLayout)v;
 		TextView textView = (TextView)lay.findViewById(R.id.icontext);
-		Log.i("Message", "TextView selected is="+textView.getText());
+		Log.i("Message", "onListItemClick TextView selected is="+textView.getText());
 		mClickItemedText = textView.getText().toString();
-    	Log.i("Message", "mClickItemedText="+mClickItemedText);
+    	Log.i("Message", "onListItemClick mClickItemedText="+mClickItemedText);
         //The entry to put a alert_dialog
 		TrackListViewActivity.operatedTrackID = id;
-		alert_dialog_selection();
+		//alert_dialog_selection();
 
 	}
 
@@ -173,31 +237,8 @@ public class TrackListViewActivity extends ListActivity{
 			  			
 			  			switch (which)
 			  			{	
+			  			  
 			  				case 0:
-			  					//Show this track on the map
-			  					Log.i("Message", "Dialog Item- Track Showing is selected");
-			  					myTrackDBAdapter.open();
-			  					operatedTrackCursor = myTrackDBAdapter.getTrack(TrackListViewActivity.operatedTrackID);
-			  					String track_name = operatedTrackCursor.getString(1);
-			  					String track_coordinates = operatedTrackCursor.getString(3);
-			  					String track_times = operatedTrackCursor.getString(4);
-			  					String track_elevations = operatedTrackCursor.getString(5);
-			  					Log.i("Message","track_name="+track_name);
-			  					Log.i("Message","track_coordinates="+track_coordinates);
-			  					myTrackDBAdapter.close();
-			  					
-			  					placeList = ConvertToPlaceList(track_coordinates,track_times,track_elevations);
-			  					Log.i("Message", "placeList has been created.......");
-			  					
-			  					Intent myIntent = new Intent();
-			  			        myIntent.setClass(TrackListViewActivity.this, BigPlanet.class);
-			  			        myIntent.putExtra("drawing_mode", "2");
-			  			        Log.i("Message", "calling BigPlanet...........");
-			  			        startActivity(myIntent);
-			  					//BigPlanet.addMarkersForDrawing(placeList, 2);
-			  					
-			  					break;
-			  				case 1:
 			  					//Edit this track
 			  					Log.i("Message", "Dialog Item- Track Editing is selected");
 			  					showDialog(EDIT_DIALOG);
@@ -206,7 +247,7 @@ public class TrackListViewActivity extends ListActivity{
 			  					//TextView edit_view = (TextView) edit_dialog.findViewById(R.id.name_edit_view);
 			  					
 			  					break;
-			  				case 2:
+			  				case 1:
 			  					//Delete this track
 			  					//String a = getString(R.string.);
 			  					Log.i("Message", "Dialog Item- Track Deleting is selected");
@@ -233,7 +274,7 @@ public class TrackListViewActivity extends ListActivity{
 								.show();
 			  					break;
 			  					
-			  				case 3:
+			  				case 2:
 			  					//Save the track into SD-Card
 			  					Log.i("Message", "Dialog Item- Track Exporting is selected");
 			  					final CharSequence strDialogTitle = getString(R.string.str_export_dialog_title);
