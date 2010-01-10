@@ -88,10 +88,4 @@
     <string name="bookmark_name">名稱</string>
     <string name="bookmark_description">描述</string>
 
-    <string name="share_location_groupname">群組名稱:</string>
-    <string name="share_location_account">Google 帳號:</string>
-    <string name="share_location_password">Google 密碼:</string>
-    <string name="share_location_checkbox">傳送/接收 GPS 座標</string>
-    <string name="share_location_note"></string>
-
 </resources>

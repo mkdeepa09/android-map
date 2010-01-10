@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="share_location_note">Share Locations:
+  The leader will sent continuous GPS locations to other members in the same group. 
+  And the GPS track will be drawn on the maps of other members.</string>
+  <string name="share_location_account">Google Account: </string>
+  <string name="share_location_password">Google Password: </string>
+  <string name="share_location_groupname">Group Name: </string>
+  <string name="btn_update_group_list">Get joined groups of this account</string>
+  <string name="checkbox_SentReceiveGPS">Send/Receive GPS coordinates</string>
+  <string name="msg_wait">Please wait</string>
+  <string name="msg_get_group_info">Get group info</string>
+  <string name="msg_connecting">Connecting...</string>
+  <string name="msg_account_password_empty">The account or password is empty.</string>
+  <string name="msg_account_password_error">The account or password is incorrect.</string>
+  <string name="msg_leader">Leader:</string>
+  <string name="msg_not_connect_to_server">Not connected to server.</string>
+  <string name="msg_enable_sending">Enable sending GPS coordinates.</string>
+  <string name="msg_enable_receiving">Enable receiving GPS coordinates.</string>
+</resources>

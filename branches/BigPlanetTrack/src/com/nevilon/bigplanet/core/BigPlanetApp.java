@@ -1,5 +1,7 @@
 package com.nevilon.bigplanet.core;
 
+import org.traveler.googleclientlogin.GooglePreferences;
+
 import android.app.Application;
 
 public class BigPlanetApp extends Application {
@@ -13,6 +15,7 @@ public class BigPlanetApp extends Application {
 	@Override
 	public void onCreate() {
 		Preferences.init(this);
+		GooglePreferences.init(this);
 	}
 
 }
