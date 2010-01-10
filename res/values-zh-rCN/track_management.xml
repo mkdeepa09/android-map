@@ -39,4 +39,10 @@
 <string name="fail">储存失败</string>
 <string name="str_store_gps_location_to_db_title">正在储存GPS Locations</string>
 <string name="str_store_gps_location_to_db_body">请稍候片刻</string>
+<string name="gps_locationlist_has_no_data">目前无任何GPS座标纪录可储存,\n请确定GPS讯号能接收</string>
+<string name="delete_track_successfully">删除路径成功</string>
+<string name="delete_track_fail">删除路径失败</string>
+<string name="edit_track_dialog_tile">编辑路径</string>
+<string name="edit_track_dialog_body">您可以为此路径输入有意义之名称及其他资讯。</string>
+<string name="edit_successfully">编辑成功</string>
 </resources>

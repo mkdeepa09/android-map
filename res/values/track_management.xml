@@ -42,4 +42,10 @@
 <string name="fail">Fail to store!</string>
 <string name="str_store_gps_location_to_db_title">Storing GPS Locations to Database</string>
 <string name="str_store_gps_location_to_db_body">Please wait...</string>
+<string name="gps_locationlist_has_no_data">No GPS location data to store.\nPlease make sure to receive GPS  successfully.</string>
+<string name="delete_track_successfully">Delete track successfully</string>
+<string name="delete_track_fail">Fail to delete track!</string>
+<string name="edit_track_dialog_tile">Edit Track-Information</string>
+<string name="edit_track_dialog_body">You can give a meanful name for this track and some other notes about it.</string>
+<string name="edit_successfully">Edit successfully</string>
 </resources>

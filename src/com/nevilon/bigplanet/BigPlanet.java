@@ -185,7 +185,7 @@ public class BigPlanet extends Activity {
 						/*有錯*/
 						Toast.makeText(
 							    BigPlanet.this,
-	            		        getString(R.string.fail),
+	            		        getString(R.string.fail)+"\n"+(String)msg.obj,
 	            		        Toast.LENGTH_LONG).show();
 					
 				         break;
@@ -406,23 +406,35 @@ public class BigPlanet extends Activity {
 					
 				  */
 					
+					
+					
+				  if(MarkerManager.getLocationList().size()>0) // check out whether GPS LocationList contains any GPS data or not
+				  {	
 					// 顯示Progress對話方塊
-					final CharSequence strDialogTitle = getString(R.string.str_store_gps_location_to_db_title);
-					final CharSequence strDialogBody = getString(R.string.str_store_gps_location_to_db_body);
-					myGPSDialog = ProgressDialog.show
-			                 (
-			                   BigPlanet.this,
-			                   strDialogTitle,
-			                   strDialogBody, 
-			                   true
-			                 );
-					
-					
+						final CharSequence strDialogTitle = getString(R.string.str_store_gps_location_to_db_title);
+						final CharSequence strDialogBody = getString(R.string.str_store_gps_location_to_db_body);
+						myGPSDialog = ProgressDialog.show
+				                 (
+				                   BigPlanet.this,
+				                   strDialogTitle,
+				                   strDialogBody, 
+				                   true
+				                 );
+					  
 					GpsLocationStoringThread storingThread = new GpsLocationStoringThread();
 					storingThread.setMainHandler(myHandler);
 					storingThread.setLocationList(MarkerManager.getLocationList());
 					//storingThread.setLocationList(locationList);
 					storingThread.start();
+				  }
+				  else{
+					  
+					  Toast.makeText(
+							    BigPlanet.this,
+	            		        getString(R.string.gps_locationlist_has_no_data),
+	            		        Toast.LENGTH_LONG).show();
+					  
+				  }
 					
 				}
 			}
