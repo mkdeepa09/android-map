@@ -70,7 +70,7 @@ public class TrackListViewActivity extends ListActivity{
 	  private static String track_name;
 	  private static String track_des;
 
-	  
+	  //private ProgressDialog myProgressDialog;
 	  private BaseAdapter listViewAdapter;
 	  public static String mClickItemedText;
 	  public static ArrayList<Place> placeList = null;
@@ -148,26 +148,52 @@ public class TrackListViewActivity extends ListActivity{
 				Log.i( "TAG", "onItemClick id=" + id);
 				TrackListViewActivity.operatedTrackID = id;
 				
-				//Show this track on the map, this is the same as Case 0 function of alert_dialog_selection() below
+				final ProgressDialog myProgressDialog = ProgressDialog.show(TrackListViewActivity.this,      
+						getString(R.string.drawing_track_progressdialog_title), getString(R.string.drawing_track_progressdialog_body), true);
+				//Show this track on the map
 				
 					myTrackDBAdapter.open();
 					operatedTrackCursor = myTrackDBAdapter.getTrack(TrackListViewActivity.operatedTrackID);
-					String track_name = operatedTrackCursor.getString(1);
-					String track_coordinates = operatedTrackCursor.getString(3);
-					String track_times = operatedTrackCursor.getString(4);
-					String track_elevations = operatedTrackCursor.getString(5);
+					final String track_name = operatedTrackCursor.getString(1);
+					final String track_coordinates = operatedTrackCursor.getString(3);
+					final String track_times = operatedTrackCursor.getString(4);
+					final String track_elevations = operatedTrackCursor.getString(5);
 					Log.i("Message","track_name="+track_name);
 					Log.i("Message","track_coordinates="+track_coordinates);
 					myTrackDBAdapter.close();
 					
-					placeList = ConvertToPlaceList(track_coordinates,track_times,track_elevations);
-					Log.i("Message", "placeList has been created.......");
 					
-					Intent myIntent = new Intent();
-			        myIntent.setClass(TrackListViewActivity.this, BigPlanet.class);
-			        myIntent.putExtra("drawing_mode", "2");
-			        Log.i("Message", "calling BigPlanet...........");
-			        startActivity(myIntent);
+					
+					new Thread(){
+						
+						public void run(){
+							
+							try{
+								placeList = ConvertToPlaceList(track_coordinates,track_times,track_elevations);
+								Log.i("Message", "placeList has been created.......");
+								//sleep(1000);
+								Intent myIntent = new Intent();
+						        myIntent.setClass(TrackListViewActivity.this, BigPlanet.class);
+						        myIntent.putExtra("drawing_mode", "2");
+						        Log.i("Message", "calling BigPlanet...........");
+						        startActivity(myIntent);
+							}catch(Exception e)
+							{
+								e.printStackTrace();
+							}
+							finally
+							{
+								myProgressDialog.dismiss();
+							}
+							
+						}
+						
+						
+						
+					}.start();
+					
+					
+					
 				
 			}
 		});

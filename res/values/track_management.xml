@@ -48,4 +48,6 @@
 <string name="edit_track_dialog_tile">Edit Track-Information</string>
 <string name="edit_track_dialog_body">You can give a meanful name for this track and some other notes about it.</string>
 <string name="edit_successfully">Edit successfully</string>
+<string name="drawing_track_progressdialog_title">Drawing Track Now</string>
+<string name="drawing_track_progressdialog_body">Please wait...</string>
 </resources>

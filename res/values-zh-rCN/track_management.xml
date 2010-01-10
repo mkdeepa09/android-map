@@ -45,4 +45,6 @@
 <string name="edit_track_dialog_tile">编辑路径</string>
 <string name="edit_track_dialog_body">您可以为此路径输入有意义之名称及其他资讯。</string>
 <string name="edit_successfully">编辑成功</string>
+<string name="drawing_track_progressdialog_title">正在描画路径</string>
+<string name="drawing_track_progressdialog_body">请稍候片刻...</string>
 </resources>
