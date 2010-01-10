@@ -993,16 +993,18 @@ public class BigPlanet extends Activity {
 			}
 			// sent GPS location if connecting to XMPP server and the role is Leader
 			// TODO: send out when getting more GPS coordinates, see GoogleAccountActivity.xmppHandler if modified
-			if (GoogleAccountActivity.xmppService.isConnected()) {
-				if (GoogleAccountActivity.isLeader) {
-					String groupname = GoogleAccountActivity.Groupname;
-					String gps = longitude+","+latitude;
-					String message = "group:"+groupname+";"+"gps:"+gps;
-					Log.i("onLocationChanged", "xmppService.sendMessage("+ message +")");
-					try {
-						GoogleAccountActivity.xmppService.sendMessage(message);
-					} catch (XMPPException e) {
-						e.printStackTrace();
+			if (GoogleAccountActivity.xmppService != null) {
+				if (GoogleAccountActivity.xmppService.isConnected()) {
+					if (GoogleAccountActivity.isLeader) {
+						String groupname = GoogleAccountActivity.Groupname;
+						String gps = longitude+","+latitude;
+						String message = "group:"+groupname+";"+"gps:"+gps;
+						Log.i("onLocationChanged", "xmppService.sendMessage("+ message +")");
+						try {
+							GoogleAccountActivity.xmppService.sendMessage(message);
+						} catch (XMPPException e) {
+							e.printStackTrace();
+						}
 					}
 				}
 			}
