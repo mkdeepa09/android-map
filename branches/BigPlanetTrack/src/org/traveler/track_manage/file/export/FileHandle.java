@@ -11,6 +11,8 @@ import java.util.Calendar;
 
 import org.traveler.track_manage.view.TrackListViewActivity;
 
+import com.nevilon.bigplanet.core.storage.SQLLocalStorage;
+
 
 
 
@@ -21,7 +23,7 @@ import android.util.Log;
 public abstract class FileHandle {
 	
 	private String fileName;
-	private String filePatch = "/sdcard/Traveler/Export/";
+	private String filePatch = SQLLocalStorage.TRACK_EXPORT_PATH;
     private FileWriter fstream;
     private BufferedWriter buffer;
     private File fileIOHandle;
