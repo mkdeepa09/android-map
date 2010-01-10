@@ -46,4 +46,10 @@
 <string name="fail">儲存失敗</string>
 <string name="str_store_gps_location_to_db_title">正在儲存GPS Locations</string>
 <string name="str_store_gps_location_to_db_body">請稍候片刻...</string>
+<string name="gps_locationlist_has_no_data">目前無任何GPS座標紀錄可儲存,\n請確定GPS訊號能接收</string>
+<string name="delete_track_successfully">刪除路徑成功</string>
+<string name="delete_track_fail">刪除路徑失敗</string>
+<string name="edit_track_dialog_tile">編輯路徑</string>
+<string name="edit_track_dialog_body">您可以為此路徑輸入有意義之名稱及其他資訊。</string>
+<string name="edit_successfully">編輯成功</string>
 </resources>

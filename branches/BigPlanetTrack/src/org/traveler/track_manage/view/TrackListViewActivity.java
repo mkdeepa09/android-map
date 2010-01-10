@@ -101,7 +101,7 @@ public class TrackListViewActivity extends ListActivity{
 			
 			public void handleMessage(Message msg) {
                
-				Log.i("Message", "flag="+msg.what+" indicating for export result "); //1:export���\;0:export����
+				Log.i("Message", "flag="+msg.what+" indicating for export result "); //1:export成功;0:export失敗
 				switch (msg.what)
 				{
 				  
@@ -319,7 +319,7 @@ public class TrackListViewActivity extends ListActivity{
 					//myCursor.requery();
 					//TrackListViewActivity.listView.invalidate();
 					
-					Toast.makeText(this, "刪除成功", 
+					Toast.makeText(this, getString(R.string.delete_track_successfully), 
 							Toast.LENGTH_SHORT).show();
 					retrieveAllTracksFromDB();
 
@@ -327,7 +327,7 @@ public class TrackListViewActivity extends ListActivity{
 				else
 				{
 					//myTrackDeleteDialog.dismiss(); 
-					Toast.makeText(this, "刪除失敗", 
+					Toast.makeText(this, getString(R.string.delete_track_fail), 
 			                	Toast.LENGTH_SHORT).show();            
 				}
 			
@@ -388,11 +388,11 @@ public class TrackListViewActivity extends ListActivity{
 		    	
 		    	
 		    	builder.setView(editTrackDialogLayout);
-		    	builder.setTitle("�s����| "+"\n"+track_name);
-		    	builder.setMessage("�z�i�H�������|��J���N�q���W�٤Ψ�L��T�C");
+		    	builder.setTitle(getString(R.string.edit_track_dialog_tile)+"\n"+track_name);
+		    	builder.setMessage(getString(R.string.edit_track_dialog_body));
 		    	builder.setInverseBackgroundForced(true);
 		    	
-		    	builder.setPositiveButton("�T�w", new DialogInterface.OnClickListener(){
+		    	builder.setPositiveButton(getString(R.string.OK), new DialogInterface.OnClickListener(){
 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
@@ -434,12 +434,12 @@ public class TrackListViewActivity extends ListActivity{
 						myTrackDBAdapter.updateTrack(TrackListViewActivity.operatedTrackID, changed_track_name, changed_track_des, track_coordinate, track_time, track_elevation);
 						myTrackDBAdapter.close();
 						
-						Toast.makeText(TrackListViewActivity.this,"編輯成功", 
+						Toast.makeText(TrackListViewActivity.this,getString(R.string.edit_successfully), 
 			                	Toast.LENGTH_SHORT).show();
 						retrieveAllTracksFromDB();
 						
 					}});
-		    	builder.setNegativeButton("���", new DialogInterface.OnClickListener(){
+		    	builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener(){
 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
@@ -479,8 +479,8 @@ public class TrackListViewActivity extends ListActivity{
 		    	String track_name = TrackListViewActivity.operatedTrackCursor.getString(1);
 		    	Log.i("Message", "Edit Track's ID="+TrackListViewActivity.operatedTrackID+" Edit Track's Name="+track_name);
 		    	myTrackDBAdapter.close();
-		    	((AlertDialog)dialog).setTitle("�s����| "+"\n"+track_name);
-		    	((AlertDialog)dialog).setMessage("�z�i�H�������|��J���N�q���W�٤Ψ�L��T�C");
+		    	((AlertDialog)dialog).setTitle(getString(R.string.edit_track_dialog_tile)+"\n"+track_name);
+		    	((AlertDialog)dialog).setMessage(getString(R.string.edit_track_dialog_body));
 		    	((AlertDialog)dialog).setInverseBackgroundForced(true);
 		    	EditText name_text = (EditText)dialog.findViewById(R.id.name_edit_text);
 		    	name_text.setText("");
