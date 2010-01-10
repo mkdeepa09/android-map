@@ -43,11 +43,12 @@ public abstract class FileHandle {
 	    
 	    /* Modify by Taiyu */
 	    
-    	//this.fileName 		= 	fileName+".gpx";
-	    this.fileName=TrackListViewActivity.mClickItemedText+".gpx";
-    	String na = new String (this.fileName.getBytes("UTF-8"),"UTF8");
-    	Log.i("Message", "na="+na);
-    	Log.i("Message", "output file name="+this.fileName);
+    	this.fileName 		= 	fileName+".gpx";
+    	this.fileName =TrackListViewActivity.FileterOutForFileNameRule(this.fileName);
+	    //this.fileName=TrackListViewActivity.mClickItemedText+".gpx";
+    	//String na = new String (this.fileName.getBytes("UTF-8"),"UTF8");
+    	//Log.i("Message", "na="+na);
+    	Log.i("Message", "output GPXfile name="+this.fileName);
 		this.fileIOHandle	=	new File(getFullFileName());
 		//this.fstream  		= 	new FileWriter(this.fileIOHandle);
 		this.fous = new FileOutputStream(this.fileIOHandle);
@@ -58,7 +59,7 @@ public abstract class FileHandle {
     } 
 
     /* Modify by Taiyu */
-    public FileHandle(String fileName) 	throws IOException {this.initFile(fileName); Log.i("Message", "GpxFileName="+fileName);		}
+    public FileHandle(String fileName) 	throws IOException {this.initFile(fileName); 		}
     public FileHandle() 				throws IOException {this.initFile(mkFileName());	}
     public long getFileSize() 				throws IOException {return this.fileIOHandle.length()/1024;	}
 
