@@ -1090,14 +1090,10 @@ public class BigPlanet extends Activity {
 		mm.addMarker(place, zoom, 1, MarkerManager.MY_LOCATION_MARKER);
 	}
 	
-	public static void addMarkersForDrawing(List<Place> placeList, int type) {
+	public static void addMarkersForDrawing(List<Place> placeList, int imageType) {
 		// type : 2 -> from DB, 3 -> trackLeader //
-		Log.i("Message", "At addMarkerForDrawing........Type="+type);
+		Log.i("Message", "At addMarkerForDrawing........Type="+imageType);
 		int zoom = PhysicMap.getZoomLevel();
-		int imageType = 2; 
-		if (type == 3){
-			
-		}
 		for (int i=0;i<placeList.size();i++)
 		{
 //			double lat = placeList.get(i).getLocation().getLatitude();
