@@ -26,6 +26,7 @@ import org.traveler.xmpp.XMPPServiceFactory;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.packet.IQ;
 import org.jivesoftware.smack.packet.Packet;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -675,7 +676,9 @@ public class GoogleAccountActivity extends Activity {
 				// packet
 				Packet packet = (Packet) msg.obj;
 				String body = null;
-				if (packet.getClass() == org.jivesoftware.smack.packet.Message.class) {
+				if (packet.getClass() == IQ.class) {
+//					IQ iqPacket = (IQ) packet;
+				} else if (packet.getClass() == org.jivesoftware.smack.packet.Message.class) {
 					org.jivesoftware.smack.packet.Message xmppMessage =
 						(org.jivesoftware.smack.packet.Message) packet;
 					body = xmppMessage.getBody();
