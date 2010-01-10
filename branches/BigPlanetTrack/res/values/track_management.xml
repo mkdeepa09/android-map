@@ -6,7 +6,7 @@
 <string name="des_edit_text">Track Description</string>
 <string name="name_edit_text">Track Name</string>
 <string-array name="items_track_what_to_do_dialog">
-<item>Show track on the map</item>
+
 <item>Edit track</item>
 <item>Delete track</item>
 <item>Save track into SD-Card</item>

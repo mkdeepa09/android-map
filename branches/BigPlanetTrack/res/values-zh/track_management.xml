@@ -30,7 +30,7 @@
 <string name="save_successfully">儲存成功</string>
 <string name="save_fail">儲存失敗</string>
 <string name="what_do_you_want_to_do">您要做什麼?</string>
-<string-array name="items_track_what_to_do_dialog"><item>顯示路徑於地圖</item>
+<string-array name="items_track_what_to_do_dialog">
 <item>編輯路徑</item>
 <item>刪除路徑</item>
 <item>儲存路徑於SD卡</item>

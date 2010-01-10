@@ -26,7 +26,7 @@
 <string name="save_successfully">储存成功</string>
 <string name="save_fail">储存失败</string>
 <string name="what_do_you_want_to_do">您要做什么?</string>
-<string-array name="items_track_what_to_do_dialog"><item>显示路径於地图</item>
+<string-array name="items_track_what_to_do_dialog">
 <item>编辑路径</item>
 <item>删除路径</item>
 <item>储存路径於SD卡</item>
