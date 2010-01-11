@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 
 import com.nevilon.bigplanet.BigPlanet;
+import com.nevilon.bigplanet.core.Place;
 
 import android.location.Location;
 import android.os.Handler;
@@ -21,7 +22,8 @@ import android.util.Log;
 public class GpsLocationLogParsingThread extends Thread {
     //private int line_count = 1;
 	private Handler mainThreadHandler;
-    private ArrayList<Location> locationList = new ArrayList<Location>();
+    //private ArrayList<Location> locationList = new ArrayList<Location>();
+	private ArrayList<Place> placeList = new ArrayList<Place>();
     private String trackName = null;
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd G 'at' hh:mm:ss a zzz");
     Timestamp timestamp;
@@ -49,7 +51,7 @@ public class GpsLocationLogParsingThread extends Thread {
 			in.readLine();
 			
 			String[] second_line = in.readLine().split("	");
-			Log.i("Message:","Add the First Location");
+			
 			Location location = new Location("NTU Traveler");
 			location.setLongitude(Double.parseDouble(second_line[0]));
 			location.setLatitude(Double.parseDouble(second_line[1]));
@@ -58,8 +60,13 @@ public class GpsLocationLogParsingThread extends Thread {
 			location.setSpeed(Float.parseFloat(second_line[4]));
 			location.setBearing(Float.parseFloat(second_line[5]));
 			location.setAccuracy(Float.parseFloat(second_line[6]));
-			this.locationList.add(location);
-			
+			Log.i("Message:","Add the First Location to First Place");
+			Place place = new Place();
+			place.setLon(Double.parseDouble(second_line[0]));
+			place.setLat(Double.parseDouble(second_line[1]));
+			place.setLocation(location);
+			this.placeList.add(place);
+			Log.i("Message:","Add the First Place to placeList");
 			
 			
 			Log.i("Message", "TimeValue="+second_line[3]);
@@ -76,7 +83,8 @@ public class GpsLocationLogParsingThread extends Thread {
 		    Log.i("Message:","Parsing Log finishes...");
 		    System.out.println("------------------------");
 		    Log.i("Message:","Saving to DB begins...");
-		    StoreGpsLocationListToDB(this.locationList);
+		    //StoreGpsLocationListToDB(this.locationList);
+		    StoreGpsLocationListToDB(this.placeList);
 		    // send message back to GpsTrackStorageSimulationActivity
 		    
 		    String obj = "Successfully!";
@@ -117,23 +125,24 @@ public class GpsLocationLogParsingThread extends Thread {
 	
 	
 	
-	
+	/*
 	public void SetGpsLocationList(ArrayList<Location> locationList){
 		
 		this.locationList = locationList;
 		
 	}
+	*/
 	
-	
-	private void StoreGpsLocationListToDB(ArrayList<Location> locationList)
+	private void StoreGpsLocationListToDB(ArrayList<Place> placeList)
 	{
 		
 		StringBuffer coordinates_buff = new StringBuffer();
 		StringBuffer time_buff = new StringBuffer();
 		StringBuffer elevation_buff = new StringBuffer();
 		
-		for(Location location: locationList)
+		for(Place place: placeList)
 		{
+			Location location = place.getLocation();
 			coordinates_buff.append(location.getLatitude()+","+location.getLongitude()+";");
 			Timestamp timestamp = new Timestamp(location.getTime());
 			time_buff.append(timestamp.toString()+";");
@@ -171,7 +180,11 @@ public class GpsLocationLogParsingThread extends Thread {
 		location.setSpeed(Float.parseFloat(element[4]));
 		location.setBearing(Float.parseFloat(element[5]));
 		location.setAccuracy(Float.parseFloat(element[6]));
-		locationList.add(location);
+		Place place = new Place();
+		place.setLon(Double.parseDouble(element[0]));
+		place.setLat(Double.parseDouble(element[1]));
+		place.setLocation(location);
+		placeList.add(place);
 		//dump(element);
 	}
 
@@ -198,10 +211,10 @@ public class GpsLocationLogParsingThread extends Thread {
 		}
 	}
 	
-	public ArrayList<Location> getLocationList(){
+	public ArrayList<Place> getPlaceList(){
 		
 		
-		return this.locationList;
+		return this.placeList;
 		
 	}
 	
