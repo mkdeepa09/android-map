@@ -55,6 +55,6 @@
 <string name="edit_track_dialog_tile">編輯路徑</string>
 <string name="edit_track_dialog_body">您可以為此路徑輸入有意義之名稱及其他資訊。</string>
 <string name="edit_successfully">編輯成功</string>
-<string name="drawing_track_progressdialog_title">正在描畫路徑</string>
+<string name="drawing_track_progressdialog_title">正在描繪路徑</string>
 <string name="drawing_track_progressdialog_body">請稍候片刻...</string>
 </resources>
