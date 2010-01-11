@@ -614,6 +614,8 @@ public class TrackListViewActivity extends ListActivity{
 				location.setLatitude(Double.parseDouble(lat));
 				location.setLongitude(Double.parseDouble(lon));
 				place.setLocation(location);
+				place.setLat(Double.parseDouble(lat));
+				place.setLon(Double.parseDouble(lon));
 				myPlaceList.add(place);
 				//place.getLocation().setLatitude(Double.parseDouble(lat));
 				//place.getLocation().setLongitude(Double.parseDouble(lon));
