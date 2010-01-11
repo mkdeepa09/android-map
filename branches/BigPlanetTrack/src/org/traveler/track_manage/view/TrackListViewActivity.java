@@ -177,6 +177,7 @@ public class TrackListViewActivity extends ListActivity{
 						        myIntent.putExtra("drawing_mode", "2");
 						        Log.i("Message", "calling BigPlanet...........");
 						        startActivity(myIntent);
+						        finish();
 							}catch(Exception e)
 							{
 								e.printStackTrace();
