@@ -92,7 +92,7 @@ public class BigPlanet extends Activity {
 	private Toast textMessage;
 
 	/*
-	 * Графический движок, реализующий карту
+	 * ��訄�邽�迮�郕邽邿 迡赲邽迠郋郕, �迮訄郅邽郱���邽邿 郕訄���
 	 */
 	private MapControl mapControl;
 
@@ -134,7 +134,7 @@ public class BigPlanet extends Activity {
     Handler handler;
     Handler myHandler;
 	/**
-	 * Конструктор
+	 * �郋郇����郕�郋�
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -149,7 +149,7 @@ public class BigPlanet extends Activity {
          if(this.drawing_mode != null){
         	 Log.i("drawing_mode", this.drawing_mode);
         	 //if(TrackListViewActivity.placeList != null)
-        	//	 addMarkersForDrawing(TrackListViewActivity.placeList, 2);
+        	//	 addMarkersFor(TrackListViewActivity.placeList, 2);
         	// else
         	//	 Log.e("Error", "TrackListViewActivity.placeList is Null");
         	 
@@ -164,12 +164,12 @@ public class BigPlanet extends Activity {
 			
 			public void handleMessage(Message msg) {
                
-				Log.i("Message", "flag="+msg.what); //1:全部import成功;0:部分import失敗
+				Log.i("Message", "flag="+msg.what); //1:�券import��;0:�典�import憭望�
 				switch (msg.what)
 				{
 				  
 				   case GpsLocationStoringThread.SUCCESSFULLY:
-					   /*成功*/
+					   /*��*/
 					    
 					    Intent myIntent = new Intent();
 				        myIntent.setClass(BigPlanet.this, TrackListViewActivity.class);
@@ -179,7 +179,7 @@ public class BigPlanet extends Activity {
 						break;
 						
 					case GpsLocationLogParsingThread.FAIL:
-						/*有錯*/
+						/*�*/
 						Toast.makeText(
 							    BigPlanet.this,
 	            		        getString(R.string.fail)+"\n"+(String)msg.obj,
@@ -196,7 +196,7 @@ public class BigPlanet extends Activity {
         
 
 		boolean hasSD = false;
-		// проверка на доступность sd
+		// 郈�郋赲迮�郕訄 郇訄 迡郋���郈郇郋��� sd
 		String status = Environment.getExternalStorageState();
 		if (!status.equals(Environment.MEDIA_MOUNTED)) {
 			SDCARD_AVAILABLE = false;
@@ -269,7 +269,10 @@ public class BigPlanet extends Activity {
 		if(this.drawing_mode!=null)
 		{	
 			if(this.drawing_mode.equals("2")&&TrackListViewActivity.placeList != null)
+			{
 				addMarkersForDrawing(TrackListViewActivity.placeList, 2);
+	            Log.i("Message", "Calling addMarkDrawing.......................................");		
+			}
 			else
 				Log.e("Error", "TrackListViewActivity.placeList is Null");
 		}
@@ -327,6 +330,7 @@ public class BigPlanet extends Activity {
 			//startGPSLocationListener();
 		}
 		setActivityTitle((Activity) context);
+		mapControl.invalidate();
 	}
 	
 	public void disabledTrack(Context context) {
@@ -339,6 +343,7 @@ public class BigPlanet extends Activity {
 		//TODO: save to DB      getLocationList();
 		
 		setActivityTitle((Activity) context);
+		mapControl.invalidate();
 	}
 		
 	private RelativeLayout getTrackRelativeLayout() {
@@ -362,8 +367,7 @@ public class BigPlanet extends Activity {
 					Log.i("Message","Stop Recording GPS Location...");
 					Log.i("Message","Start to Store GPS Location to DB...");
 				
-				/*	測試用
-					ArrayList<Location> locationList = new ArrayList<Location>();
+				/*	皜祈岫��					ArrayList<Location> locationList = new ArrayList<Location>();
 					
 					String gpsLogFilePath = "/sdcard/RMaps/tracks/import/gps1.log"; // need to create the folder
 					File gpsLogFile = new File(gpsLogFilePath);
@@ -405,7 +409,7 @@ public class BigPlanet extends Activity {
 					
 				  if(MarkerManager.getLocationList().size()>0) // check out whether GPS LocationList contains any GPS data or not
 				  {	
-					// 顯示Progress對話方塊
+					// 憿舐內Progress撠店�孵�
 						final CharSequence strDialogTitle = getString(R.string.str_store_gps_location_to_db_title);
 						final CharSequence strDialogBody = getString(R.string.str_store_gps_location_to_db_body);
 						myGPSDialog = ProgressDialog.show
@@ -447,19 +451,19 @@ public class BigPlanet extends Activity {
 	}
 
 	private void initializeMap() {
-		// создание карты
+		// �郋郱迡訄郇邽迮 郕訄���
 		mm = new MarkerManager(getResources());
 		RawTile savedTile = Preferences.getTile();
 		//savedTile.s = 0;
 		configMapControl(savedTile);
-		// использовать ли сеть
+		// 邽�郈郋郅�郱郋赲訄�� 郅邽 �迮��
 		boolean useNet = Preferences.getUseNet();
 		mapControl.getPhysicalMap().getTileResolver().setUseNet(useNet);
-		// источник карты
+		// 邽��郋�郇邽郕 郕訄���
 		int mapSourceId = Preferences.getSourceId();
 		mapControl.getPhysicalMap().getTileResolver().setMapSource(mapSourceId);
 		mapControl.getPhysicalMap().getDefaultTile().s = mapSourceId;
-		// величина отступа
+		// 赲迮郅邽�邽郇訄 郋����郈訄
 		Point globalOffset = Preferences.getOffset();
 		//globalOffset.x = 0;
 		//globalOffset.y = -32;
@@ -500,8 +504,8 @@ public class BigPlanet extends Activity {
 			// see MapControl zoomPanel.setOnZoomOutClickListener
 			if (intent.getBooleanExtra(MapControl.FIX_ZOOM, false)) {
 				Log.i("BP", "%% "+MapControl.FIX_ZOOM);
-				initializeMap();
-				onResume();
+				//initializeMap();
+				//onResume();
 			}
 			// center map
 			if (isFollowMode && !isMapInCenter) {
@@ -525,7 +529,7 @@ public class BigPlanet extends Activity {
 	}
 
 	/**
-	 * Обрабатывает поворот телефона
+	 * �訇�訄訇訄��赲訄迮� 郈郋赲郋�郋� �迮郅迮�郋郇訄
 	 */
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
@@ -544,7 +548,7 @@ public class BigPlanet extends Activity {
 	}
 	
 	/**
-	 * Запоминает текущий тайл и отступ при выгрузке приложения
+	 * �訄郈郋邾邽郇訄迮� �迮郕��邽邿 �訄邿郅 邽 郋����郈 郈�邽 赲�迣��郱郕迮 郈�邽郅郋迠迮郇邽�
 	 */
 	@Override
 	protected void onDestroy() {
@@ -592,10 +596,7 @@ public class BigPlanet extends Activity {
 	public boolean onKeyDown(int keyCode, KeyEvent ev) {
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_BACK:
-			/**
-			 * если текущий режим SELECT_MODE - изменить на ZOOM_MODE если
-			 * текущий режим ZOOM_MODE - делегировать обработку
-			 */
+
 			if (mapControl.getMapMode() == MapControl.SELECT_MODE) {
 				mapControl.setMapMode(MapControl.ZOOM_MODE);
 				return true;
@@ -605,9 +606,6 @@ public class BigPlanet extends Activity {
 		}
 	}
 
-	/**
-	 * Создает элементы меню
-	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
@@ -642,7 +640,7 @@ public class BigPlanet extends Activity {
 	}
 
 	/**
-	 * Устанавливает статус(активен/неактивен) пунктов меню
+	 * 苺��訄郇訄赲郅邽赲訄迮� ��訄���(訄郕�邽赲迮郇/郇迮訄郕�邽赲迮郇) 郈�郇郕�郋赲 邾迮郇�
 	 */
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
@@ -652,7 +650,7 @@ public class BigPlanet extends Activity {
 	}
 
 	/**
-	 * Устанавливает размеры карты и др. свойства
+	 * 苺��訄郇訄赲郅邽赲訄迮� �訄郱邾迮�� 郕訄��� 邽 迡�. �赲郋邿��赲訄
 	 */
 	private void configMapControl(RawTile tile) {
 		WindowManager wm = this.getWindowManager();
@@ -711,7 +709,7 @@ public class BigPlanet extends Activity {
 	}
 
 	/**
-	 * Создает радиокнопку с заданными параметрами
+	 * 苤郋郱迡訄迮� �訄迡邽郋郕郇郋郈郕� � 郱訄迡訄郇郇�邾邽 郈訄�訄邾迮��訄邾邽
 	 * 
 	 * @param label
 	 * @param id
@@ -725,7 +723,7 @@ public class BigPlanet extends Activity {
 	}
 
 	/**
-	 * Обрабатывает нажатие на меню
+	 * �訇�訄訇訄��赲訄迮� 郇訄迠訄�邽迮 郇訄 邾迮郇�
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -779,13 +777,13 @@ public class BigPlanet extends Activity {
 			recordGpsTracks();
 			break;
 		case 105: //erase track
-			clearTracks();
+			eraseLeader();
 			break;
 		case 106: //erase track
-			clearTracks();
+			eraseSaveTracks_G();
 			break;
 		case 107: //erase track
-			clearTracks();
+			eraseMarker_DB();
 			break;
 
 		}
@@ -996,17 +994,17 @@ public class BigPlanet extends Activity {
 					goToMyLocation(location, PhysicMap.getZoomLevel());
 				} else {
 					addMarker(location, PhysicMap.getZoomLevel());
-					mapControl.invalidate();
 				}
+				
 			}
 			if(isGPS_track){
 				if (isFollowMode) {
 					trackMyLocation(location, PhysicMap.getZoomLevel());
 				} else {
 					addMarker(location, PhysicMap.getZoomLevel());
-					mapControl.invalidate();
 				}
 			}
+			mapControl.invalidate();
 			// sent GPS location if connecting to XMPP server and the role is Leader
 			// TODO: send out when getting more GPS coordinates, see GoogleAccountActivity.xmppHandler if modified
 			if (GoogleAccountActivity.xmppService != null) {
@@ -1030,6 +1028,7 @@ public class BigPlanet extends Activity {
 			if (locationType.equals("gps")) {
 				locationManager.removeUpdates(networkLocationListener);
 			}
+			mapControl.invalidate();
 		}
 		
 		public void onProviderDisabled(String provider) {
@@ -1071,7 +1070,7 @@ public class BigPlanet extends Activity {
 		com.nevilon.bigplanet.core.geoutils.Point p = GeoUtils.toTileXY(lat, lon, zoom);
 		com.nevilon.bigplanet.core.geoutils.Point off = GeoUtils.getPixelOffsetInTile(lat, lon, zoom);
 		mapControl.goTo((int) p.x, (int) p.y, zoom, (int) off.x, (int) off.y);
-
+		
 		Place place = new Place();
 		place.setLat(lat);
 		place.setLon(lon);
@@ -1107,21 +1106,38 @@ public class BigPlanet extends Activity {
 	}
 	
 	public static void addMarkersForDrawing(List<Place> placeList, int imageType) {
-		// type : 2 -> from DB, 3 -> trackLeader //
+		// imagetype : 2 -> from DB, 3 -> trackLeader //
+
 		Log.i("Message", "At addMarkerForDrawing........Type="+imageType);
+
 		int zoom = PhysicMap.getZoomLevel();
 		for (int i=0;i<placeList.size();i++)
 		{
-//			double lat = placeList.get(i).getLocation().getLatitude();
-//			double lon = placeList.get(i).getLocation().getLongitude();
 			Place place = placeList.get(i);
-//			place.setLat(lat);
-//			place.setLon(lon);
 			mm.addMarker(place, zoom, imageType, MarkerManager.MY_LOCATION_MARKER);
 		}
 		if(!isDBdrawclear){
 			isDBdrawclear = true;
 		}
+	}
+	
+	public void eraseSaveTracks_G(){
+		if(!mm.clearSaveTracks_G()){
+			textMessage = Toast.makeText(this, R.string.clearSaveTrackFales,
+					Toast.LENGTH_LONG);
+			textMessage.show();
+		}
+		mapControl.invalidate();
+	}
+	
+	public void eraseMarker_DB(){
+		mm.clearMarker_DB();
+		mapControl.invalidate();
+	}
+	
+	public void eraseLeader(){
+		mm.clearLeader();
+		mapControl.invalidate();
 	}
 	
 	/* End of the GPS LocationListener code */
@@ -1185,7 +1201,7 @@ public class BigPlanet extends Activity {
 	}
 
 	/**
-	 * Отображает диалоги для кеширования карты в заданном радиусе
+	 * ��郋訇�訄迠訄迮� 迡邽訄郅郋迣邽 迡郅� 郕迮�邽�郋赲訄郇邽� 郕訄��� 赲 郱訄迡訄郇郇郋邾 �訄迡邽��迮
 	 */
 	private void showMapSaver() {
 		MapSaverUI mapSaverUI = new MapSaverUI(this, 
@@ -1196,7 +1212,7 @@ public class BigPlanet extends Activity {
 	}
 
 	/**
-	 * Создает диалог для выбора режима работы(оффлайн, онлайн)
+	 * 苤郋郱迡訄迮� 迡邽訄郅郋迣 迡郅� 赲�訇郋�訄 �迮迠邽邾訄 �訄訇郋��(郋��郅訄邿郇, 郋郇郅訄邿郇)
 	 */
 	private void selectNetworkMode() {
 		final Dialog networkModeDialog;
@@ -1246,7 +1262,7 @@ public class BigPlanet extends Activity {
 	}
 
 	/**
-	 * Создает диалог для выбора источника карт
+	 * 苤郋郱迡訄迮� 迡邽訄郅郋迣 迡郅� 赲�訇郋�訄 邽��郋�郇邽郕訄 郕訄��
 	 */
 	private void selectMapSource() {
 		final Dialog mapSourceDialog;

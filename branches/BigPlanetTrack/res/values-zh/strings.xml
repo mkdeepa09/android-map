@@ -87,5 +87,7 @@
     
     <string name="bookmark_name">名稱</string>
     <string name="bookmark_description">描述</string>
+    
+    <string name="clearSaveTrackFales">請先停止記錄軌跡</string>
 
 </resources>

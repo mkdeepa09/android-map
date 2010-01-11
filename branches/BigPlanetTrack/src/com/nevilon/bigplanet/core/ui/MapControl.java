@@ -30,7 +30,7 @@ import com.nevilon.bigplanet.core.MarkerManager.MarkerImage;
 import com.nevilon.bigplanet.core.MarkerManager.Marker_G;
 
 /**
- * Виджет, реализующий карту
+ * �邽迡迠迮�, �迮訄郅邽郱���邽邿 郕訄���
  * 
  * @author hudvin
  * 
@@ -48,24 +48,24 @@ public class MapControl extends RelativeLayout {
 	//private int SMOOTH_ZOOM_INTERVAL = 20;
 
 	/*
-	 * Панель с картой
+	 * �訄郇迮郅� � 郕訄��郋邿
 	 */
 	private Panel main;
 
 	Canvas cs;
 
 	/*
-	 * Детектор двойного тача
+	 * �迮�迮郕�郋� 迡赲郋邿郇郋迣郋 �訄�訄
 	 */
 	private DoubleClickDetector dcDetector = new DoubleClickDetector();
 
 	/*
-	 * Движок карты
+	 * �赲邽迠郋郕 郕訄���
 	 */
 	private PhysicMap pmap;
 
 	/*
-	 * Панель с зум-контролами
+	 * �訄郇迮郅� � 郱�邾-郕郋郇��郋郅訄邾邽
 	 */
 	private ZoomPanel zoomPanel;
 
@@ -74,7 +74,7 @@ public class MapControl extends RelativeLayout {
 	private Bitmap cb = null;
 
 	/*
-	 * Размер ячейки фона
+	 * �訄郱邾迮� ��迮邿郕邽 �郋郇訄
 	 */
 	private final static int BCG_CELL_SIZE = 16;
 
@@ -100,7 +100,7 @@ public class MapControl extends RelativeLayout {
 	private Context context;
 
 	/**
-	 * Конструктор
+	 * �郋郇����郕�郋�
 	 * 
 	 * @param context
 	 * @param width
@@ -156,8 +156,8 @@ public class MapControl extends RelativeLayout {
 	}
 
 	/**
-	 * Устанавливает режим карты и состояние зум-контролов(выбор объекта для
-	 * добавления в закладки либо навигация)
+	 * 苺��訄郇訄赲郅邽赲訄迮� �迮迠邽邾 郕訄��� 邽 �郋��郋�郇邽迮 郱�邾-郕郋郇��郋郅郋赲(赲�訇郋� 郋訇�迮郕�訄 迡郅�
+	 * 迡郋訇訄赲郅迮郇邽� 赲 郱訄郕郅訄迡郕邽 郅邽訇郋 郇訄赲邽迣訄�邽�)
 	 * 
 	 * @param mapMode
 	 */
@@ -172,7 +172,7 @@ public class MapControl extends RelativeLayout {
 	}
 
 	/**
-	 * Устанавливает размеры карты и дочерних контролов
+	 * 苺��訄郇訄赲郅邽赲訄迮� �訄郱邾迮�� 郕訄��� 邽 迡郋�迮�郇邽� 郕郋郇��郋郅郋赲
 	 * 
 	 * @param width
 	 * @param height
@@ -186,7 +186,7 @@ public class MapControl extends RelativeLayout {
 	}
 
 	/**
-	 * Возвращает движок карты
+	 * �郋郱赲�訄�訄迮� 迡赲邽迠郋郕 郕訄���
 	 * 
 	 * @return
 	 */
@@ -213,7 +213,7 @@ public class MapControl extends RelativeLayout {
 	}
 
 	/**
-	 * Строит виджет, устанавливает обработчики, размеры и др.
+	 * 苤��郋邽� 赲邽迡迠迮�, ���訄郇訄赲郅邽赲訄迮� 郋訇�訄訇郋��邽郕邽, �訄郱邾迮�� 邽 迡�.
 	 * 
 	 * @param width
 	 * @param height
@@ -227,13 +227,13 @@ public class MapControl extends RelativeLayout {
 			}
 		};
 		
-		// создание панели с картой
+		// �郋郱迡訄郇邽迮 郈訄郇迮郅邽 � 郕訄��郋邿
 		main = new Panel(this.getContext());
 		addView(main, 0, new ViewGroup.LayoutParams(width, height));
-		// создание зум-панели
-		if (zoomPanel == null) { // если не создана раньше
+		// �郋郱迡訄郇邽迮 郱�邾-郈訄郇迮郅邽
+		if (zoomPanel == null) { // 迮�郅邽 郇迮 �郋郱迡訄郇訄 �訄郇��迮
 			zoomPanel = new ZoomPanel(this.getContext());
-			// обработчик уменьшения
+			// 郋訇�訄訇郋��邽郕 �邾迮郇��迮郇邽�
 			zoomPanel.setOnZoomOutClickListener(new OnClickListener() {
 				public void onClick(View v) {
 					Log.i("MapControl", "OnZoomOutClick");
@@ -251,7 +251,7 @@ public class MapControl extends RelativeLayout {
 				}
 			});
 
-			// обработчик увеличения
+			// 郋訇�訄訇郋��邽郕 �赲迮郅邽�迮郇邽�
 			zoomPanel.setOnZoomInClickListener(new OnClickListener() {
 				public void onClick(View v) {
 					Log.i("MapControl", "OnZoomInClick");
@@ -275,11 +275,11 @@ public class MapControl extends RelativeLayout {
 		}
 		zoomPanel.setPadding((width - 160) / 2, height - 50, 0, 0);
 
-		if (pmap == null) { // если не был создан раньше
+		if (pmap == null) { // 迮�郅邽 郇迮 訇�郅 �郋郱迡訄郇 �訄郇��迮
 			pmap = new PhysicMap(startTile, new AbstractCommand() {
 
 				/**
-				 * Callback, выполняющий перерисовку карты по запросу
+				 * Callback, 赲�郈郋郅郇���邽邿 郈迮�迮�邽�郋赲郕� 郕訄��� 郈郋 郱訄郈�郋��
 				 */
 				@Override
 				public void execute() {
@@ -308,8 +308,8 @@ public class MapControl extends RelativeLayout {
 	}
 
 	/**
-	 * Устанавливает состояние zoomIn/zoomOut контролов в зависимости от уровня
-	 * зума
+	 * 苺��訄郇訄赲郅邽赲訄迮� �郋��郋�郇邽迮 zoomIn/zoomOut 郕郋郇��郋郅郋赲 赲 郱訄赲邽�邽邾郋��邽 郋� ��郋赲郇�
+	 * 郱�邾訄
 	 */
 	public void updateZoomControls() {
 		pmap.getTileResolver().clearCache();
@@ -334,7 +334,7 @@ public class MapControl extends RelativeLayout {
 	}
 
 	/**
-	 * Перерисовывает карту
+	 * �迮�迮�邽�郋赲�赲訄迮� 郕訄���
 	 * 
 	 * @param canvas
 	 * @param paint
@@ -378,7 +378,7 @@ public class MapControl extends RelativeLayout {
 		}
 
 		if (pmap.scaleFactor == 1) {
-			// отрисовка маркеров
+			// 郋��邽�郋赲郕訄 邾訄�郕迮�郋赲
 			for (int i = 0; i < 7; i++) {
 				for (int j = 0; j < 7; j++) {
 					if ((i > 1 && i < 5) && ((j > 1 && j < 5))) {
@@ -439,12 +439,8 @@ public class MapControl extends RelativeLayout {
 								List<Marker_G> markers_G = markerManager.getMarkers_G_type(tileX, tileY, z, i2, 1);
 								if (i2==0){					
 									for (Marker_G marker_G : markers_G) {
-										x11 = (i - 2)* TILE_SIZE
-										   + pmap.getGlobalOffset().x
-										   + (int) marker_G.getOffset().x;
-										y11 = (j - 2)* TILE_SIZE
-											+ pmap.getGlobalOffset().y
-											+ (int) marker_G.getOffset().y+3;
+										x11 = (i - 2)* TILE_SIZE + pmap.getGlobalOffset().x + (int) marker_G.getOffset().x;
+										y11 = (j - 2)* TILE_SIZE + pmap.getGlobalOffset().y	+ (int) marker_G.getOffset().y+3;
 										
 										markerManager.markers_G.get(i2).setMarkerImage(markerManager.images.get(markerManager.START_MY_TRACK_MARKER));
 										cs.drawBitmap(marker_G.getMarkerImage().getImage(),
@@ -479,12 +475,8 @@ public class MapControl extends RelativeLayout {
 								List<Marker_G> SaveTracks_G = markerManager.getMarkers_G_type(tileX, tileY, z, i2, 2);
 								if (i2==0){
 									for (Marker_G SaveTrack_G : SaveTracks_G) {
-										x21 = (i - 2)* TILE_SIZE
-										   + pmap.getGlobalOffset().x
-										   + (int) SaveTrack_G.getOffset().x;
-										y21 = (j - 2)* TILE_SIZE
-											+ pmap.getGlobalOffset().y
-											+ (int) SaveTrack_G.getOffset().y+3;
+										x21 = (i - 2)* TILE_SIZE + pmap.getGlobalOffset().x + (int) SaveTrack_G.getOffset().x;
+										y21 = (j - 2)* TILE_SIZE + pmap.getGlobalOffset().y + (int) SaveTrack_G.getOffset().y+3;
 										markerManager.saveTracks_G.get(i2).setMarkerImage(markerManager.images.get(markerManager.START_MY_TRACK_MARKER));
 										cs.drawBitmap(SaveTrack_G.getMarkerImage().getImage(),
 												x21- SaveTrack_G.getMarkerImage().getOffsetX(),
@@ -492,13 +484,8 @@ public class MapControl extends RelativeLayout {
 									}
 								}else{
 									for (Marker_G SaveTrack_G : SaveTracks_G) {
-										x22 = (i - 2)* TILE_SIZE
-											+ pmap.getGlobalOffset().x
-											+ (int) SaveTrack_G.getOffset().x;
-										y22 = (j - 2)* TILE_SIZE
-											+ pmap.getGlobalOffset().y
-											+ (int) SaveTrack_G.getOffset().y+3;
-	
+										x22 = (i - 2)* TILE_SIZE + pmap.getGlobalOffset().x + (int) SaveTrack_G.getOffset().x;
+										y22 = (j - 2)* TILE_SIZE + pmap.getGlobalOffset().y	+ (int) SaveTrack_G.getOffset().y+3;
 										cs.drawLine(x21,y21,x22,y22,paint);
 										x21 = x22;
 										y21 = y22;
@@ -519,12 +506,8 @@ public class MapControl extends RelativeLayout {
 								List<Marker_G> markers_DB = markerManager.getMarkers_G_type(tileX, tileY, z, i2, 3);
 								if (i2==0){
 									for (Marker_G marker_DB : markers_DB) {
-										x31 = (i - 2)* TILE_SIZE
-										   + pmap.getGlobalOffset().x
-										   + (int) marker_DB.getOffset().x;
-										y31 = (j - 2)* TILE_SIZE
-											+ pmap.getGlobalOffset().y
-											+ (int) marker_DB.getOffset().y+3;
+										x31 = (i - 2)* TILE_SIZE + pmap.getGlobalOffset().x + (int) marker_DB.getOffset().x;
+										y31 = (j - 2)* TILE_SIZE + pmap.getGlobalOffset().y	+ (int) marker_DB.getOffset().y+3;
 										markerManager.markers_DB.get(i2).setMarkerImage(markerManager.images.get(markerManager.START_MY_DB_MARKER));
 										cs.drawBitmap(marker_DB.getMarkerImage().getImage(),
 												x31- marker_DB.getMarkerImage().getOffsetX(),
@@ -532,12 +515,8 @@ public class MapControl extends RelativeLayout {
 									}
 								}else{
 									for (Marker_G marker_DB : markers_DB) {
-										x32 = (i - 2)* TILE_SIZE
-											+ pmap.getGlobalOffset().x
-											+ (int) marker_DB.getOffset().x;
-										y32 = (j - 2)* TILE_SIZE
-											+ pmap.getGlobalOffset().y
-											+ (int) marker_DB.getOffset().y+3;
+										x32 = (i - 2)* TILE_SIZE + pmap.getGlobalOffset().x	+ (int) marker_DB.getOffset().x;
+										y32 = (j - 2)* TILE_SIZE + pmap.getGlobalOffset().y	+ (int) marker_DB.getOffset().y+3;
 	
 										cs.drawLine(x31,y31,x32,y32,paint);
 										x31 = x32;
@@ -558,25 +537,14 @@ public class MapControl extends RelativeLayout {
 								List<Marker_G> markers_leader = markerManager.getMarkers_G_type(tileX, tileY, z, i2, 4);
 								if (i2==0){
 									for (Marker_G marker_leader : markers_leader) {
-										x41 = (i - 2)* TILE_SIZE
-										   + pmap.getGlobalOffset().x
-										   + (int) marker_leader.getOffset().x;
-										y41 = (j - 2)* TILE_SIZE
-											+ pmap.getGlobalOffset().y
-											+ (int) marker_leader.getOffset().y+3;
+										x41 = (i - 2)* TILE_SIZE + pmap.getGlobalOffset().x + (int) marker_leader.getOffset().x;
+										y41 = (j - 2)* TILE_SIZE + pmap.getGlobalOffset().y	+ (int) marker_leader.getOffset().y+3;
 								
-										cs.drawBitmap(marker_leader.getMarkerImage().getImage(),
-												x41- marker_leader.getMarkerImage().getOffsetX(),
-												y41- marker_leader.getMarkerImage().getOffsetY(),paint);
 									}
 								}else{
 									for (Marker_G marker_leader : markers_leader) {
-										x32 = (i - 2)* TILE_SIZE
-											+ pmap.getGlobalOffset().x
-											+ (int) marker_leader.getOffset().x;
-										y32 = (j - 2)* TILE_SIZE
-											+ pmap.getGlobalOffset().y
-											+ (int) marker_leader.getOffset().y+3;
+										x42 = (i - 2)* TILE_SIZE + pmap.getGlobalOffset().x	+ (int) marker_leader.getOffset().x;
+										y42 = (j - 2)* TILE_SIZE + pmap.getGlobalOffset().y	+ (int) marker_leader.getOffset().y+3;
 	
 										cs.drawLine(x41,y41,x42,y42,paint);
 										x41 = x42;
@@ -585,8 +553,8 @@ public class MapControl extends RelativeLayout {
 										if (i2==MarkerManager.markers_leader.size()-1){
 											markerManager.markers_leader.get(i2).setMarkerImage(markerManager.images.get(markerManager.END_LEADER_MARKER));
 											cs.drawBitmap(marker_leader.getMarkerImage().getImage(),
-														x32- marker_leader.getMarkerImage().getOffsetX(),
-														y32- marker_leader.getMarkerImage().getOffsetY(),paint);
+														x42- marker_leader.getMarkerImage().getOffsetX(),
+														y42- marker_leader.getMarkerImage().getOffsetY(),paint);
 											}
 										}
 									}
@@ -597,58 +565,6 @@ public class MapControl extends RelativeLayout {
 			}
 		}
 
-		/*if (BigPlanet.isGPS_track_save && markerManager.saveTracks_G.size()!=0){	
-			float x1=0,x2=0,y1=0,y2=0;
-			paint.setColor(Color.GREEN);
-			paint.setStrokeWidth(5);
-			for (int i2=0;i2<markerManager.saveTracks_G.size();i2++) {
-				for (int i = 0; i < 7; i++) {
-					for (int j = 0; j < 7; j++) {
-						if ((i > 1 && i < 5) && ((j > 1 && j < 5))) {
-							RawTile tile = pmap.getDefaultTile();
-							int z =PhysicMap.getZoomLevel();
-							int tileX = tile.x + (i - 2);
-							int tileY = tile.y + (j - 2);
-							List<Marker_G> saveTracks_G = markerManager.getSaveTrack_G(tileX,tileY, z,i2);
-							if (i2==0){
-								for (Marker_G saveTrack_G : saveTracks_G) {
-									x1 = (i - 2)* TILE_SIZE
-									   + pmap.getGlobalOffset().x
-									   + (int) saveTrack_G.getOffset().x;
-									y1 = (j - 2)* TILE_SIZE
-										+ pmap.getGlobalOffset().y
-										+ (int) saveTrack_G.getOffset().y+3;
-									
-									cs.drawBitmap(saveTrack_G.getMarkerImage().getImage(),
-											x1- saveTrack_G.getMarkerImage().getOffsetX(),
-											y1- saveTrack_G.getMarkerImage().getOffsetY(),paint);
-								}
-	
-							}else{
-								for (Marker_G saveTrack_G : saveTracks_G) {
-									x2 = (i - 2)* TILE_SIZE
-										+ pmap.getGlobalOffset().x
-										+ (int) saveTrack_G.getOffset().x;
-									y2 = (j - 2)* TILE_SIZE
-										+ pmap.getGlobalOffset().y
-										+ (int) saveTrack_G.getOffset().y+3;
-	
-									cs.drawLine(x1,y1,x2,y2,paint);
-									x1 = x2;
-									y1 = y2;
-									
-									if (i2==MarkerManager.saveTracks_G.size()-1){
-										cs.drawBitmap(saveTrack_G.getMarkerImage().getImage(),
-													x2- saveTrack_G.getMarkerImage().getOffsetX(),
-													y2- saveTrack_G.getMarkerImage().getOffsetY(),paint);
-										}
-									}
-							}
-						}
-					}
-				}
-			}
-		}*/
 
 		if (isScalable) {
 			Matrix matr = new Matrix();
@@ -679,7 +595,7 @@ public class MapControl extends RelativeLayout {
 	}
 
 	/**
-	 * Панель, на которую выводится карта
+	 * �訄郇迮郅�, 郇訄 郕郋�郋��� 赲�赲郋迡邽��� 郕訄��訄
 	 * 
 	 * @author hudvin
 	 * 
@@ -716,7 +632,7 @@ public class MapControl extends RelativeLayout {
 		}
 
 		/**
-		 * Обработка касаний
+		 * �訇�訄訇郋�郕訄 郕訄�訄郇邽邿
 		 */
 		@Override
 		public boolean onTouchEvent(final MotionEvent event) {
@@ -739,8 +655,8 @@ public class MapControl extends RelativeLayout {
 				if (dcDetector.process(event)) { // double-tap
 					if (pmap.scaleFactor == 1) {
 						if (mapMode == MapControl.ZOOM_MODE) { // double-tap zoom-in
-							// точка, по которой будет производиться
-							// центирование
+							// �郋�郕訄, 郈郋 郕郋�郋�郋邿 訇�迡迮� 郈�郋邽郱赲郋迡邽����
+							// �迮郇�邽�郋赲訄郇邽迮
 //							System.gc();
 //							scalePoint.set((int) event.getX(), (int) event.getY());
 //							final float STEP = 0.2f;
