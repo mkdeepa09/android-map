@@ -789,10 +789,6 @@ public class BigPlanet extends Activity {
 		}
 		return false;
 	}
-	
-	private void clearTracks() {
-		
-	}
 
 	private void browseTracks(){
 		Log.i("Message", "Press--Browse Track function");

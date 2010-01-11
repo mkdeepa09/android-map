@@ -275,7 +275,7 @@ public class MarkerManager {
 	}
 	
 	public void clearLeader(){
-		saveTracks_G.clear();
+		markers_leader.clear();
 	}
 	
 	public static ArrayList<Location> getLocationList(){
