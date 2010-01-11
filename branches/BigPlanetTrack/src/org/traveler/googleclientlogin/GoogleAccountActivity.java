@@ -512,6 +512,7 @@ public class GoogleAccountActivity extends Activity {
 		GoogleCookieStore = cookieStore;
 		// Use the cookies to access the authenticated resource via HttpClient
 		getGAEResource(JoinedGroupsServlet);
+		showWebView("/");
 	}
 	
 	private void showWebView(String url) {
