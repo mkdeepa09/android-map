@@ -260,6 +260,24 @@ public class MarkerManager {
 		markers_G.clear();
 	}
 	
+	public boolean clearSaveTracks_G(){
+		if(!BigPlanet.isGPS_track){
+			saveTracks_G.clear();
+			BigPlanet.isGPS_track_save = false;
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	public void clearMarker_DB(){
+		markers_DB.clear();
+	}
+	
+	public void clearLeader(){
+		saveTracks_G.clear();
+	}
+	
 	public static ArrayList<Location> getLocationList(){
 		ArrayList<Location> list = new ArrayList<Location>();
 		for(int i=0; i<saveTracks_G.size();i++)
