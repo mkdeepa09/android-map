@@ -3,6 +3,9 @@
 <string name="BROWSE_TRACK_MENU">Browse Tracks</string>
 <string name="TRACK_MANAGE_MENU">Manage Tracks</string>
 <string name="IMPORT_TRACK_MENU">Import Tracks</string>
+<string name="ERASE_LEADER_TRACK_MENU">Erase Leader\'s Track</string>
+<string name="ERASE_REFERENCE_TRACK_MENU">Erase Reference Track</string>
+<string name="ERASE_RECORDED_TRACK_MENU">Erase Recorded Track</string>
 <string name="des_edit_text">Track Description</string>
 <string name="name_edit_text">Track Name</string>
 <string-array name="items_track_what_to_do_dialog">

@@ -618,6 +618,9 @@ public class BigPlanet extends Activity {
         sub.add(6, 102, 0, R.string.BROWSE_TRACK_MENU);
         sub.add(6, 103, 1, R.string.IMPORT_TRACK_MENU);
         //sub.add(6, 104, 2, R.string.RECORD_GPS_TRACK_MENU);
+        sub.add(6, 105, 3, R.string.ERASE_LEADER_TRACK_MENU);
+        sub.add(6, 106, 4, R.string.ERASE_RECORDED_TRACK_MENU);
+        sub.add(6, 107, 5, R.string.ERASE_REFERENCE_TRACK_MENU);
 
 		sub = menu.addSubMenu(0, 6, 0, R.string.BOOKMARKS_MENU).setIcon(R.drawable.bookmark);
 		sub.add(2, 21, 0, R.string.BOOKMARK_ADD_MENU);
@@ -775,11 +778,24 @@ public class BigPlanet extends Activity {
 		case 104: //simulate GPS track storage
 			recordGpsTracks();
 			break;
+		case 105: //erase track
+			clearTracks();
+			break;
+		case 106: //erase track
+			clearTracks();
+			break;
+		case 107: //erase track
+			clearTracks();
+			break;
 
 		}
 		return false;
 	}
 	
+	private void clearTracks() {
+		
+	}
+
 	private void browseTracks(){
 		Log.i("Message", "Press--Browse Track function");
 		Intent myIntent = new Intent();

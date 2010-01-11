@@ -3,6 +3,9 @@
 <string name="BROWSE_TRACK_MENU">瀏覽路徑</string>
 <string name="TRACK_MANAGE_MENU">管理路徑</string>
 <string name="IMPORT_TRACK_MENU">匯入路徑</string>
+<string name="ERASE_LEADER_TRACK_MENU">清除組長的路徑</string>
+<string name="ERASE_REFERENCE_TRACK_MENU">清除參考的路徑</string>
+<string name="ERASE_RECORDED_TRACK_MENU">清除記錄的路徑</string>
 <string name="des_edit_text">路徑描述</string>
 <string name="name_edit_text">路徑名稱</string>
 
