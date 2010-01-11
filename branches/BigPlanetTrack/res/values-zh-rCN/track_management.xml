@@ -3,6 +3,9 @@
 <string name="BROWSE_TRACK_MENU">浏览路径</string>
 <string name="TRACK_MANAGE_MENU">管理路径</string>
 <string name="IMPORT_TRACK_MENU">汇入路径</string>
+<string name="ERASE_LEADER_TRACK_MENU">清除组长的路径</string>
+<string name="ERASE_REFERENCE_TRACK_MENU">清除参考的路径</string>
+<string name="ERASE_RECORDED_TRACK_MENU">清除记录的路径</string>
 <string name="des_edit_text">路径描述</string>
 <string name="name_edit_text">路径名称</string>
 
