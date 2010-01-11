@@ -172,11 +172,12 @@ public class TrackListViewActivity extends ListActivity{
 								placeList = ConvertToPlaceList(track_coordinates,track_times,track_elevations);
 								Log.i("Message", "placeList has been created.......");
 								//sleep(1000);
-								Intent myIntent = new Intent();
-						        myIntent.setClass(TrackListViewActivity.this, BigPlanet.class);
-						        myIntent.putExtra("drawing_mode", "2");
+								//Intent myIntent = new Intent();
+						        //myIntent.setClass(TrackListViewActivity.this, BigPlanet.class);
+						        //myIntent.putExtra("drawing_mode", "2");
 						        Log.i("Message", "calling BigPlanet...........");
-						        startActivity(myIntent);
+						        //startActivity(myIntent);
+						        BigPlanet.addMarkersForDrawing(placeList, 2);
 						        finish();
 							}catch(Exception e)
 							{
