@@ -82,7 +82,6 @@ public class XMPPService {
 			PacketFilter packetFilter = new AndFilter(
 					new PacketTypeFilter(Message.class), 
 					new FromContainsFilter(xmppReceiver));
-			packetFilter = null;
 			
 			connection.addPacketListener(packetListener, packetFilter);
 		}

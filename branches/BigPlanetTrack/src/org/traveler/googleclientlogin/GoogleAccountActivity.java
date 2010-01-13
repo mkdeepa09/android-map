@@ -26,7 +26,6 @@ import org.traveler.xmpp.XMPPServiceFactory;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smack.packet.IQ;
 import org.jivesoftware.smack.packet.Packet;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -97,16 +96,15 @@ public class GoogleAccountActivity extends Activity {
 	private String LeaderEmail;
 	private DefaultHttpClient httpclient = null;
 	public static XMPPService xmppService;
-	private static boolean isWaiting;
-	private static boolean isRunning;
 	
-	private TextView mTextView_Note;
+	private TextView mTextView_Title;
 	private TextView mEditText_Email;
 	private TextView mEditText_Pass;
-	private Button mButton;
+	private Button mButton_UpdateGroupList;
 	private LinearLayout mGroupnameView;
 	private Spinner mSpinner_Groupname;
-	private CheckBox mCheckBox_SentReceiveGPS;
+	private Button mButton_ManageGroup;
+	private CheckBox mCheckBox_ConnectXMPP;
 	private TextView mTextView_Message;
 	private WebView mWebView;
 	private ProgressDialog progressDialog;
@@ -122,27 +120,42 @@ public class GoogleAccountActivity extends Activity {
 		password = GooglePreferences.getPasswd();
 		isXMPPConnected = GooglePreferences.getIsXMPPConnected();
 
-		mTextView_Note = (TextView) findViewById(R.id.mTextView_Note);
-		mTextView_Note.setText(R.string.share_location_note);
+		mTextView_Title = (TextView) findViewById(R.id.mTextView_Title);
+		mTextView_Title.setText(R.string.share_location_note);
 		
 		mEditText_Email = (EditText) findViewById(R.id.mEditText_Email);
 		mEditText_Email.setText(email);
 		mEditText_Pass = (EditText) findViewById(R.id.mEditText_Pass);
 		mEditText_Pass.setText(password);
-		mButton = (Button) findViewById(R.id.mButton);
-		mButton.setOnClickListener(mButtonOnClickListener);
+		mButton_UpdateGroupList = (Button) findViewById(R.id.mButton_UpdateGroupList);
+		mButton_UpdateGroupList.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				signin();
+			}
+		});
 
 		mGroupnameView = (LinearLayout) findViewById(R.id.mGroupnameView);
 		mSpinner_Groupname = (Spinner) findViewById(R.id.mSpinner_Groupname);
 		mSpinner_Groupname.setOnItemSelectedListener(mSpinnerListener);
+		mButton_ManageGroup = (Button) findViewById(R.id.mButton_ManageGroup);
+		mButton_ManageGroup.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (GoogleCookieStore != null) {
+					showWebView("/");
+					mButton_ManageGroup.setVisibility(View.GONE);
+				}
+			}
+		});
+		mButton_ManageGroup.setVisibility(View.GONE);
 
-		mCheckBox_SentReceiveGPS = (CheckBox) findViewById(R.id.mCheckBox_SentReceiveGPS);
-		mCheckBox_SentReceiveGPS.setOnCheckedChangeListener(mCheckedChangeListener);
+		mCheckBox_ConnectXMPP = (CheckBox) findViewById(R.id.mCheckBox_ConnectXMPPServer);
+		mCheckBox_ConnectXMPP.setOnCheckedChangeListener(mCheckedChangeListener);
 
 		mTextView_Message = (TextView) findViewById(R.id.mTextView_Message);
-
 		mWebView = (WebView) findViewById(R.id.mWebView);
-
+		
 		// Get a singleton instance of DefaultHttpClient
 		if (httpclient == null) {
 			Log.i(TAG, "new DefaultHttpClient()");
@@ -153,8 +166,7 @@ public class GoogleAccountActivity extends Activity {
 		}
 		
 		if (!email.equals("") && !password.equals("")) {
-			mButton.performClick();
-			mCheckBox_SentReceiveGPS.setChecked(isXMPPConnected);
+			mButton_UpdateGroupList.performClick();
 		} else {
 			hideLayouts();
 		}
@@ -166,7 +178,8 @@ public class GoogleAccountActivity extends Activity {
 		if (this.progressDialog != null && this.progressDialog.isShowing()) {
 			this.progressDialog.dismiss();
 		}
-		isRunning = false;
+		GooglePreferences.putIsXMPPConnected(isXMPPConnected);
+		Log.i(TAG, "save GooglePreferences: isXMPPConnected="+isXMPPConnected);
 	}
 
 	@Override
@@ -178,6 +191,7 @@ public class GoogleAccountActivity extends Activity {
 			Log.i(TAG, "destroy HttpClient");
 		}
 		if (mWebView != null) {
+			mWebView.clearCache(true);
 			mWebView.destroy();
 			mWebView = null;
 			Log.i(TAG, "destroy WebView");
@@ -185,50 +199,47 @@ public class GoogleAccountActivity extends Activity {
 	}
 	
 	private void hideLayouts() {
+		mButton_ManageGroup.setVisibility(View.GONE);
 		mGroupnameView.setVisibility(View.GONE);
 		mSpinner_Groupname.setAdapter(null);
-		mCheckBox_SentReceiveGPS.setChecked(false);
-		mCheckBox_SentReceiveGPS.setEnabled(false);
+		mCheckBox_ConnectXMPP.setVisibility(View.GONE);
+		mCheckBox_ConnectXMPP.setChecked(false);
 		mWebView.setVisibility(View.GONE);
-		isRunning = false;
 		progressDialog.dismiss();
 	}
 		
-	private OnClickListener mButtonOnClickListener = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			mTextView_Message.setText("");
-			String newEmail = mEditText_Email.getText().toString().trim();
-			String newPass = mEditText_Pass.getText().toString();
-			if (!newEmail.equals(email)) {
-				// Change the email account
-				GoogleToken = null;
-			}
-			if (!newEmail.equals("") && !newPass.equals("")) {
-				email = newEmail;
-				password = newPass;
-				GooglePreferences.putEmail(email);
-				GooglePreferences.putPasswd(password);
-				Log.i(TAG, "save GooglePreferences: Email, Passwd");
-				if (GoogleToken != null) {
-					// Use the token to get cookies
-					getAuthCookie(GoogleAppEngineLoginURL + GoogleToken);
-				} else {
-					// Use the email and password to get the token
-					getAuthToken(ClientLoginURL);
-				}
-			} else {
-				mTextView_Message.setText(R.string.msg_account_password_empty);
-			}
+	private void signin() {
+		mTextView_Message.setText("");
+		String newEmail = mEditText_Email.getText().toString().trim();
+		String newPass = mEditText_Pass.getText().toString();
+		if (!newEmail.equals(email)) {
+			// Change the email account
+			GoogleToken = null;
 		}
-	};
+		if (!newEmail.equals("") && !newPass.equals("")) {
+			email = newEmail;
+			password = newPass;
+			GooglePreferences.putEmail(email);
+			GooglePreferences.putPasswd(password);
+			Log.i(TAG, "save GooglePreferences: Email, Passwd");
+			if (GoogleToken != null) {
+				// Use the token to get cookies
+				getAuthCookie(GoogleAppEngineLoginURL + GoogleToken);
+			} else {
+				// Use the email and password to get the token
+				getAuthToken(ClientLoginURL);
+			}
+		} else {
+			mTextView_Message.setText(R.string.msg_account_password_empty);
+		}
+	}
 	
 	private OnItemSelectedListener mSpinnerListener = new OnItemSelectedListener() {
 		@Override
 		public void onItemSelected(AdapterView<?> arg0, View view, int index, long arg3) {
 			Groupname = (String) mSpinner_Groupname.getItemAtPosition(index);
 			getGAEResource(GoogleAppEngineURL + GroupLeaderServlet + Groupname);
-			mCheckBox_SentReceiveGPS.setEnabled(true);
+			mCheckBox_ConnectXMPP.setVisibility(View.VISIBLE);
 		}
 		@Override
 		public void onNothingSelected(AdapterView<?> arg0) {
@@ -239,10 +250,10 @@ public class GoogleAccountActivity extends Activity {
 	private OnCheckedChangeListener mCheckedChangeListener = new OnCheckedChangeListener() {
 		@Override
 		public void onCheckedChanged(CompoundButton view, boolean isChecked) {
+			isXMPPConnected = isChecked;
 			if (isChecked) {
 				if (Groupname == null) {
-					mTextView_Message.setText(R.string.msg_group_empty);
-					mCheckBox_SentReceiveGPS.setChecked(false);
+					mCheckBox_ConnectXMPP.setChecked(false);
 				} else {
 					email = mEditText_Email.getText().toString().trim();
 					password = mEditText_Pass.getText().toString();
@@ -254,11 +265,12 @@ public class GoogleAccountActivity extends Activity {
 					}
 				}
 			} else {
+				mTextView_Message.setText("");
 				// disconnect an XMPP connection
 				if (xmppService != null) {
 					xmppService.disconnect();
+					BigPlanet.clearNotification(BigPlanet.Notification_XMPP);
 				}
-				mTextView_Message.setText("");
 			}
 		}
 	};
@@ -437,6 +449,8 @@ public class GoogleAccountActivity extends Activity {
 			//TODO: process different error messages to i18n texts
 			if (authToken.startsWith("Error=BadAuthentication")) {
 				mTextView_Message.setText(R.string.msg_account_password_error);
+			} else if (authToken.startsWith("CaptchaToken=")) {
+				mTextView_Message.setText(R.string.msg_account_password_error);
 			} else {
 				mTextView_Message.setText(authToken);
 			}
@@ -448,7 +462,8 @@ public class GoogleAccountActivity extends Activity {
 		GoogleCookieStore = cookieStore;
 		// Use the cookies to access the authenticated resource via HttpClient
 		getGAEResource(GoogleAppEngineURL + JoinedGroupsServlet);
-		showWebView("/");
+		// show showWebView("/") button
+		mButton_ManageGroup.setVisibility(View.VISIBLE);
 	}
 	
 	private void showWebView(String url) {
@@ -489,11 +504,11 @@ public class GoogleAccountActivity extends Activity {
 				mGroupnameView.setVisibility(View.VISIBLE);
 				mSpinner_Groupname.setAdapter(adapter);
 			} else {
-				mSpinner_Groupname.setAdapter(null);
-				progressDialog.dismiss();
+				hideLayouts();
+				mButton_ManageGroup.setVisibility(View.VISIBLE);
+				mTextView_Message.setText(R.string.msg_group_empty);
 			}
 		} catch (JSONException e) {
-			//progressDialog.dismiss();
 			hideLayouts();
 			e.printStackTrace();
 		}
@@ -509,8 +524,13 @@ public class GoogleAccountActivity extends Activity {
 				isLeader = false;
 			}
 			Log.i(TAG, "isLeader = " + isLeader);
-			String msg = getString(R.string.msg_leader);
-			mTextView_Message.setText(msg + " " + LeaderEmail);
+			if (isLeader) {
+				mCheckBox_ConnectXMPP.setText(R.string.msg_send);
+			} else {
+				mCheckBox_ConnectXMPP.setText(R.string.msg_receive);
+			}
+			// trigger connectToXMPPServer() if isXMPPConnected is true
+			mCheckBox_ConnectXMPP.setChecked(isXMPPConnected);
 		} catch (JSONException e) {
 			//progressDialog.dismiss();
 			hideLayouts();
@@ -519,71 +539,48 @@ public class GoogleAccountActivity extends Activity {
 	}
 
 	private void connectToXMPPServer() {
-		isRunning = false;
 		showProgressDialog();
 		// do the HTTP dance in a separate thread
 		new Thread("XMPPServerConnector") {
 			@Override
 			public void run() {
-				isRunning = true;
-				while (isRunning) {
-					isWaiting = true;
-					while (isWaiting) {
-						if (LeaderEmail != null) {
-							isWaiting = false;
-							isRunning = false;
-						}
-						try {
-							Thread.sleep(100);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-					}
-					// Get a singleton instance of XMPPService
-					if (xmppService == null) {
-						xmppService = XMPPServiceFactory.getXMPPService();
-						Log.i(TAG, "XMPPServiceFactory.getXMPPService()");
-					}
-					XMPPConnection connection = xmppService.getConnection();
-					if (!connection.isAuthenticated()) {
-						xmppService.connect();
-						if (connection.isConnected()) {
-							xmppService.login(email, password);
-							xmppService.addPacketListener(myPacketListener, XMPPReceiver);
-							if (!connection.isAuthenticated()) {
-								sendAndroidHandlerMessage(XMPP_ErrorMessage, getString(R.string.msg_account_password_error));
-							} else {
-								// XMPP connection has been created
-								Log.i(TAG, "XMPP connection has been created.");
-								progressDialog.dismiss();
-								try {
-									// create chat channel with XMPPReceiver(i.e. server agent)
-									xmppService.sendMessage("Hi");
-								} catch (XMPPException e) {
-									e.printStackTrace();
-								}
-							}
+				// Get a singleton instance of XMPPService
+				if (xmppService == null) {
+					xmppService = XMPPServiceFactory.getXMPPService();
+					Log.i(TAG, "XMPPServiceFactory.getXMPPService()");
+				}
+				XMPPConnection connection = xmppService.getConnection();
+				if (!connection.isAuthenticated()) {
+					xmppService.connect();
+					if (connection.isConnected()) {
+						xmppService.login(email, password);
+						xmppService.addPacketListener(myPacketListener, XMPPReceiver);
+						if (!connection.isAuthenticated()) {
+							sendAndroidHandlerMessage(XMPP_ErrorMessage, getString(R.string.msg_account_password_error));
 						} else {
-							sendAndroidHandlerMessage(XMPP_ErrorMessage, getString(R.string.msg_not_connect_to_server));
+							// XMPP connection has been created
+							Log.i(TAG, "XMPP connection has been created.");
+							sendAndroidHandlerMessage(XMPP_Notification, getString(R.string.msg_connected));
+							progressDialog.dismiss();
+							try {
+								// create chat channel with XMPPReceiver(i.e. server agent)
+								xmppService.sendMessage("Hi");
+								BigPlanet.setNotification(GoogleAccountActivity.this, 
+										BigPlanet.Notification_XMPP);
+							} catch (XMPPException e) {
+								e.printStackTrace();
+							}
 						}
 					} else {
-						Log.i(TAG, "connection.isAuthenticated()");
+						sendAndroidHandlerMessage(XMPP_ErrorMessage, getString(R.string.msg_not_connect_to_server));
 					}
-					isXMPPConnected = connection.isAuthenticated();
-					GooglePreferences.putIsXMPPConnected(isXMPPConnected);
-					Log.i(TAG, "save GooglePreferences: isXMPPConnected="+isXMPPConnected);
-					if (isXMPPConnected) {
-						if (isLeader)
-							sendAndroidHandlerMessage(XMPP_Notification, getString(R.string.msg_enable_sending));
-						else
-							sendAndroidHandlerMessage(XMPP_Notification, getString(R.string.msg_enable_receiving));
-					}
-					try {
-						Thread.sleep(100);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+				} else {
+					Log.i(TAG, "connection.isAuthenticated()");
+					sendAndroidHandlerMessage(XMPP_Notification, getString(R.string.msg_connected));
 				}
+				isXMPPConnected = connection.isAuthenticated();
+				GooglePreferences.putIsXMPPConnected(isXMPPConnected);
+				Log.i(TAG, "save GooglePreferences: isXMPPConnected="+isXMPPConnected);
 			}
 		}.start();
 	}
@@ -612,15 +609,12 @@ public class GoogleAccountActivity extends Activity {
 			if (msg.what == XMPP_ErrorMessage) {
 				// error message
 				String message = (String) msg.obj;
-				mCheckBox_SentReceiveGPS.setChecked(false);
+				mCheckBox_ConnectXMPP.setChecked(false);
 				mTextView_Message.setText(message);
 				
 			} else if (msg.what == XMPP_Notification)  {
 				// notification message
 				String message = (String) msg.obj;
-				String text = mTextView_Message.getText().toString();
-				if (text.length()>0)
-					message = text + "\n" + message;
 				mTextView_Message.setText(message);
 				
 			} else if (msg.what == XMPP_Packet)  {
@@ -633,9 +627,7 @@ public class GoogleAccountActivity extends Activity {
 	
 	private void processPacket(Packet packet) {
 		String body = null;
-		if (packet.getClass() == IQ.class) {
-//			IQ iqPacket = (IQ) packet;
-		} else if (packet.getClass() == org.jivesoftware.smack.packet.Message.class) {
+		if (packet.getClass() == org.jivesoftware.smack.packet.Message.class) {
 			org.jivesoftware.smack.packet.Message xmppMessage =
 				(org.jivesoftware.smack.packet.Message) packet;
 			body = xmppMessage.getBody();
@@ -684,7 +676,7 @@ public class GoogleAccountActivity extends Activity {
 			progressDialog.setOnCancelListener(new OnCancelListener() {
 				@Override
 				public void onCancel(DialogInterface arg0) {
-					mCheckBox_SentReceiveGPS.setChecked(false);
+					mCheckBox_ConnectXMPP.setChecked(isXMPPConnected);
 				}
 			});
 		}

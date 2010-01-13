@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="share_location_note">分享位置:
-  组长上传自己的连续 GPS 座标给同群组的其他成员。
-  并在这些成员的地图上画出 GPS 轨迹。</string>
+  <string name="share_location_title">分享位置</string>
+  <string name="share_location_note">
+  队长将传送自己的连续 GPS 座标给队员。\n队员将接收队长的座标并于地图画出 GPS 轨迹。
+  </string>
   <string name="share_location_account">Google 帐号:</string>
   <string name="share_location_password">Google 密码:</string>
-  <string name="share_location_groupname">群组名称:</string>
-  <string name="btn_update_group_list">取得该帐号所属群组清单</string>
-  <string name="checkbox_SentReceiveGPS">传送或接收 GPS 座标</string>
+  <string name="share_location_groupname">所属队伍:</string>
+  <string name="btn_update_group_list">取得所属队伍清单</string>
+  <string name="btn_manage_group">管理队伍</string>
+  <string name="checkbox_SendReceiveGPS">传送 / 接收 GPS 座标</string>
+  <string name="msg_send">您是队长，将传送自己的 GPS 座标给其他队员。</string>
+  <string name="msg_receive">您是队员，将接收队长的座标并于地图画出 GPS 轨迹。</string>
   <string name="msg_wait">请稍候</string>
-  <string name="msg_get_group_info">取得群组资讯</string>
+  <string name="msg_get_group_info">取得队伍资讯</string>
   <string name="msg_connecting">连线中...</string>
-  <string name="msg_group_empty">请选择群组。</string>
+  <string name="msg_not_connect_to_server">无法连线至伺服器。</string>
   <string name="msg_account_password_empty">帐号或密码空白。</string>
   <string name="msg_account_password_error">帐号或密码错误。</string>
-  <string name="msg_leader">组长:</string>
-  <string name="msg_not_connect_to_server">无法连线至伺服器。</string>
-  <string name="msg_enable_sending">开始传送自己的 GPS 座标给其他群组成员。</string>
-  <string name="msg_enable_receiving">开始接收组长的 GPS 座标并画轨迹在地图上。</string>
+  <string name="msg_group_empty">您尚未加入任何队伍。</string>
+  <string name="msg_connected">已连线。</string>
+  <string name="msg_online">您在线上</string>
 </resources>

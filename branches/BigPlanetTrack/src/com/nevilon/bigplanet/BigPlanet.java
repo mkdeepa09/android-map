@@ -17,6 +17,9 @@ import org.traveler.track_manage.view.TrackListViewActivity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -82,11 +85,8 @@ import com.nevilon.bigplanet.core.ui.SmoothZoomEngine;
 public class BigPlanet extends Activity {
 
 	//public static final int GO_TO_LOCATION = 20;
-
 	private static final String BOOKMARK_DATA = "bookmark";
-
 	//private static int MY_LOCATION_ZOOM = 1;
-
 	private static int SEARCH_ZOOM = 2;
 
 	private Toast textMessage;
@@ -94,24 +94,23 @@ public class BigPlanet extends Activity {
 	/*
 	 * Графический движок, реализующий карту
 	 */
-	private MapControl mapControl;
+	private static MapControl mapControl;
 
 	private static MarkerManager mm;
 
+	public static NotificationManager mNotificationManager;
+	public static int Notification_RecordTrack = 0;
+	public static int Notification_XMPP = 1;
+	
 	private static LocationManager locationManager;
 	
 	private Location currentLocation;
 
 	private boolean inHome = false;
-
 	public static boolean isFollowMode = true; // default value is auto follow
-	
 	public static boolean isGPS_track = false;  // default false
-	
 	public static boolean isGPS_track_save = false;  // default false
-	
 	public static boolean isMapInCenter = false;
-	
 	public static boolean isDBdrawclear = false; // default false for DB clear
 	
 	private static String locationType = "";
@@ -119,13 +118,10 @@ public class BigPlanet extends Activity {
 	private boolean SDCARD_AVAILABLE = true;
 	
 	private MyIntentReceiver intentReceiver;
-	
 	private MyUpdateScreenIntentReceiver updateScreenIntentReceiver;
 	
 	public static RelativeLayout mAutoFollowRelativeLayout;
-	
 	public static RelativeLayout mTrackRelativeLayout;
-	
 	private static ImageView scaleImageView;
 	
 	public static TravelDataBaseAdapter DBAdapter;
@@ -204,6 +200,7 @@ public class BigPlanet extends Activity {
 			updateScreenIntentReceiver = new MyUpdateScreenIntentReceiver();
 			registerReceiver(updateScreenIntentReceiver, new IntentFilter("com.nevilon.bigplanet.INTENTS.UpdateScreen"));
 
+			mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 			locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 			
 			SmoothZoomEngine.stop = false;
@@ -307,6 +304,7 @@ public class BigPlanet extends Activity {
 		if (isGPS_track) {
 			Toast.makeText(context, R.string.track_enabled, Toast.LENGTH_SHORT).show();
 			//startGPSLocationListener();
+			setNotification(this, Notification_RecordTrack);
 		}
 		setActivityTitle((Activity) context);
 		mapControl.invalidate();
@@ -316,30 +314,33 @@ public class BigPlanet extends Activity {
 		if (!isGPS_track) {
 			Toast.makeText(context, R.string.track_disabled, Toast.LENGTH_SHORT).show();
 			//finishGPSLocationListener(false);
+			clearNotification(Notification_RecordTrack);
 		}
 		mm.saveMarkerGTrack();
 		isGPS_track_save = true;
 		setActivityTitle((Activity) context);
 		mapControl.invalidate();
 	}
-		
+
+	private ImageView ivRecordTrack;
+	
 	private RelativeLayout getTrackRelativeLayout() {
 		final RelativeLayout relativeLayout = new RelativeLayout(this);
 		
 		/* Create a ImageView with a track icon. */
-		final ImageView ivAutoFollow = new ImageView(this);
-		ivAutoFollow.setImageResource(R.drawable.btn_record_start);
+		ivRecordTrack = new ImageView(this);
+		ivRecordTrack.setImageResource(R.drawable.btn_record_start);
 		
-		ivAutoFollow.setOnClickListener(new OnClickListener(){
+		ivRecordTrack.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v) {
 				if(!isGPS_track){
 					isGPS_track = true;
-					ivAutoFollow.setImageResource(R.drawable.btn_record_stop);
+					ivRecordTrack.setImageResource(R.drawable.btn_record_stop);
 					enabledTrack(BigPlanet.this);
 				}else{
 					isGPS_track = false;
-					ivAutoFollow.setImageResource(R.drawable.btn_record_start);
+					ivRecordTrack.setImageResource(R.drawable.btn_record_start);
 					disabledTrack(BigPlanet.this);
 					Log.i("Message","Stop Recording GPS Location...");
 					Log.i("Message","Start to Store GPS Location to DB...");
@@ -415,7 +416,7 @@ public class BigPlanet extends Activity {
 				RelativeLayout.LayoutParams.WRAP_CONTENT);
 		params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
 		params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-		relativeLayout.addView(ivAutoFollow, params);
+		relativeLayout.addView(ivRecordTrack, params);
 		
 		return relativeLayout;
 	}
@@ -513,6 +514,11 @@ public class BigPlanet extends Activity {
 		if (SDCARD_AVAILABLE) {
 			startGPSLocationListener();
 			followMyLocation();
+			if (isGPS_track){
+				ivRecordTrack.setImageResource(R.drawable.btn_record_stop);
+			} else{
+				ivRecordTrack.setImageResource(R.drawable.btn_record_start);
+			}
 		}
 	}
 	
@@ -1090,6 +1096,7 @@ public class BigPlanet extends Activity {
 		if(!isDBdrawclear){
 			isDBdrawclear = true;
 		}
+		mapControl.invalidate();
 	}
 	
 	public void eraseSaveTracks_G(){
@@ -1375,5 +1382,42 @@ public class BigPlanet extends Activity {
 		activity.setTitle(title);
 		int imageID = activity.getResources().getIdentifier("scale"+zoom, "drawable", activity.getPackageName());
 		scaleImageView.setImageResource(imageID);
+	}
+	
+	public static void setNotification(Context context, int notificationId) {
+		int iconId = 0;
+		String contentTitle = null;
+		String contentText = null;
+		
+		if (notificationId == Notification_RecordTrack) {
+			iconId = R.drawable.globe;
+			contentTitle = context.getString(R.string.app_name);
+			contentText = context.getString(R.string.notify_recording);
+		} else if (notificationId == Notification_XMPP) {
+			contentTitle = context.getString(R.string.msg_online);
+			if (GoogleAccountActivity.isLeader) {
+				iconId = R.drawable.user_out;
+				contentText = context.getString(R.string.msg_send);
+			} else {
+				iconId = R.drawable.user_in;
+				contentText = context.getString(R.string.msg_receive);
+			}
+		}
+		
+		Intent notifyIntent = new Intent(context, BigPlanet.class);
+		PendingIntent pendingIntent = 
+			PendingIntent.getActivity(context, 0, notifyIntent, Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+
+		Notification notification = new Notification();
+		notification.flags = Notification.FLAG_NO_CLEAR;
+		notification.icon = iconId;
+		notification.defaults = Notification.DEFAULT_SOUND;
+		
+		notification.setLatestEventInfo(context, contentTitle, contentText, pendingIntent);
+		mNotificationManager.notify(notificationId, notification);
+	}
+	
+	public static void clearNotification(int notificationId) {
+		mNotificationManager.cancel(notificationId);
 	}
 }
