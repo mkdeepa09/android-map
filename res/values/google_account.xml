@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="share_location_note">Share Locations:
-  The leader will sent continuous GPS locations to other members in the same group. 
-  And the GPS track will be drawn on the maps of other members.</string>
+  <string name="share_location_title">Share Locations</string>
+  <string name="share_location_note">
+  The leader will send continuous GPS coordinates to other group members.\nThe members will receive the group leader\'s coordinates and draw a GPS track on the maps.
+  </string>
   <string name="share_location_account">Google Account:</string>
   <string name="share_location_password">Google Password:</string>
-  <string name="share_location_groupname">Group Name:</string>
-  <string name="btn_update_group_list">Get joined groups of this account</string>
-  <string name="checkbox_SentReceiveGPS">Send or receive GPS coordinates</string>
+  <string name="share_location_groupname">Joined Groups:</string>
+  <string name="btn_update_group_list">Get Joined Groups</string>
+  <string name="btn_manage_group">Manage Groups</string>
+  <string name="checkbox_SendReceiveGPS">Send / Receive GPS coordinates</string>
+  <string name="msg_send">You are leader and sending your GPS coordinates to other group members.</string>
+  <string name="msg_receive">You are member and receiving the group leader\'s coordinates and drawing a GPS track on your map.</string>
   <string name="msg_wait">Please wait</string>
   <string name="msg_get_group_info">Get group info</string>
   <string name="msg_connecting">Connecting...</string>
-  <string name="msg_group_empty">Please choose a group name.</string>
+  <string name="msg_not_connect_to_server">Not connected to server.</string>
   <string name="msg_account_password_empty">The account or password is empty.</string>
   <string name="msg_account_password_error">The account or password is incorrect.</string>
-  <string name="msg_leader">Leader:</string>
-  <string name="msg_not_connect_to_server">Not connected to server.</string>
-  <string name="msg_enable_sending">Start sending your own GPS coordinates to other group members.</string>
-  <string name="msg_enable_receiving">Start receiving the group leader\'s GPS coordinates and draw a track on your map.</string>
+  <string name="msg_group_empty">You don\'t join any group.</string>
+  <string name="msg_connected">Connected.</string>
+  <string name="msg_online">You are online.</string>
 </resources>

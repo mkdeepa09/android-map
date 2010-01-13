@@ -89,5 +89,6 @@
     <string name="bookmark_description">描述</string>
     
     <string name="clearSaveTrackFales">请先停止记录轨迹</string>
+    <string name="notify_recording">正在记录轨迹...</string>
 
 </resources>

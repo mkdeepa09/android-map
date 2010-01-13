@@ -89,5 +89,6 @@
     <string name="bookmark_description">Description</string>
     
     <string name="clearSaveTrackFales">Please stop recording the track first.</string>
+    <string name="notify_recording">Recording your track...</string>
     
 </resources>
