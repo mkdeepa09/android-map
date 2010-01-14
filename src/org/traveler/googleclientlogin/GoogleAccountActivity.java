@@ -646,7 +646,7 @@ public class GoogleAccountActivity extends Activity {
 					place.setLat(lat);
 					List<Place> placeList = new ArrayList<Place>();
 					placeList.add(place);
-					BigPlanet.addMarkersForDrawing(placeList, 3);
+					BigPlanet.addMarkersForDrawing(this, placeList, 3);
 				} catch (ArrayIndexOutOfBoundsException e) {
 					e.printStackTrace();
 				} catch (NumberFormatException e) {
