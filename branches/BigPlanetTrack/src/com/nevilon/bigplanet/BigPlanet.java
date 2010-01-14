@@ -94,7 +94,7 @@ public class BigPlanet extends Activity {
 	/*
 	 * Графический движок, реализующий карту
 	 */
-	private static MapControl mapControl;
+	private MapControl mapControl;
 
 	private static MarkerManager mm;
 
@@ -120,12 +120,11 @@ public class BigPlanet extends Activity {
 	private MyIntentReceiver intentReceiver;
 	private MyUpdateScreenIntentReceiver updateScreenIntentReceiver;
 	
-	public static RelativeLayout mAutoFollowRelativeLayout;
-	public static RelativeLayout mTrackRelativeLayout;
+	private static RelativeLayout mAutoFollowRelativeLayout;
+	private static RelativeLayout mTrackRelativeLayout;
 	private static ImageView scaleImageView;
 	
 	public static TravelDataBaseAdapter DBAdapter;
-	private String drawing_mode = null;
 	public static ProgressDialog myGPSDialog = null;
     Handler handler;
     Handler myHandler;
@@ -139,18 +138,6 @@ public class BigPlanet extends Activity {
 		
 		Log.i("BigPlanet:", "At BigPlanet,Now!");
 		Log.i("Message", "new a DBAdapter instance");
-		Bundle extras = getIntent().getExtras(); 
-        if(extras !=null)
-        {
-         this.drawing_mode = extras.getString("drawing_mode");
-         if(this.drawing_mode != null){
-        	 Log.i("drawing_mode", this.drawing_mode);
-        	 //if(TrackListViewActivity.placeList != null)
-        	//	 addMarkersFor(TrackListViewActivity.placeList, 2);
-        	// else
-        	//	 Log.e("Error", "TrackListViewActivity.placeList is Null");
-         }
-        }
         DBAdapter = new TravelDataBaseAdapter(this);
         
         myHandler = new Handler(){
@@ -242,17 +229,6 @@ public class BigPlanet extends Activity {
 		
 		if (hasSD) {
 			setActivityTitle(BigPlanet.this);
-		}
-		
-		if(this.drawing_mode!=null)
-		{	
-			if(this.drawing_mode.equals("2")&&TrackListViewActivity.placeList != null)
-			{
-				addMarkersForDrawing(TrackListViewActivity.placeList, 2);
-	            Log.i("Message", "Calling addMarkDrawing.......................................");		
-			}
-			else
-				Log.e("Error", "TrackListViewActivity.placeList is Null");
 		}
 	}
 	
@@ -472,6 +448,7 @@ public class BigPlanet extends Activity {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			Log.i("BP", "onReceive");
+			mapControl.invalidate();
 			// see MapControl zoomPanel.setOnZoomOutClickListener
 			if (intent.getBooleanExtra(MapControl.FIX_ZOOM, false)) {
 				Log.i("BP", "%% "+MapControl.FIX_ZOOM);
@@ -484,7 +461,12 @@ public class BigPlanet extends Activity {
 					Log.i("BP", "%% "+currentLocation.getProvider()+" "
 							+currentLocation.getLongitude()+", "+currentLocation.getLatitude());
 					isMapInCenter = true;
-					goToMyLocation(currentLocation, PhysicMap.getZoomLevel());
+					int zoom = PhysicMap.getZoomLevel();
+					double lat = currentLocation.getLatitude();
+					double lon = currentLocation.getLongitude();
+					com.nevilon.bigplanet.core.geoutils.Point p = GeoUtils.toTileXY(lat, lon, zoom);
+					com.nevilon.bigplanet.core.geoutils.Point off = GeoUtils.getPixelOffsetInTile(lat, lon, zoom);
+					mapControl.goTo((int) p.x, (int) p.y, zoom, (int) off.x, (int) off.y);
 				}
 			}
 			// refresh the activity title
@@ -955,10 +937,10 @@ public class BigPlanet extends Activity {
 	private final float minDistance = 5; // m
 	
 	class MyLocationListener implements LocationListener {
-		String locationType;
+		String myLocationType;
 		
 		MyLocationListener(String locationType) {
-			this.locationType = locationType;
+			this.myLocationType = locationType;
 		}
 		
 		public void onLocationChanged(Location location) {
@@ -996,10 +978,10 @@ public class BigPlanet extends Activity {
 					}
 				}
 			}
-			locationType = location.getProvider();
+			BigPlanet.locationType = location.getProvider();
 			setActivityTitle(BigPlanet.this);
 			// gpsLocationListener has higher priority than networkLocationListener
-			if (locationType.equals("gps")) {
+			if (myLocationType.equals("gps")) {
 				locationManager.removeUpdates(networkLocationListener);
 			}
 			mapControl.invalidate();
@@ -1007,14 +989,14 @@ public class BigPlanet extends Activity {
 		
 		public void onProviderDisabled(String provider) {
 			Log.i("Location", provider + " is disabled.");
-			if (locationType.equals("gps")) {
+			if (myLocationType.equals("gps")) {
 				locationManager.requestLocationUpdates(provider, minTime, minDistance, networkLocationListener);
 			}
 		}
 		
 		public void onProviderEnabled(String provider) {
 			Log.i("Location", provider + " is enabled.");
-			if (locationType.equals("gps")) {
+			if (myLocationType.equals("gps")) {
 				locationManager.requestLocationUpdates(provider, minTime, minDistance, gpsLocationListener);
 			} else {
 				locationManager.requestLocationUpdates(provider, minTime, minDistance, networkLocationListener);
@@ -1079,7 +1061,7 @@ public class BigPlanet extends Activity {
 		mm.addMarker(place, zoom, 1, MarkerManager.MY_LOCATION_MARKER);
 	}
 	
-	public static void addMarkersForDrawing(List<Place> placeList, int imageType) {
+	public static void addMarkersForDrawing(Context context, List<Place> placeList, int imageType) {
 		/**
 		 * imagetype:
 		 * 2 -> from DB
@@ -1096,7 +1078,8 @@ public class BigPlanet extends Activity {
 		if(!isDBdrawclear){
 			isDBdrawclear = true;
 		}
-		mapControl.invalidate();
+		Intent i = new Intent("com.nevilon.bigplanet.INTENTS.UpdateScreen");
+		context.sendBroadcast(i);
 	}
 	
 	public void eraseSaveTracks_G(){

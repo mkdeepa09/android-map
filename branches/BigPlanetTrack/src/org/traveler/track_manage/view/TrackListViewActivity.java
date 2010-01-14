@@ -177,7 +177,7 @@ public class TrackListViewActivity extends ListActivity{
 						        //myIntent.putExtra("drawing_mode", "2");
 						        Log.i("Message", "calling BigPlanet...........");
 						        //startActivity(myIntent);
-						        BigPlanet.addMarkersForDrawing(placeList, 2);
+						        BigPlanet.addMarkersForDrawing(TrackListViewActivity.this, placeList, 2);
 						        finish();
 							}catch(Exception e)
 							{
