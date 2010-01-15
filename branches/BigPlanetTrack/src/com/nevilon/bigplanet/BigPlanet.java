@@ -452,20 +452,30 @@ public class BigPlanet extends Activity {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			Log.i("BP", "onReceive");
-			mapControl.invalidate();
-			// center map
-			if (isFollowMode && !isMapInCenter) {
-				if (currentLocation != null) {
-					Log.i("BP", "%% goToMyLocation");
-					Log.i("BP", "%% "+currentLocation.getProvider()+" "
-							+currentLocation.getLongitude()+", "+currentLocation.getLatitude());
-					isMapInCenter = true;
-					int zoom = PhysicMap.getZoomLevel();
-					double lat = currentLocation.getLatitude();
-					double lon = currentLocation.getLongitude();
-					com.nevilon.bigplanet.core.geoutils.Point p = GeoUtils.toTileXY(lat, lon, zoom);
-					com.nevilon.bigplanet.core.geoutils.Point off = GeoUtils.getPixelOffsetInTile(lat, lon, zoom);
-					mapControl.goTo((int) p.x, (int) p.y, zoom, (int) off.x, (int) off.y);
+			if (intent.getIntExtra("type", 0) == 1) {
+				// see MapControl invokeGoToMyLocation
+				double lat = intent.getDoubleExtra("lat", 0);
+				double lon = intent.getDoubleExtra("lon", 0);
+				int zoom = intent.getIntExtra("zoom", PhysicMap.getZoomLevel());
+				goToMyLocation(lat, lon, zoom);
+			} else {
+				// center map
+				if (isFollowMode && !isMapInCenter) {
+					if (currentLocation != null) {
+						Log.i("BP", "%% goToMyLocation");
+						Log.i("BP", "%% "+currentLocation.getProvider()+" "
+								+currentLocation.getLongitude()+", "+currentLocation.getLatitude());
+						isMapInCenter = true;
+						int zoom = PhysicMap.getZoomLevel();
+						double lat = currentLocation.getLatitude();
+						double lon = currentLocation.getLongitude();
+						com.nevilon.bigplanet.core.geoutils.Point p = GeoUtils.toTileXY(lat, lon, zoom);
+						com.nevilon.bigplanet.core.geoutils.Point off = GeoUtils.getPixelOffsetInTile(lat, lon, zoom);
+						mapControl.goTo((int) p.x, (int) p.y, zoom, (int) off.x, (int) off.y);
+					}
+				} else {
+					// receiving leader' GPS
+					mapControl.invalidate();
 				}
 			}
 			// refresh the activity title
@@ -1036,6 +1046,10 @@ public class BigPlanet extends Activity {
 	public void goToMyLocation(Location location, int zoom) {
 		double lat = location.getLatitude();
 		double lon = location.getLongitude();
+		goToMyLocation(lat, lon, zoom);
+	}
+	
+	private void goToMyLocation(double lat, double lon, int zoom) {
 		com.nevilon.bigplanet.core.geoutils.Point p = GeoUtils.toTileXY(lat, lon, zoom);
 		com.nevilon.bigplanet.core.geoutils.Point off = GeoUtils.getPixelOffsetInTile(lat, lon, zoom);
 		mapControl.goTo((int) p.x, (int) p.y, zoom, (int) off.x, (int) off.y);

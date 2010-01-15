@@ -308,6 +308,15 @@ public class MapControl extends RelativeLayout {
 			context.sendBroadcast(i);
 		}
 	}
+	
+	private void invokeGoToMyLocation(double lat, double lon, int zoom) {
+		Intent i = new Intent("com.nevilon.bigplanet.INTENTS.UpdateScreen");
+		i.putExtra("type", 1);
+		i.putExtra("lat", lat);
+		i.putExtra("lon", lon);
+		i.putExtra("zoom", zoom);
+		context.sendBroadcast(i);
+	}
 
 	/**
 	 * Устанавливает состояние zoomIn/zoomOut контролов в зависимости от уровня
