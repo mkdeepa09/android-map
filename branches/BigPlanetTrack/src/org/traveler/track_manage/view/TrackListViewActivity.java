@@ -219,7 +219,7 @@ public class TrackListViewActivity extends ListActivity{
 	protected void onLongListItemClick(View v,int pos,long id) { 
 	      Log.i( "TAG", "onItemLongClick id=" + id);
 	      LinearLayout lay = (LinearLayout)v;
-			TextView textView = (TextView)lay.findViewById(R.id.icontext);
+			TextView textView = (TextView)lay.findViewById(R.id.track_name);
 			Log.i("Message", "onItemLongClick TextView selected is="+textView.getText());
 			TrackListViewActivity.operatedTrackID = id;
 			alert_dialog_selection();
@@ -230,7 +230,7 @@ public class TrackListViewActivity extends ListActivity{
 		// TODO Auto-generated method stub
 		super.onListItemClick(l, v, position, id);
 		LinearLayout lay = (LinearLayout)v;
-		TextView textView = (TextView)lay.findViewById(R.id.icontext);
+		TextView textView = (TextView)lay.findViewById(R.id.track_name);
 		Log.i("Message", "onListItemClick TextView selected is="+textView.getText());
 		mClickItemedText = textView.getText().toString();
     	Log.i("Message", "onListItemClick mClickItemedText="+mClickItemedText);
@@ -499,8 +499,16 @@ public class TrackListViewActivity extends ListActivity{
 						String track_coordinate = TrackListViewActivity.operatedTrackCursor.getString(3);
 						String track_time = TrackListViewActivity.operatedTrackCursor.getString(4);
 						String track_elevation = TrackListViewActivity.operatedTrackCursor.getString(5);
+						long track_consumedTime = TrackListViewActivity.operatedTrackCursor.getLong(6);
+						float track_totalDistance = TrackListViewActivity.operatedTrackCursor.getFloat(7);
+						double track_averageSpeed = TrackListViewActivity.operatedTrackCursor.getDouble(8);
+						double track_manximumSpeed = TrackListViewActivity.operatedTrackCursor.getDouble(9);
+						long track_PointNumber = TrackListViewActivity.operatedTrackCursor.getLong(10);
+						String track_source = TrackListViewActivity.operatedTrackCursor.getString(11);
 						
-						myTrackDBAdapter.updateTrack(TrackListViewActivity.operatedTrackID, changed_track_name, changed_track_des, track_coordinate, track_time, track_elevation);
+						
+						myTrackDBAdapter.updateTrack(TrackListViewActivity.operatedTrackID, changed_track_name, changed_track_des, track_coordinate, track_time, track_elevation
+								,track_consumedTime,track_totalDistance,track_averageSpeed,track_manximumSpeed,track_PointNumber,track_source);
 						myTrackDBAdapter.close();
 						
 						Toast.makeText(TrackListViewActivity.this,getString(R.string.edit_successfully), 

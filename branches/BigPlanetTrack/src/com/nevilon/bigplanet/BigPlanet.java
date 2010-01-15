@@ -143,9 +143,18 @@ public class BigPlanet extends Activity {
 		Log.i("BigPlanet:", "At BigPlanet,Now!");
 		Log.i("Message", "new a DBAdapter instance");
         DBAdapter = new TravelDataBaseAdapter(this);
+
+        Log.i("Message", "New a MainHandler");
+
         
+
         myHandler = new Handler(){
+
+			
+        	
+
 			public void handleMessage(Message msg) {
+				
 				Log.i("Message", "flag="+msg.what); //1:�券import��;0:�典�import憭望�
 				switch (msg.what)
 				{
@@ -360,9 +369,10 @@ public class BigPlanet extends Activity {
 					}
 					*/
 					
-				  if(MarkerManager.getLocationList().size()>0) // check out whether GPS LocationList contains any GPS data or not
+				  if(MarkerManager.getLocationList().size()>1) // check out whether GPS LocationList contains any GPS data or not
+					                                           // due to at least two locations needed to compute the "Distance" measurement 
 				  {	
-					// 憿舐內Progress撠店�孵�
+					
 						final CharSequence strDialogTitle = getString(R.string.str_store_gps_location_to_db_title);
 						final CharSequence strDialogBody = getString(R.string.str_store_gps_location_to_db_body);
 						myGPSDialog = ProgressDialog.show
@@ -384,6 +394,9 @@ public class BigPlanet extends Activity {
 							    BigPlanet.this,
 	            		        getString(R.string.gps_locationlist_has_no_data),
 	            		        Toast.LENGTH_LONG).show();
+
+					  Log.i("Message","the size of LocationList is less than two points");
+
 				  }
 					
 				}
@@ -587,10 +600,11 @@ public class BigPlanet extends Activity {
 		SubMenu sub = menu.addSubMenu(5, 101, 0, R.string.TRACK_MANAGE_MENU).setIcon(R.drawable.track_manage);
         sub.add(6, 102, 0, R.string.BROWSE_TRACK_MENU);
         sub.add(6, 103, 1, R.string.IMPORT_TRACK_MENU);
-        //sub.add(6, 104, 2, R.string.RECORD_GPS_TRACK_MENU);
+        sub.add(6, 104, 2, R.string.RECORD_GPS_TRACK_MENU);
         sub.add(6, 105, 3, R.string.ERASE_LEADER_TRACK_MENU);
         sub.add(6, 106, 4, R.string.ERASE_RECORDED_TRACK_MENU);
         sub.add(6, 107, 5, R.string.ERASE_REFERENCE_TRACK_MENU);
+        
 
 		sub = menu.addSubMenu(0, 6, 0, R.string.BOOKMARKS_MENU).setIcon(R.drawable.bookmark);
 		sub.add(2, 21, 0, R.string.BOOKMARK_ADD_MENU);

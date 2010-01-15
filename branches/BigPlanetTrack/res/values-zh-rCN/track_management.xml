@@ -50,4 +50,10 @@
 <string name="edit_successfully">编辑成功</string>
 <string name="drawing_track_progressdialog_title">正在描绘路径</string>
 <string name="drawing_track_progressdialog_body">请稍候片刻...</string>
+<string name="hr_unit">时</string>
+<string name="min_unit">分</string>
+<string name="sec_unit">秒</string>
+<string name="meter_unit">米</string>
+<string name="point_number_unit">点</string>
+<string name="source_text">来源</string>
 </resources>

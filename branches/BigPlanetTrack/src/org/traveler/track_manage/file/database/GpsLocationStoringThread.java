@@ -1,10 +1,14 @@
 package org.traveler.track_manage.file.database;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
+import org.traveler.track_manage.track.TrackContentAnalyser;
+
 import com.nevilon.bigplanet.BigPlanet;
 import com.nevilon.bigplanet.R;
+import com.nevilon.bigplanet.core.Place;
 
 import android.location.Location;
 import android.os.Handler;
@@ -12,8 +16,9 @@ import android.os.Message;
 import android.util.Log;
 
 public class GpsLocationStoringThread extends Thread {
-	private Handler mainThreadHandler;
+	private Handler mainThreadHandler = null;
 	private ArrayList<Location> locationList = null;
+	private ArrayList<Place> placeList = new ArrayList<Place>();
 	private String trackName = null;
 	Timestamp timestamp;
 	public static final int SUCCESSFULLY=1;
@@ -27,6 +32,11 @@ public class GpsLocationStoringThread extends Thread {
 		StringBuffer coordinates_buff = new StringBuffer();
 		StringBuffer time_buff = new StringBuffer();
 		StringBuffer elevation_buff = new StringBuffer();
+		if(this.mainThreadHandler == null)
+			Log.i("Message", "MainHandler is Null");
+		else 
+			Log.i("Message", "MainHandler is not Null");
+		
 	  try{ 	
 		if(this.locationList != null)
 		{
@@ -51,9 +61,43 @@ public class GpsLocationStoringThread extends Thread {
 				
 				
 				}
+				
+				
+				//create the PlaceList from LocationList
+				for(Location my_location: this.locationList){
+					
+					Place place = new Place();
+				    place.setLocation(my_location);
+					place.setLat(my_location.getLatitude());
+					place.setLon(my_location.getLongitude());
+					this.placeList.add(place);
+				}
+				
+				
+				TrackContentAnalyser analyser = new TrackContentAnalyser();
+            	Log.i("trackName", "Perform TrackContentAnalyser");
+            	analyser.analyzeContent(this.placeList);
+            	
+            	long consumedTime = analyser.getConsumedTime();
+            	Time time = new Time(consumedTime);
+        		Log.i("Message","ConsumedTime="+time.toString() );
+            	
+            	float totalDistance = analyser.getTotalDistance();
+            	Log.i("Message","totalDistance="+totalDistance+"m");
+            	
+            	
+            	double averageSpeed = analyser.getAverageSpeed();
+            	Log.i("Message","averageSpeed="+averageSpeed+"m/s");
+            	
+            	double manximumSpeed = analyser.getMaximumSpeed();
+            	Log.i("Message","manximumSpeed="+manximumSpeed+"m/s");
+            	
+            	long trackPointNumber = analyser.getTrackPointNumber();
+            	Log.i("Message","trackPointNumber="+trackPointNumber);
 			
 				BigPlanet.DBAdapter.open();
-				long id = BigPlanet.DBAdapter.insertTrack(this.trackName, "From Gps Location", coordinates_buff.toString(), time_buff.toString(), elevation_buff.toString());
+				long id = BigPlanet.DBAdapter.insertTrack(this.trackName, "no description", coordinates_buff.toString(), time_buff.toString(), elevation_buff.toString(),consumedTime
+						,totalDistance,averageSpeed,manximumSpeed,trackPointNumber,"GPS");
 				Log.i("Message", "Insert a new track successfully");
 				BigPlanet.DBAdapter.close();
 			
@@ -91,8 +135,9 @@ public class GpsLocationStoringThread extends Thread {
 	  }
 	  catch(Exception e){
 		  
-		    String obj = "MainHandler is Null";
-		    if(mainThreadHandler != null)
+		    String obj = "Some exceptions occur";
+		   
+		   if(mainThreadHandler != null)
 		    {
 		       m  = mainThreadHandler.obtainMessage(FAIL, 2, 1, obj);
 		    
@@ -100,7 +145,7 @@ public class GpsLocationStoringThread extends Thread {
 		    }
      	    else
      		  throw new Error("mainHandler is Null");
-     		  
+     		
 		    e.printStackTrace();
 	  }
 	  finally

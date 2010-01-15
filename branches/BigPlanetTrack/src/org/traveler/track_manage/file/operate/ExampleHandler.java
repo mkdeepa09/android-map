@@ -1,5 +1,8 @@
 package org.traveler.track_manage.file.operate;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -111,11 +114,26 @@ public class ExampleHandler extends DefaultHandler {
               Log.i("Messgae","out trkseg_tag");
          }else if (localName.equals("trkpt")) { 
               this.in_trkpt_tag = false;
-              this.myParsedExampleDataSet.addTrackPoint(this.trackPoint);
-              this.trackPoint = null;
-              Log.i("Messgae","out trkpt_tag");
-              Log.i("Messgae","add a new track_point into arrayList");
-              Log.i("Messgae","reset trackPoint Null");
+              
+              Pattern p = Pattern.compile("(20\\d{2})-(0[0-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])(T|\\s)([0-1][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])(Z|.0)");
+              Matcher m = p.matcher(this.trackPoint.getTime());
+              if(m.matches()){
+               Log.i("Message", "Time format checking pass....");
+               this.trackPoint.computeTimeLongValue();
+               this.myParsedExampleDataSet.addTrackPoint(this.trackPoint);
+               this.trackPoint = null;
+               Log.i("Messgae","out trkpt_tag");
+               Log.i("Messgae","add a new track_point into arrayList");
+               Log.i("Messgae","reset trackPoint Null");
+              }
+              else
+              {
+            	  Log.i("Message", "Time format checking Not pass...., time="+this.trackPoint.getTime());
+            	  this.trackPoint = null;
+            	  Log.i("Messgae","out trkpt_tag");
+            	  Log.i("Messgae","reset trackPoint Null");
+              }
+              
          }else if (localName.equals("time")) { 
               this.in_time_tag = false;
               Log.i("Messgae","out time_tag");
