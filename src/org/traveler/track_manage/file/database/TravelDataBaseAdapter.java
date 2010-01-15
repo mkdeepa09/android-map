@@ -25,7 +25,7 @@ public class TravelDataBaseAdapter {
 	 
 	 
 	 private final static String DATABASE_NAME = "track_db";
-	 private final static int DATABASE_VERSION = 1;
+	 private final static int DATABASE_VERSION = 2;
 	 private final static String TABLE_NAME = "track_table";
      private static final String TAG = "DBAdapter";
      
@@ -72,7 +72,7 @@ public class TravelDataBaseAdapter {
              Log.w(TAG, "Upgrading database from version " + oldVersion 
                      + " to "
                      + newVersion + ", which will destroy all old data");
-             db.execSQL("DROP TABLE IF EXISTS titles");
+             db.execSQL("DROP TABLE IF EXISTS "+TABLE_NAME);
              onCreate(db);
          }
      }    
