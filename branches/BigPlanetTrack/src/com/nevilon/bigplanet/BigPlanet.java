@@ -514,6 +514,13 @@ public class BigPlanet extends Activity {
 			} else{
 				ivRecordTrack.setImageResource(R.drawable.btn_record_start);
 			}
+			if (isFollowMode){
+				mAutoFollowRelativeLayout.setVisibility(View.INVISIBLE);
+			} else{
+				mAutoFollowRelativeLayout.setVisibility(View.VISIBLE);
+			}
+//			Toast.makeText(this, "isGPS_track="+isGPS_track, Toast.LENGTH_SHORT).show();
+//			Toast.makeText(this, "isFollowMode="+isFollowMode, Toast.LENGTH_SHORT).show();
 		}
 	}
 	
@@ -910,8 +917,8 @@ public class BigPlanet extends Activity {
 //	};
 
 	private void startGPSLocationListener() {
-		isFollowMode = true;
-		inHome = false;
+//		isFollowMode = true;
+//		inHome = false;
 		
 		Criteria criteria = new Criteria();
 		criteria.setAccuracy(Criteria.ACCURACY_FINE);
@@ -957,8 +964,8 @@ public class BigPlanet extends Activity {
 	}
 	
 	public static void finishGPSLocationListener(boolean isSetNull) {
-		isFollowMode = false;
-		locationType = "";
+//		isFollowMode = false;
+//		locationType = "";
 		boolean isXMPPConnected = GoogleAccountActivity.xmppService != null && GoogleAccountActivity.xmppService.isConnected();
 		if (!isGPS_track && !isXMPPConnected) {
 			if (locationManager != null) {
@@ -1059,14 +1066,13 @@ public class BigPlanet extends Activity {
 	}
 	
 	private void followMyLocation() {
-		if (!isFollowMode) {
+		if (isFollowMode) {
+			isFollowMode = false;
 			enabledAutoFollow(this);
 		}
 	}
 
-	// 阿超	
-	//private void goToMyLocation(Location location, int zoom) {
-	public void goToMyLocation(Location location, int zoom) {
+	private void goToMyLocation(Location location, int zoom) {
 		double lat = location.getLatitude();
 		double lon = location.getLongitude();
 		goToMyLocation(lat, lon, zoom);
