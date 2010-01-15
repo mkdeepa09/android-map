@@ -16,7 +16,7 @@
 <string name="str_dialog_title">正在匯入路徑</string>
 <string name="track_importing_result">路徑匯入情況</string>
 <string name="track_importing_successfully">成功!</string>
-<string name="import_no_items">目前尚無偵測到任何以GPX格式存在之路徑檔案!\n請將檔案放置在tracks/importt目錄下,謝謝。</string>
+<string name="import_no_items">目前尚無偵測到任何以GPX格式存在之路徑檔案!\n請將檔案放置在tracks/import目錄下,謝謝。</string>
 <string name="track_browse_view">瀏覽路徑頁面</string>
 <string name="browse_no_items">目前尚無任何匯入之路徑。</string>
 

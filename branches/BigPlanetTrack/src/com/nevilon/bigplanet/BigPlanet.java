@@ -63,14 +63,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
-
 import com.nevilon.bigplanet.core.BigPlanetApp;
 import com.nevilon.bigplanet.core.MarkerManager;
 import com.nevilon.bigplanet.core.PhysicMap;
 import com.nevilon.bigplanet.core.Place;
 import com.nevilon.bigplanet.core.Preferences;
 import com.nevilon.bigplanet.core.RawTile;
-import com.nevilon.bigplanet.core.MarkerManager.Marker;
 import com.nevilon.bigplanet.core.MarkerManager.Marker_G;
 import com.nevilon.bigplanet.core.db.DAO;
 import com.nevilon.bigplanet.core.db.GeoBookmark;
@@ -147,21 +145,13 @@ public class BigPlanet extends Activity {
         DBAdapter = new TravelDataBaseAdapter(this);
 
         Log.i("Message", "New a MainHandler");
-
-        
-
         myHandler = new Handler(){
-
-			
-        	
-
 			public void handleMessage(Message msg) {
 				
-				Log.i("Message", "flag="+msg.what); //1:�券import��;0:�典�import憭望�
+				Log.i("Message", "flag="+msg.what);
 				switch (msg.what)
 				{
 				   case GpsLocationStoringThread.SUCCESSFULLY:
-					   /*��*/
 					    Intent myIntent = new Intent();
 				        myIntent.setClass(BigPlanet.this, TrackListViewActivity.class);
 				        Log.i("Message", "calling TrackListViewActivity");
@@ -169,7 +159,6 @@ public class BigPlanet extends Activity {
 						break;
 						
 					case GpsLocationLogParsingThread.FAIL:
-						/*�*/
 						Toast.makeText(
 							    BigPlanet.this,
 	            		        getString(R.string.fail)+"\n"+(String)msg.obj,
