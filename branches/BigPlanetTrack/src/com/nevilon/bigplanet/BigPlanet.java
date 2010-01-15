@@ -106,7 +106,9 @@ public class BigPlanet extends Activity {
 	
 	private static LocationManager locationManager;
 	
-	private Location currentLocation;
+	// 阿超//
+	//private Location currentLocation;
+	public static Location currentLocation;
 
 	private boolean inHome = false;
 	public static boolean isFollowMode = true; // default value is auto follow
@@ -1033,7 +1035,9 @@ public class BigPlanet extends Activity {
 		}
 	}
 
-	private void goToMyLocation(Location location, int zoom) {
+	// 阿超	
+	//private void goToMyLocation(Location location, int zoom) {
+	public void goToMyLocation(Location location, int zoom) {
 		double lat = location.getLatitude();
 		double lon = location.getLongitude();
 		com.nevilon.bigplanet.core.geoutils.Point p = GeoUtils.toTileXY(lat, lon, zoom);
