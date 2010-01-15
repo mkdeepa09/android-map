@@ -47,7 +47,7 @@
 <string name="RECORD_GPS_TRACK_MENU">模擬GPS Track儲存</string>
 <string name="Gps_track_storage_simu_view">Gps路徑儲存模擬頁面</string>
 <string name="fail">儲存失敗</string>
-<string name="str_store_gps_location_to_db_title">正在儲存GPS Locations</string>
+<string name="str_store_gps_location_to_db_title">正在儲存GPS路徑</string>
 <string name="str_store_gps_location_to_db_body">請稍候片刻...</string>
 <string name="gps_locationlist_has_no_data">目前無任何GPS座標紀錄可儲存,\n請確定GPS訊號能接收</string>
 <string name="delete_track_successfully">刪除路徑成功</string>

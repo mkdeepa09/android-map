@@ -304,7 +304,6 @@ public class MapControl extends RelativeLayout {
 		if (main != null) {
 			main.postInvalidate();
 			Intent i = new Intent("com.nevilon.bigplanet.INTENTS.UpdateScreen");
-			i.putExtra("FixZoomOut", false);
 			context.sendBroadcast(i);
 		}
 	}
