@@ -1,5 +1,6 @@
 package com.nevilon.bigplanet.core.ui;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -24,6 +25,7 @@ import com.nevilon.bigplanet.R;
 import com.nevilon.bigplanet.core.AbstractCommand;
 import com.nevilon.bigplanet.core.MarkerManager;
 import com.nevilon.bigplanet.core.PhysicMap;
+import com.nevilon.bigplanet.core.Place;
 import com.nevilon.bigplanet.core.RawTile;
 import com.nevilon.bigplanet.core.MarkerManager.Marker;
 import com.nevilon.bigplanet.core.MarkerManager.Marker_G;
@@ -80,6 +82,8 @@ public class MapControl extends RelativeLayout {
 	private OnMapLongClickListener onMapLongClickListener;
 
 	private MarkerManager markerManager;
+	
+	private BigPlanet bigPlanet;
 
 	public static Bitmap CELL_BACKGROUND = BitmapUtils.drawBackground(
 			BCG_CELL_SIZE, TILE_SIZE, TILE_SIZE);
@@ -402,6 +406,30 @@ public class MapControl extends RelativeLayout {
 				}
 			}
 		}
+		/*if (MarkerManager.markers_DB.size()!=0){
+			List<Marker_G> markers_DB_check = new ArrayList<Marker_G>();
+			int z = 18;
+			for (int i2=0;i2<MarkerManager.markers_DB.size();i2++) {
+				for (int i = 0; i < 7; i++) {
+					for (int j = 0; j < 7; j++) {
+						if ((i > 1 && i < 5) && ((j > 1 && j < 5))) {
+							RawTile tile = pmap.getDefaultTile();
+							
+							int tileX = tile.x + (i - 2);
+							int tileY = tile.y + (j - 2);
+							
+							if(i2 < MarkerManager.markers_DB.size()){
+								 markers_DB_check = markerManager.getMarkers_G_type(tileX, tileY, z, i2, 3);
+								
+							}
+						}
+					}
+				}
+			}
+			if (markers_DB_check.size() != MarkerManager.markers_DB.size())
+				bigPlanet.goToMyLocation(bigPlanet.currentLocation, PhysicMap.getZoomLevel());
+		}*/
+		
 		
 		boolean markers_G_draw = false;
 		boolean saveTracks_G_draw = false;
@@ -462,11 +490,10 @@ public class MapControl extends RelativeLayout {
 														y12- marker_G.getMarkerImage().getOffsetY(),paint);
 											}										
 										}
-										cs.drawBitmap(MarkerManager.markers_G.get(0).getMarkerImage().getImage(),
-											x1- MarkerManager.markers_G.get(0).getMarkerImage().getOffsetX(),
-											y1- MarkerManager.markers_G.get(0).getMarkerImage().getOffsetY(),paint);
-										
 									}
+									cs.drawBitmap(MarkerManager.markers_G.get(0).getMarkerImage().getImage(),
+										x1- MarkerManager.markers_G.get(0).getMarkerImage().getOffsetX(),
+										y1- MarkerManager.markers_G.get(0).getMarkerImage().getOffsetY(),paint);
 								}
 							if(saveTracks_G_draw && i2 < MarkerManager.saveTracks_G.size()){
 								paint.setColor(Color.GREEN);
@@ -496,10 +523,10 @@ public class MapControl extends RelativeLayout {
 														y22- SaveTrack_G.getMarkerImage().getOffsetY(),paint);
 											}
 										}
-										cs.drawBitmap(MarkerManager.saveTracks_G.get(0).getMarkerImage().getImage(),
-											x2- MarkerManager.saveTracks_G.get(0).getMarkerImage().getOffsetX(),
-											y2- MarkerManager.saveTracks_G.get(0).getMarkerImage().getOffsetY(),paint);
 									}
+									cs.drawBitmap(MarkerManager.saveTracks_G.get(0).getMarkerImage().getImage(),
+										x2- MarkerManager.saveTracks_G.get(0).getMarkerImage().getOffsetX(),
+										y2- MarkerManager.saveTracks_G.get(0).getMarkerImage().getOffsetY(),paint);
 								}
 							
 							if(markers_DB_draw && i2 < MarkerManager.markers_DB.size()){
@@ -531,10 +558,10 @@ public class MapControl extends RelativeLayout {
 														y32- marker_DB.getMarkerImage().getOffsetY(),paint);
 											}
 										}
-										cs.drawBitmap(MarkerManager.markers_DB.get(0).getMarkerImage().getImage(),
-											x3- MarkerManager.markers_DB.get(0).getMarkerImage().getOffsetX(),
-											y3- MarkerManager.markers_DB.get(0).getMarkerImage().getOffsetY(),paint);
 									}
+									cs.drawBitmap(MarkerManager.markers_DB.get(0).getMarkerImage().getImage(),
+										x3- MarkerManager.markers_DB.get(0).getMarkerImage().getOffsetX(),
+										y3- MarkerManager.markers_DB.get(0).getMarkerImage().getOffsetY(),paint);
 								}
 							if(markers_leader_draw && i2 <= MarkerManager.markers_leader.size()){
 								paint.setColor(Color.RED);
@@ -569,7 +596,7 @@ public class MapControl extends RelativeLayout {
 				}
 			}
 		}
-
+		
 
 		if (isScalable) {
 			Matrix matr = new Matrix();
