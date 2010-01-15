@@ -203,16 +203,15 @@ public class MapControl extends RelativeLayout {
 		updateScreen();
 	}
 	
-	public static String FIX_ZOOM = "FixZoomLessThanThree";
+	// Fix Zoom <= 3
 	public void fixZoom() {
 		new Handler().postDelayed(new Runnable(){
 			@Override
 			public void run() {
 				Intent i = new Intent("com.nevilon.bigplanet.INTENTS.UpdateScreen");
-				i.putExtra(MapControl.FIX_ZOOM, true);
 				context.sendBroadcast(i);
 			}
-		}, 1000);
+		}, 2000);
 	}
 
 	/**
@@ -446,7 +445,7 @@ public class MapControl extends RelativeLayout {
 		int MaxSize = FindMaxSize(MarkerManager.markers_G.size(),MarkerManager.saveTracks_G.size(),MarkerManager.markers_DB.size(),MarkerManager.markers_leader.size());
 		
 		if (markers_G_draw || saveTracks_G_draw || markers_DB_draw || markers_leader_draw){
-			float x11=0,x12=0,x1=0,y11=0,y12=0,y1=0,x21=0,x22=0,x2=0,y21=0,y22=0,y2=0,x31=0,x32=0,x3=0,y31=0,y32=0,y3=0,x41=0,x42=0,x4=0,y41=0,y42=0,y4=0;
+			float x11=0,x12=0,x1=0,y11=0,y12=0,y1=0,x21=0,x22=0,x2=0,y21=0,y22=0,y2=0,x31=0,x32=0,x3=0,y31=0,y32=0,y3=0,x41=0,x42=0,y41=0,y42=0;
 			
 			for (int i2=0;i2<MaxSize;i2++) {
 				for (int i = 0; i < 7; i++) {
