@@ -53,4 +53,10 @@
 <string name="edit_successfully">Edit successfully</string>
 <string name="drawing_track_progressdialog_title">Drawing Track Now</string>
 <string name="drawing_track_progressdialog_body">Please wait...</string>
+<string name="hr_unit">hr</string>
+<string name="min_unit">min</string>
+<string name="sec_unit">sec</string>
+<string name="meter_unit">meter</string>
+<string name="point_number_unit">points</string>
+<string name="source_text">source</string>
 </resources>

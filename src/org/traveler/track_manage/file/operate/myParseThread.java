@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,14 +22,18 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.traveler.track_manage.file.database.TravelDataBaseAdapter;
 import org.traveler.track_manage.file.database.TravelerTrackDataBaseHelper;
+import org.traveler.track_manage.track.TrackContentAnalyser;
 import org.traveler.track_manage.view.ExtendedCheckBox;
 import org.traveler.track_manage.view.ExtendedCheckBoxListActivity;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
+import com.nevilon.bigplanet.core.Place;
 
 
+
+import android.location.Location;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -199,7 +204,7 @@ public class myParseThread extends Thread {
 		            }
 		            else{
 		            	
-		            	
+		            	ArrayList<Place> placeList = new ArrayList<Place>();
 		            	String trackName = parsedExampleDataSet.getTrackName();
 		            	String trackDes = parsedExampleDataSet.getTrackDescription();
 		            	StringBuffer trackCoordinateBuffer = new StringBuffer();
@@ -211,19 +216,52 @@ public class myParseThread extends Thread {
 		            		trackCoordinateBuffer.append(trackPoint.getLatitude()+","+trackPoint.getLongitude()+";");
 		            		trackTimeBuffer.append(trackPoint.getTime()+";");
 		            		trackElevationBuffer.append(trackPoint.getElevation()+";");
+		            		
+		            		Location location = new Location("NTU Traveler");
+		            		location.setLatitude(trackPoint.getLatitude());
+		            		location.setLongitude(trackPoint.getLongitude());
+		            		location.setTime(trackPoint.getTimeLong());
+		            		Place place = new Place();
+		            		place.setLat(trackPoint.getLatitude());
+		            		place.setLon(trackPoint.getLongitude());
+		            		place.setLocation(location);
+		            		placeList.add(place);
 		            	}
 		            	
-		            	
-		                Log.i("trackName", trackName);
+		            	Log.i("trackName", trackName);
 		                Log.i("trackDes", trackDes);
 		                Log.i("trackCoordi", trackCoordinateBuffer.toString());
 		                Log.i("trackTime", trackTimeBuffer.toString());
 		                Log.i("trackEle", trackElevationBuffer.toString());
+		            	
+		            	TrackContentAnalyser analyser = new TrackContentAnalyser();
+		            	Log.i("Message", "Perform TrackContentAnalyser.........................");
+		            	analyser.analyzeContent(placeList);
+		            	
+		            	long consumedTime = analyser.getConsumedTime();
+		            	Time time = new Time(consumedTime);
+		        		Log.i("Message","ConsumedTime="+time.toString() );
+		            	
+		            	float totalDistance = analyser.getTotalDistance();
+		            	Log.i("Message","totalDistance="+totalDistance+"m");
+		            	
+		            	
+		            	double averageSpeed = analyser.getAverageSpeed();
+		            	Log.i("Message","averageSpeed="+averageSpeed+"m/s");
+		            	
+		            	double manximumSpeed = analyser.getMaximumSpeed();
+		            	Log.i("Message","manximumSpeed="+manximumSpeed+"m/s");
+		            	
+		            	long trackPointNumber = analyser.getTrackPointNumber();
+		            	Log.i("Message","trackPointNumber="+trackPointNumber);
+		            	
+		                
 		                
 		                
 		                trackDBAdapter.open();
 		                long id;
-		                id = trackDBAdapter.insertTrack(trackName, trackDes, trackCoordinateBuffer.toString(), trackTimeBuffer.toString(), trackElevationBuffer.toString());
+		                id = trackDBAdapter.insertTrack(trackName, trackDes, trackCoordinateBuffer.toString(), trackTimeBuffer.toString(), trackElevationBuffer.toString(),consumedTime,totalDistance,averageSpeed,manximumSpeed,trackPointNumber,
+		                		"File");
 		            	//this.trackDBHelper.insert(trackName,trackDes,trackCoordinateBuffer.toString() , trackTimeBuffer.toString(),trackElevationBuffer.toString());
 		                //this.trackDBHelper.insert("name","des","coordinate" , "time","elevation");
 		                Log.i("Message", "Insert a new track successfully");

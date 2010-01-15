@@ -72,14 +72,14 @@ public class GpsTrackStorageSimulatorActivity extends Activity {
 				
 						new AlertDialog.Builder(GpsTrackStorageSimulatorActivity.this)
 				        .setTitle(getString(R.string.track_importing_result))
-				        .setMessage(R.string.some_error+(String)msg.obj)
+				        .setMessage(R.string.fail)
 				        .setPositiveButton(getString(R.string.OK),new DialogInterface.OnClickListener()
 				            {
 				              public void onClick(DialogInterface dialoginterface, int i)
 				              {
 				            	  Toast.makeText(
 				            			  GpsTrackStorageSimulatorActivity.this,
-				            		        getString(R.string.some_successful),
+				            		        getString(R.string.fail),
 				            		        Toast.LENGTH_LONG).show();
 				            	//The entry to call the TrackDisplayViewActivity
 				            	  //showAllImportedTracks();

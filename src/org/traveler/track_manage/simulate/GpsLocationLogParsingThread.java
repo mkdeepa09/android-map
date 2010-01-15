@@ -5,9 +5,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+
+import org.traveler.track_manage.track.TrackContentAnalyser;
 
 
 
@@ -82,9 +85,22 @@ public class GpsLocationLogParsingThread extends Thread {
 		    in.close();
 		    Log.i("Message:","Parsing Log finishes...");
 		    System.out.println("------------------------");
+		    //
+		    
+		    
+		    Log.i("Message:","Analyze Track Content begins...");
+		    TrackContentAnalyser trackAnalyser = new TrackContentAnalyser();
+		    trackAnalyser.analyzeContent(this.placeList);
+		    
+		    
 		    Log.i("Message:","Saving to DB begins...");
-		    //StoreGpsLocationListToDB(this.locationList);
 		    StoreGpsLocationListToDB(this.placeList);
+		    
+		    
+		    
+		    
+		    
+		    
 		    // send message back to GpsTrackStorageSimulationActivity
 		    
 		    String obj = "Successfully!";
@@ -101,7 +117,7 @@ public class GpsLocationLogParsingThread extends Thread {
 			
 		}catch(Exception e){
 			String obj = "Fail!";
-		    m  = mainThreadHandler.obtainMessage(FAIL, 0, 1, obj);
+		    m  = mainThreadHandler.obtainMessage(FAIL, 1, 1, obj);
 		    if(mainThreadHandler != null)
            	 mainThreadHandler.sendMessage(m);
        	    else
@@ -150,6 +166,27 @@ public class GpsLocationLogParsingThread extends Thread {
 			
 			
 		}
+		
+		TrackContentAnalyser analyser = new TrackContentAnalyser();
+    	Log.i("trackName", "Perform TrackContentAnalyser");
+    	analyser.analyzeContent(placeList);
+    	
+    	long consumedTime = analyser.getConsumedTime();
+    	Time time = new Time(consumedTime);
+		Log.i("Message","ConsumedTime="+time.toString() );
+    	
+    	float totalDistance = analyser.getTotalDistance();
+    	Log.i("Message","totalDistance="+totalDistance+"m");
+    	
+    	
+    	double averageSpeed = analyser.getAverageSpeed();
+    	Log.i("Message","averageSpeed="+averageSpeed+"m/s");
+    	
+    	double manximumSpeed = analyser.getMaximumSpeed();
+    	Log.i("Message","manximumSpeed="+manximumSpeed+"m/s");
+    	
+    	long trackPointNumber = analyser.getTrackPointNumber();
+    	Log.i("Message","trackPointNumber="+trackPointNumber);
 		//Log.i("Message:","coordinate_buff="+coordinates_buff.toString());
 		//System.out.println("------------------------");
 		//Log.i("Message:","time_buff="+time_buff.toString());
@@ -157,7 +194,8 @@ public class GpsLocationLogParsingThread extends Thread {
 		//Log.i("Message:","elevation_buff="+elevation_buff.toString());
 		//System.out.println("------------------------");
 		BigPlanet.DBAdapter.open();
-		long id = BigPlanet.DBAdapter.insertTrack(this.trackName, "FromGpsLocation", coordinates_buff.toString(), time_buff.toString(), elevation_buff.toString());
+		long id = BigPlanet.DBAdapter.insertTrack(this.trackName, "FromGpsLocation", coordinates_buff.toString(), time_buff.toString(), elevation_buff.toString(),
+				consumedTime,totalDistance,averageSpeed,manximumSpeed,trackPointNumber,"GPS");
 		Log.i("Message", "Insert a new track successfully");
 		BigPlanet.DBAdapter.close();
 		

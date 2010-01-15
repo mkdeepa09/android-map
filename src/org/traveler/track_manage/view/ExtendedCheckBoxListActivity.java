@@ -81,11 +81,12 @@ public class ExtendedCheckBoxListActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i("Message", "set a DBAdapter instance from BigPlanet");
         DBAdapter = BigPlanet.DBAdapter;
         //setContentView(R.layout.main);
         /*------------------------------------------------------------------------------------------*/
          
-        Log.i("Message", "new a DBAdapter instance");
+        
         //DBHelper = new TravelerTrackDataBaseHelper(this);
         //DBAdapter = new TravelDataBaseAdapter(this);
         
@@ -331,7 +332,7 @@ public class ExtendedCheckBoxListActivity extends Activity {
 					
 					
 				*/
-				}
+				}//end of if(select_at_least_one_track)
 				else
 					Toast.makeText(
             		        ExtendedCheckBoxListActivity.this,
@@ -474,7 +475,7 @@ public class ExtendedCheckBoxListActivity extends Activity {
 				System.out.println("Retrive track="+track_name+"from DB");
 				for(ExtendedCheckBox checkBox:extendedCheckBoxList){
 					
-					if(checkBox.getText().equals(track_name)){
+					if((checkBox.getText().equals(track_name))&& checkBox.getChecked()){
 						System.out.println("In DB, find the duplicate track="+track_name);
 						duplicateTrackNameList.add(track_name);
 					}

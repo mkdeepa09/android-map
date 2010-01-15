@@ -16,6 +16,13 @@ public class TravelDataBaseAdapter {
 	 public final static String FIELD_coordinate = "track_coordinate";// column 3
 	 public final static String FIELD_time = "track_time";// column 4
 	 public final static String FIELD_elevation = "track_elevation";// column 5
+	 public final static String FIELD_consumedTime = "track_consumedTime"; // column 6
+	 public final static String FIELD_totalDistance = "track_totalDistance"; // column 7
+	 public final static String FIELD_averageSpeed = "track_averageSpeed"; // column 8
+	 public final static String FIELD_manximumSpeed = "track_manximumSpeed"; // column 9
+	 public final static String FIELD_trackPointNumber = "track_PointNumber"; // column 10
+	 public final static String FIELD_trackSource = "track_source"; // column 11
+	 
 	 
 	 private final static String DATABASE_NAME = "track_db";
 	 private final static int DATABASE_VERSION = 1;
@@ -27,7 +34,13 @@ public class TravelDataBaseAdapter {
      + " "+ FIELD_description + " text, "
      + " "+ FIELD_coordinate + " text, "
      + " "+ FIELD_time + " text, "
-     + " "+ FIELD_elevation + " text"+")";
+     + " "+ FIELD_elevation + " text, "
+     + " "+ FIELD_consumedTime + " long, "
+     + " "+ FIELD_totalDistance + " float, "
+     + " "+ FIELD_averageSpeed + " double, "
+     + " "+ FIELD_manximumSpeed + " double, "
+     + " "+ FIELD_trackPointNumber + " long, "
+     + " "+ FIELD_trackSource + " text);";
      
      private final Context context;
      private DatabaseHelper DBHelper;
@@ -79,16 +92,24 @@ public class TravelDataBaseAdapter {
      }
      
      
-     public long insertTrack(String trackName, String trackDescription, String allTrackCoordinate, String allTrackTime, String allTrackElevation)
+     public long insertTrack(String trackName, String trackDescription, String allTrackCoordinate, String allTrackTime, String allTrackElevation, 
+    		 long track_consumedTime, float track_totalDistance, double track_averageSpeed, double track_manximumSpeed, long track_trackPointNumber
+    		 ,String track_source)
 	  {
 	    
 	    /* �N�s�W���ȩ�JContentValues */
 	    ContentValues cv = new ContentValues();
-	    cv.put(TravelerTrackDataBaseHelper.FIELD_name, trackName);
-	    cv.put(TravelerTrackDataBaseHelper.FIELD_description, trackDescription);
-	    cv.put(TravelerTrackDataBaseHelper.FIELD_coordinate, allTrackCoordinate);
-	    cv.put(TravelerTrackDataBaseHelper.FIELD_time, allTrackTime);
-	    cv.put(TravelerTrackDataBaseHelper.FIELD_elevation, allTrackElevation);
+	    cv.put(TravelDataBaseAdapter.FIELD_name, trackName);
+	    cv.put(TravelDataBaseAdapter.FIELD_description, trackDescription);
+	    cv.put(TravelDataBaseAdapter.FIELD_coordinate, allTrackCoordinate);
+	    cv.put(TravelDataBaseAdapter.FIELD_time, allTrackTime);
+	    cv.put(TravelDataBaseAdapter.FIELD_elevation, allTrackElevation);
+	    cv.put(TravelDataBaseAdapter.FIELD_consumedTime, track_consumedTime);
+	    cv.put(TravelDataBaseAdapter.FIELD_totalDistance, track_totalDistance);
+	    cv.put(TravelDataBaseAdapter.FIELD_averageSpeed, track_averageSpeed);
+	    cv.put(TravelDataBaseAdapter.FIELD_manximumSpeed, track_manximumSpeed);
+	    cv.put(TravelDataBaseAdapter.FIELD_trackPointNumber, track_trackPointNumber);
+	    cv.put(TravelDataBaseAdapter.FIELD_trackSource, track_source);
 	    long row = db.insert(TABLE_NAME, null, cv);
 	    return row;
 	  }
@@ -109,7 +130,13 @@ public class TravelDataBaseAdapter {
         		 FIELD_description,
         		 FIELD_coordinate,
         		 FIELD_time,
-        		 FIELD_elevation}, 
+        		 FIELD_elevation,
+        		 FIELD_consumedTime,
+        		 FIELD_totalDistance,
+        		 FIELD_averageSpeed,
+        		 FIELD_manximumSpeed,
+        		 FIELD_trackPointNumber,
+        		 FIELD_trackSource}, 
                  null, 
                  null, 
                  null, 
@@ -128,7 +155,13 @@ public class TravelDataBaseAdapter {
                 		 FIELD_description,
                 		 FIELD_coordinate,
                 		 FIELD_time,
-                		 FIELD_elevation
+                		 FIELD_elevation,
+                		 FIELD_consumedTime,
+                		 FIELD_totalDistance,
+                		 FIELD_averageSpeed,
+                		 FIELD_manximumSpeed,
+                		 FIELD_trackPointNumber,
+                		 FIELD_trackSource
                  		}, 
                  		FIELD_id + "=" + rowId, 
                  		null,
@@ -146,7 +179,8 @@ public class TravelDataBaseAdapter {
      
    //---updates a track---
      public boolean updateTrack(long trackID, String trackName, String trackDescription, 
-    		 String allTrackCoordinate, String allTrackTime, String allTrackElevation) 
+    		 String allTrackCoordinate, String allTrackTime, String allTrackElevation, long track_consumedTime, float track_totalDistance, 
+    		 double track_averageSpeed, double track_manximumSpeed, long track_PointNumber, String track_Source) 
      {
          ContentValues args = new ContentValues();
          args.put(FIELD_name, trackName);
@@ -154,6 +188,12 @@ public class TravelDataBaseAdapter {
          args.put(FIELD_coordinate, allTrackCoordinate);
          args.put(FIELD_time, allTrackTime);
          args.put(FIELD_elevation, allTrackElevation);
+         args.put(FIELD_consumedTime, track_consumedTime);
+         args.put(FIELD_totalDistance, track_totalDistance);
+         args.put(FIELD_averageSpeed, track_averageSpeed);
+         args.put(FIELD_manximumSpeed, track_manximumSpeed);
+         args.put(FIELD_trackPointNumber, track_PointNumber);
+         args.put(FIELD_trackSource, track_Source);
          return db.update(TABLE_NAME, args, 
         		 FIELD_id + "=" + trackID, null) > 0;
      }

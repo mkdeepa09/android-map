@@ -14,7 +14,7 @@ public class ParsedExampleDataSet {
     
     public ParsedExampleDataSet(){
     	this.trackName="my_track";
-    	this.trackDescription="good_track";
+    	this.trackDescription="no track description";
     	this.extractedInt=0;
     	this.extractedString="ya";
     	this.trackPointList = new ArrayList<TrackPoint>();
