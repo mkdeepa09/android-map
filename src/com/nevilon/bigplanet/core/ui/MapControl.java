@@ -418,7 +418,7 @@ public class MapControl extends RelativeLayout {
 		int MaxSize = FindMaxSize(MarkerManager.markers_G.size(),MarkerManager.saveTracks_G.size(),MarkerManager.markers_DB.size(),MarkerManager.markers_leader.size());
 		
 		if (markers_G_draw || saveTracks_G_draw || markers_DB_draw || markers_leader_draw){
-			float x11=0,x12=0,y11=0,y12=0,x21=0,x22=0,y21=0,y22=0,x31=0,x32=0,y31=0,y32=0,x41=0,x42=0,y41=0,y42=0;
+			float x11=0,x12=0,x1=0,y11=0,y12=0,y1=0,x21=0,x22=0,x2=0,y21=0,y22=0,y2=0,x31=0,x32=0,x3=0,y31=0,y32=0,y3=0,x41=0,x42=0,x4=0,y41=0,y42=0,y4=0;
 			
 			for (int i2=0;i2<MaxSize;i2++) {
 				for (int i = 0; i < 7; i++) {
@@ -437,11 +437,9 @@ public class MapControl extends RelativeLayout {
 									for (Marker_G marker_G : markers_G) {
 										x11 = (i - 2)* TILE_SIZE + pmap.getGlobalOffset().x + (int) marker_G.getOffset().x;
 										y11 = (j - 2)* TILE_SIZE + pmap.getGlobalOffset().y	+ (int) marker_G.getOffset().y+3;
-										
-										MarkerManager.markers_G.get(i2).setMarkerImage(MarkerManager.images.get(MarkerManager.START_MY_TRACK_MARKER));
-										cs.drawBitmap(marker_G.getMarkerImage().getImage(),
-												x11- marker_G.getMarkerImage().getOffsetX(),
-												y11- marker_G.getMarkerImage().getOffsetY(),paint);
+										x1 = x11;
+										y1 = y11;
+										MarkerManager.markers_G.get(0).setMarkerImage(MarkerManager.images.get(MarkerManager.START_MY_TRACK_MARKER));
 									}
 								}else{
 									for (Marker_G marker_G : markers_G) {
@@ -456,13 +454,18 @@ public class MapControl extends RelativeLayout {
 										x11 = x12;
 										y11 = y12;
 										
+										
 										if (i2==MarkerManager.markers_G.size()-1){
 											MarkerManager.markers_G.get(i2).setMarkerImage(MarkerManager.images.get(MarkerManager.END_MY_TRACK_MARKER));
 											cs.drawBitmap(marker_G.getMarkerImage().getImage(),
 														x12- marker_G.getMarkerImage().getOffsetX(),
 														y12- marker_G.getMarkerImage().getOffsetY(),paint);
-											}
+											}										
 										}
+										cs.drawBitmap(MarkerManager.markers_G.get(0).getMarkerImage().getImage(),
+											x1- MarkerManager.markers_G.get(0).getMarkerImage().getOffsetX(),
+											y1- MarkerManager.markers_G.get(0).getMarkerImage().getOffsetY(),paint);
+										
 									}
 								}
 							if(saveTracks_G_draw && i2 < MarkerManager.saveTracks_G.size()){
@@ -473,10 +476,10 @@ public class MapControl extends RelativeLayout {
 									for (Marker_G SaveTrack_G : SaveTracks_G) {
 										x21 = (i - 2)* TILE_SIZE + pmap.getGlobalOffset().x + (int) SaveTrack_G.getOffset().x;
 										y21 = (j - 2)* TILE_SIZE + pmap.getGlobalOffset().y + (int) SaveTrack_G.getOffset().y+3;
+										x2 = x21;
+										y2 = y21;
 										MarkerManager.saveTracks_G.get(i2).setMarkerImage(MarkerManager.images.get(MarkerManager.START_MY_TRACK_MARKER));
-										cs.drawBitmap(SaveTrack_G.getMarkerImage().getImage(),
-												x21- SaveTrack_G.getMarkerImage().getOffsetX(),
-												y21- SaveTrack_G.getMarkerImage().getOffsetY(),paint);
+										
 									}
 								}else{
 									for (Marker_G SaveTrack_G : SaveTracks_G) {
@@ -493,6 +496,9 @@ public class MapControl extends RelativeLayout {
 														y22- SaveTrack_G.getMarkerImage().getOffsetY(),paint);
 											}
 										}
+										cs.drawBitmap(MarkerManager.saveTracks_G.get(0).getMarkerImage().getImage(),
+											x2- MarkerManager.saveTracks_G.get(0).getMarkerImage().getOffsetX(),
+											y2- MarkerManager.saveTracks_G.get(0).getMarkerImage().getOffsetY(),paint);
 									}
 								}
 							
@@ -504,10 +510,10 @@ public class MapControl extends RelativeLayout {
 									for (Marker_G marker_DB : markers_DB) {
 										x31 = (i - 2)* TILE_SIZE + pmap.getGlobalOffset().x + (int) marker_DB.getOffset().x;
 										y31 = (j - 2)* TILE_SIZE + pmap.getGlobalOffset().y	+ (int) marker_DB.getOffset().y+3;
+										x3 = x31;
+										y3 = y31;
 										MarkerManager.markers_DB.get(i2).setMarkerImage(MarkerManager.images.get(MarkerManager.START_MY_DB_MARKER));
-										cs.drawBitmap(marker_DB.getMarkerImage().getImage(),
-												x31- marker_DB.getMarkerImage().getOffsetX(),
-												y31- marker_DB.getMarkerImage().getOffsetY(),paint);
+										
 									}
 								}else{
 									for (Marker_G marker_DB : markers_DB) {
@@ -525,9 +531,12 @@ public class MapControl extends RelativeLayout {
 														y32- marker_DB.getMarkerImage().getOffsetY(),paint);
 											}
 										}
+										cs.drawBitmap(MarkerManager.markers_DB.get(0).getMarkerImage().getImage(),
+											x3- MarkerManager.markers_DB.get(0).getMarkerImage().getOffsetX(),
+											y3- MarkerManager.markers_DB.get(0).getMarkerImage().getOffsetY(),paint);
 									}
 								}
-							if(markers_leader_draw && i2 < MarkerManager.markers_leader.size()){
+							if(markers_leader_draw && i2 <= MarkerManager.markers_leader.size()){
 								paint.setColor(Color.RED);
 								paint.setStrokeWidth(5);
 								List<Marker_G> markers_leader = markerManager.getMarkers_G_type(tileX, tileY, z, i2, 4);
@@ -740,5 +749,6 @@ public class MapControl extends RelativeLayout {
 	}
 	public int FindMaxSize(int a, int b, int c,int d){
 		return Math.max(Math.max(Math.max(a, b),c),d);
+		
 	}
 }

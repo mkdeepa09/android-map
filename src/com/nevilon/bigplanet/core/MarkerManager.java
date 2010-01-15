@@ -142,8 +142,17 @@ public class MarkerManager {
 		
 		if(trackType == 1){
 			if(BigPlanet.isGPS_track){
-				markers_G.add(marker_G);
+				if (markers_G.size()>0){
+					double lat = markers_G.get(markers_G.size()-1).place.getLat();
+					double lon = markers_G.get(markers_G.size()-1).place.getLon();
+					if ((marker_G.place.getLat() != lat) || (marker_G.place.getLon() != lon)){
+						markers_G.add(marker_G);
+					}
+				}else{
+					markers_G.add(marker_G);
+				}
 			}
+			
 			Iterator<Marker> it = markers.iterator();
 			while(it.hasNext()){
 				Marker m = it.next();
