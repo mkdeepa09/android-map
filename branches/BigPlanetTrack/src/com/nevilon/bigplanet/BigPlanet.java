@@ -453,11 +453,6 @@ public class BigPlanet extends Activity {
 		public void onReceive(Context context, Intent intent) {
 			Log.i("BP", "onReceive");
 			mapControl.invalidate();
-			// see MapControl zoomPanel.setOnZoomOutClickListener
-			if (intent.getBooleanExtra(MapControl.FIX_ZOOM, false)) {
-				Log.i("BP", "%% "+MapControl.FIX_ZOOM);
-				mapControl.invalidate();
-			}
 			// center map
 			if (isFollowMode && !isMapInCenter) {
 				if (currentLocation != null) {
@@ -931,7 +926,8 @@ public class BigPlanet extends Activity {
 	public static void finishGPSLocationListener(boolean isSetNull) {
 		isFollowMode = false;
 		locationType = "";
-		if (!isGPS_track) {
+		boolean isXMPPConnected = GoogleAccountActivity.xmppService != null && GoogleAccountActivity.xmppService.isConnected();
+		if (!isGPS_track && !isXMPPConnected) {
 			if (locationManager != null) {
 				locationManager.removeUpdates(networkLocationListener);
 				locationManager.removeUpdates(gpsLocationListener);
