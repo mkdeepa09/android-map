@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="BROWSE_TRACK_MENU">瀏覽路徑</string>
+<string name="BROWSE_TRACK_MENU">瀏覽舊路徑</string>
 <string name="TRACK_MANAGE_MENU">管理路徑</string>
-<string name="IMPORT_TRACK_MENU">匯入路徑</string>
+<string name="IMPORT_TRACK_MENU">匯入新路徑(GPX檔案)</string>
 <string name="ERASE_LEADER_TRACK_MENU">清除隊長路徑</string>
 <string name="ERASE_REFERENCE_TRACK_MENU">清除載入路徑</string>
 <string name="ERASE_RECORDED_TRACK_MENU">清除記錄路徑</string>
