@@ -29,6 +29,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.Point;
 import android.location.Criteria;
 import android.location.Location;
@@ -61,6 +62,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.RadioGroup.OnCheckedChangeListener;
+
 
 import com.nevilon.bigplanet.core.BigPlanetApp;
 import com.nevilon.bigplanet.core.MarkerManager;
@@ -600,7 +602,7 @@ public class BigPlanet extends Activity {
 		SubMenu sub = menu.addSubMenu(5, 101, 0, R.string.TRACK_MANAGE_MENU).setIcon(R.drawable.track_manage);
         sub.add(6, 102, 0, R.string.BROWSE_TRACK_MENU);
         sub.add(6, 103, 1, R.string.IMPORT_TRACK_MENU);
-        sub.add(6, 104, 2, R.string.RECORD_GPS_TRACK_MENU);
+        //sub.add(6, 104, 2, R.string.RECORD_GPS_TRACK_MENU);
         sub.add(6, 105, 3, R.string.ERASE_LEADER_TRACK_MENU);
         sub.add(6, 106, 4, R.string.ERASE_RECORDED_TRACK_MENU);
         sub.add(6, 107, 5, R.string.ERASE_REFERENCE_TRACK_MENU);
@@ -632,11 +634,29 @@ public class BigPlanet extends Activity {
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		boolean useNet = Preferences.getUseNet();
 		menu.findItem(42).setEnabled(useNet);
-	
+	    
+		menu.findItem(102).setEnabled(checkIfTrackExist());
 		menu.findItem(105).setEnabled(checkMarkers(MarkerManager.markers_leader));
 		menu.findItem(106).setEnabled(checkMarkers(MarkerManager.saveTracks_G));
 		menu.findItem(107).setEnabled(checkMarkers(MarkerManager.markers_DB));
 		return true;
+	}
+	
+	
+	private boolean checkIfTrackExist(){
+		
+		boolean ifHasTracks = false;
+		
+		DBAdapter.open();
+		Cursor myCursor = DBAdapter.getAllTracks();
+        if(myCursor.moveToFirst()){
+		 	
+		  ifHasTracks = true;	
+		}
+        
+        return ifHasTracks;
+		
+		
 	}
 	
 	public boolean checkMarkers(List<Marker_G> list) {

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="BROWSE_TRACK_MENU">Browse Tracks</string>
+<string name="BROWSE_TRACK_MENU">Browse Existed Tracks</string>
 <string name="TRACK_MANAGE_MENU">Manage Tracks</string>
-<string name="IMPORT_TRACK_MENU">Import Tracks</string>
+<string name="IMPORT_TRACK_MENU">Import  New Tracks (GPX File)</string>
 <string name="ERASE_LEADER_TRACK_MENU">Erase Leader\'s Track</string>
 <string name="ERASE_REFERENCE_TRACK_MENU">Erase Loaded Track</string>
 <string name="ERASE_RECORDED_TRACK_MENU">Erase Recorded Track</string>
