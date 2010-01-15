@@ -68,6 +68,8 @@ import com.nevilon.bigplanet.core.PhysicMap;
 import com.nevilon.bigplanet.core.Place;
 import com.nevilon.bigplanet.core.Preferences;
 import com.nevilon.bigplanet.core.RawTile;
+import com.nevilon.bigplanet.core.MarkerManager.Marker;
+import com.nevilon.bigplanet.core.MarkerManager.Marker_G;
 import com.nevilon.bigplanet.core.db.DAO;
 import com.nevilon.bigplanet.core.db.GeoBookmark;
 import com.nevilon.bigplanet.core.geoutils.GeoUtils;
@@ -245,8 +247,8 @@ public class BigPlanet extends Activity {
 		if (!isFollowMode) {
 			Toast.makeText(context, R.string.auto_follow_enabled, Toast.LENGTH_SHORT).show();
 			mAutoFollowRelativeLayout.setVisibility(View.INVISIBLE);
-			isFollowMode = true;
 			goToMyLocation(currentLocation, PhysicMap.getZoomLevel());
+			isFollowMode = true;
 		}
 		setActivityTitle((Activity) context);
 	}
@@ -609,7 +611,18 @@ public class BigPlanet extends Activity {
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		boolean useNet = Preferences.getUseNet();
 		menu.findItem(42).setEnabled(useNet);
+	
+		menu.findItem(105).setEnabled(checkMarkers(MarkerManager.markers_leader));
+		menu.findItem(106).setEnabled(checkMarkers(MarkerManager.saveTracks_G));
+		menu.findItem(107).setEnabled(checkMarkers(MarkerManager.markers_DB));
 		return true;
+	}
+	
+	public boolean checkMarkers(List<Marker_G> list) {
+		if(list.size()>0){
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -1070,11 +1083,30 @@ public class BigPlanet extends Activity {
 		Log.i("Message", "At addMarkerForDrawing........Type="+imageType);
 
 		int zoom = PhysicMap.getZoomLevel();
+
+		double latTemp = 0, latMax = 0,latMin = 999, lonTemp = 0, lonMax = 0, lonMin = 999;
 		for (int i=0;i<placeList.size();i++)
 		{
 			Place place = placeList.get(i);
 			mm.addMarker(place, zoom, imageType, MarkerManager.MY_LOCATION_MARKER);
+			
+			if (imageType == 2){	
+				latTemp = place.getLat();
+				latMax = Math.max(latTemp, latMax);
+				latMin = Math.min(latTemp, latMin);
+				lonTemp = place.getLon();
+				lonMax = Math.max(lonTemp, lonMax);
+				lonMin = Math.min(lonTemp, lonMin);
+				//com.nevilon.bigplanet.core.geoutils.Point p = GeoUtils.toTileXY(latMax, lonMax, zoom);
+				//com.nevilon.bigplanet.core.geoutils.Point off = GeoUtils.getPixelOffsetInTile(latMax, lonMax, zoom);
+				//mapControl.goTo((int) p.x, (int) p.y, zoom, (int) off.x, (int) off.y);
+				int a = 1;
+			}
 		}
+		
+
+		
+				
 		if(!isDBdrawclear){
 			isDBdrawclear = true;
 		}
