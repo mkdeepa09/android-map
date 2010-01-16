@@ -1,6 +1,7 @@
 package com.nevilon.bigplanet.core.ui;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import android.content.Context;
@@ -82,8 +83,6 @@ public class MapControl extends RelativeLayout {
 	private OnMapLongClickListener onMapLongClickListener;
 
 	private MarkerManager markerManager;
-	
-	private BigPlanet bigPlanet;
 
 	public static Bitmap CELL_BACKGROUND = BitmapUtils.drawBackground(
 			BCG_CELL_SIZE, TILE_SIZE, TILE_SIZE);
@@ -101,6 +100,12 @@ public class MapControl extends RelativeLayout {
 	public Handler h;
 	
 	private Context context;
+	
+	int z2 = 0;
+	
+	private List<Marker> markers_temp = new ArrayList<Marker>();
+	
+	private List<Marker_G> markers_DB_check = new ArrayList<Marker_G>();
 
 	/**
 	 * Конструктор
@@ -408,35 +413,11 @@ public class MapControl extends RelativeLayout {
 									+ (int) marker.getOffset().y
 									- marker.getMarkerImage().getOffsetY(), paint);
 						}
-
+						int a = 0;
 					}
 				}
 			}
-		}
-		/*if (MarkerManager.markers_DB.size()!=0){
-			List<Marker_G> markers_DB_check = new ArrayList<Marker_G>();
-			int z = 18;
-			for (int i2=0;i2<MarkerManager.markers_DB.size();i2++) {
-				for (int i = 0; i < 7; i++) {
-					for (int j = 0; j < 7; j++) {
-						if ((i > 1 && i < 5) && ((j > 1 && j < 5))) {
-							RawTile tile = pmap.getDefaultTile();
-							
-							int tileX = tile.x + (i - 2);
-							int tileY = tile.y + (j - 2);
-							
-							if(i2 < MarkerManager.markers_DB.size()){
-								 markers_DB_check = markerManager.getMarkers_G_type(tileX, tileY, z, i2, 3);
-								
-							}
-						}
-					}
-				}
-			}
-			if (markers_DB_check.size() != MarkerManager.markers_DB.size())
-				bigPlanet.goToMyLocation(bigPlanet.currentLocation, PhysicMap.getZoomLevel());
-		}*/
-		
+		}		
 		
 		boolean markers_G_draw = false;
 		boolean saveTracks_G_draw = false;
@@ -473,35 +454,33 @@ public class MapControl extends RelativeLayout {
 										x11 = (i - 2)* TILE_SIZE + pmap.getGlobalOffset().x + (int) marker_G.getOffset().x;
 										y11 = (j - 2)* TILE_SIZE + pmap.getGlobalOffset().y	+ (int) marker_G.getOffset().y+3;
 										x1 = x11;
-										y1 = y11;
-										MarkerManager.markers_G.get(0).setMarkerImage(MarkerManager.images.get(MarkerManager.START_MY_TRACK_MARKER));
+										y1 = y11;										
 									}
-								}else{
-									for (Marker_G marker_G : markers_G) {
-										x12 = (i - 2)* TILE_SIZE
-											+ pmap.getGlobalOffset().x
-											+ (int) marker_G.getOffset().x;
-										y12 = (j - 2)* TILE_SIZE
-											+ pmap.getGlobalOffset().y
-											+ (int) marker_G.getOffset().y+3;
-	
-										cs.drawLine(x11,y11,x12,y12,paint);
-										x11 = x12;
-										y11 = y12;
-										
-										
-										if (i2==MarkerManager.markers_G.size()-1){
-											MarkerManager.markers_G.get(i2).setMarkerImage(MarkerManager.images.get(MarkerManager.END_MY_TRACK_MARKER));
-											cs.drawBitmap(marker_G.getMarkerImage().getImage(),
-														x12- marker_G.getMarkerImage().getOffsetX(),
-														y12- marker_G.getMarkerImage().getOffsetY(),paint);
-											}										
-										}
-									}
-									cs.drawBitmap(MarkerManager.markers_G.get(0).getMarkerImage().getImage(),
-										x1- MarkerManager.markers_G.get(0).getMarkerImage().getOffsetX(),
-										y1- MarkerManager.markers_G.get(0).getMarkerImage().getOffsetY(),paint);
 								}
+								for (Marker_G marker_G : markers_G) {
+									x12 = (i - 2)* TILE_SIZE
+										+ pmap.getGlobalOffset().x
+										+ (int) marker_G.getOffset().x;
+									y12 = (j - 2)* TILE_SIZE
+										+ pmap.getGlobalOffset().y
+										+ (int) marker_G.getOffset().y+3;
+	
+									cs.drawLine(x11,y11,x12,y12,paint);
+									x11 = x12;
+									y11 = y12;
+																			
+									if (i2==MarkerManager.markers_G.size()-1){
+										MarkerManager.markers_G.get(0).setMarkerImage(MarkerManager.images.get(MarkerManager.START_MY_TRACK_MARKER));
+										cs.drawBitmap(MarkerManager.markers_G.get(0).getMarkerImage().getImage(),
+												x1- MarkerManager.markers_G.get(0).getMarkerImage().getOffsetX(),
+												y1- MarkerManager.markers_G.get(0).getMarkerImage().getOffsetY(),paint);
+										MarkerManager.markers_G.get(i2).setMarkerImage(MarkerManager.images.get(MarkerManager.END_MY_TRACK_MARKER));
+										cs.drawBitmap(MarkerManager.markers_G.get(MarkerManager.markers_G.size()-1).getMarkerImage().getImage(),
+												x12- MarkerManager.markers_G.get(MarkerManager.markers_G.size()-1).getMarkerImage().getOffsetX(),
+												y12- MarkerManager.markers_G.get(MarkerManager.markers_G.size()-1).getMarkerImage().getOffsetY(),paint);
+									}												
+								}								
+							}
 							if(saveTracks_G_draw && i2 < MarkerManager.saveTracks_G.size()){
 								paint.setColor(Color.GREEN);
 								paint.setStrokeWidth(5);
@@ -515,26 +494,25 @@ public class MapControl extends RelativeLayout {
 										MarkerManager.saveTracks_G.get(i2).setMarkerImage(MarkerManager.images.get(MarkerManager.START_MY_TRACK_MARKER));
 										
 									}
-								}else{
-									for (Marker_G SaveTrack_G : SaveTracks_G) {
-										x22 = (i - 2)* TILE_SIZE + pmap.getGlobalOffset().x + (int) SaveTrack_G.getOffset().x;
-										y22 = (j - 2)* TILE_SIZE + pmap.getGlobalOffset().y	+ (int) SaveTrack_G.getOffset().y+3;
-										cs.drawLine(x21,y21,x22,y22,paint);
-										x21 = x22;
-										y21 = y22;
-										
-										if (i2==MarkerManager.saveTracks_G.size()-1){
-											MarkerManager.saveTracks_G.get(i2).setMarkerImage(MarkerManager.images.get(MarkerManager.END_MY_TRACK_MARKER));
-											cs.drawBitmap(SaveTrack_G.getMarkerImage().getImage(),
-														x22- SaveTrack_G.getMarkerImage().getOffsetX(),
-														y22- SaveTrack_G.getMarkerImage().getOffsetY(),paint);
-											}
-										}
-									}
-									cs.drawBitmap(MarkerManager.saveTracks_G.get(0).getMarkerImage().getImage(),
-										x2- MarkerManager.saveTracks_G.get(0).getMarkerImage().getOffsetX(),
-										y2- MarkerManager.saveTracks_G.get(0).getMarkerImage().getOffsetY(),paint);
 								}
+								for (Marker_G SaveTrack_G : SaveTracks_G) {
+									x22 = (i - 2)* TILE_SIZE + pmap.getGlobalOffset().x + (int) SaveTrack_G.getOffset().x;
+									y22 = (j - 2)* TILE_SIZE + pmap.getGlobalOffset().y	+ (int) SaveTrack_G.getOffset().y+3;
+									cs.drawLine(x21,y21,x22,y22,paint);
+									x21 = x22;
+									y21 = y22;
+										
+									if (i2==MarkerManager.saveTracks_G.size()-1){
+										MarkerManager.saveTracks_G.get(i2).setMarkerImage(MarkerManager.images.get(MarkerManager.END_MY_TRACK_MARKER));
+										cs.drawBitmap(SaveTrack_G.getMarkerImage().getImage(),
+												x22- SaveTrack_G.getMarkerImage().getOffsetX(),
+												y22- SaveTrack_G.getMarkerImage().getOffsetY(),paint);
+										cs.drawBitmap(MarkerManager.saveTracks_G.get(0).getMarkerImage().getImage(),
+												x2- MarkerManager.saveTracks_G.get(0).getMarkerImage().getOffsetX(),
+												y2- MarkerManager.saveTracks_G.get(0).getMarkerImage().getOffsetY(),paint);
+									}
+								}					
+							}
 							
 							if(markers_DB_draw && i2 < MarkerManager.markers_DB.size()){
 								paint.setColor(Color.CYAN);
@@ -549,27 +527,26 @@ public class MapControl extends RelativeLayout {
 										MarkerManager.markers_DB.get(i2).setMarkerImage(MarkerManager.images.get(MarkerManager.START_MY_DB_MARKER));
 										
 									}
-								}else{
-									for (Marker_G marker_DB : markers_DB) {
-										x32 = (i - 2)* TILE_SIZE + pmap.getGlobalOffset().x	+ (int) marker_DB.getOffset().x;
-										y32 = (j - 2)* TILE_SIZE + pmap.getGlobalOffset().y	+ (int) marker_DB.getOffset().y+3;
-	
-										cs.drawLine(x31,y31,x32,y32,paint);
-										x31 = x32;
-										y31 = y32;
-										
-										if (i2==MarkerManager.markers_DB.size()-1){
-											MarkerManager.markers_DB.get(i2).setMarkerImage(MarkerManager.images.get(MarkerManager.END_MY_DB_MARKER));
-											cs.drawBitmap(marker_DB.getMarkerImage().getImage(),
-														x32- marker_DB.getMarkerImage().getOffsetX(),
-														y32- marker_DB.getMarkerImage().getOffsetY(),paint);
-											}
-										}
-									}
-									cs.drawBitmap(MarkerManager.markers_DB.get(0).getMarkerImage().getImage(),
-										x3- MarkerManager.markers_DB.get(0).getMarkerImage().getOffsetX(),
-										y3- MarkerManager.markers_DB.get(0).getMarkerImage().getOffsetY(),paint);
 								}
+								for (Marker_G marker_DB : markers_DB) {
+									x32 = (i - 2)* TILE_SIZE + pmap.getGlobalOffset().x	+ (int) marker_DB.getOffset().x;
+									y32 = (j - 2)* TILE_SIZE + pmap.getGlobalOffset().y	+ (int) marker_DB.getOffset().y+3;
+	
+									cs.drawLine(x31,y31,x32,y32,paint);
+									x31 = x32;
+									y31 = y32;
+										
+									if (i2==MarkerManager.markers_DB.size()-1){
+										MarkerManager.markers_DB.get(i2).setMarkerImage(MarkerManager.images.get(MarkerManager.END_MY_DB_MARKER));
+										cs.drawBitmap(marker_DB.getMarkerImage().getImage(),
+												x32- marker_DB.getMarkerImage().getOffsetX(),
+												y32- marker_DB.getMarkerImage().getOffsetY(),paint);
+										cs.drawBitmap(MarkerManager.markers_DB.get(0).getMarkerImage().getImage(),
+												x3- MarkerManager.markers_DB.get(0).getMarkerImage().getOffsetX(),
+												y3- MarkerManager.markers_DB.get(0).getMarkerImage().getOffsetY(),paint);		
+									}
+								}									
+							}
 							if(markers_leader_draw && i2 <= MarkerManager.markers_leader.size()){
 								paint.setColor(Color.RED);
 								paint.setStrokeWidth(5);
@@ -651,24 +628,109 @@ public class MapControl extends RelativeLayout {
 		@Override
 		protected void onDraw(Canvas canvas) {
 			super.onDraw(canvas);
-			if (this.getHeight() == 480-50) {
-				/**
-				 * scale map when zooming in/out
-				 * for 320x480 (e.g. HTC Dream, HTC Magic, HTC Hero, Samsung i7500)
-				 */
-				doDraw(canvas, paint, true);
-			} else {
-				/** 
-				 * don't scale map when zooming in/out
-				 * because the effect of scaling map will cause wrong map resolution after zooming in/out
-				 * for following devices:
-				 * 240x320 (e.g. HTC Tattoo)
-				 * 480x800(e.g. Acer Liquid, Google Nexus One)
-				 * 480x854 (e.g. Motorola Droid)
-				 */
-				doDraw(canvas, paint, false);
+			
+			
+			if (BigPlanet.autoDisplayDB && MarkerManager.markers_DB.size()!=0){
+				if(BigPlanet.autoDisplayDBforMarker){
+					markers_temp.add(MarkerManager.markers.get(0));
+				}
+				BigPlanet.autoDisplayDBforMarker = false;
+				
+				if(BigPlanet.autoDisplayDBFirst){
+					invokeGoToMyLocation(markers_temp.get(0).place.getLat(), markers_temp.get(0).place.getLon(), 1);
+					BigPlanet.autoDisplayDBFirst = false;
+				}else{
+					boolean check = markers_DBfordisplay();
+					
+					if (z2<13 && !check){
+						z2 = z2+1;
+						//invokeGoToMyLocation(MarkerManager.markers_DB.get(1).place.getLat(), MarkerManager.markers_DB.get(1).place.getLon(), z2);
+						invokeGoToMyLocation(markers_temp.get(0).place.getLat(), markers_temp.get(0).place.getLon(), z2);
+					}
+					else{
+						BigPlanet.autoDisplayDB = false;
+						BigPlanet.autoDisplayDBforMarker = true;
+						invokeGoToMyLocation(markers_temp.get(0).place.getLat(), markers_temp.get(0).place.getLon(), z2+1);
+						z2 = 1;
+						if (this.getHeight() == 480-50) {
+							/**
+							 * scale map when zooming in/out
+							 * for 320x480 (e.g. HTC Dream, HTC Magic, HTC Hero, Samsung i7500)
+							 */
+							doDraw(canvas, paint, true);
+						} else {
+							/** 
+							 * don't scale map when zooming in/out
+							 * because the effect of scaling map will cause wrong map resolution after zooming in/out
+							 * for following devices:
+							 * 240x320 (e.g. HTC Tattoo)
+							 * 480x800(e.g. Acer Liquid, Google Nexus One)
+							 * 480x854 (e.g. Motorola Droid)
+							 */
+							doDraw(canvas, paint, false);
+						}
+					}
+				}
+				
+			}else{
+				if(BigPlanet.autoDisplayDBforMarker && MarkerManager.markers_DB.size()!=0){
+					MarkerManager.markers.clear();
+					MarkerManager.markers.add(markers_temp.get(0));
+					BigPlanet.autoDisplayDBforMarker = false;
+				}
+				if (this.getHeight() == 480-50) {
+					/**
+					 * scale map when zooming in/out
+					 * for 320x480 (e.g. HTC Dream, HTC Magic, HTC Hero, Samsung i7500)
+					 */
+					doDraw(canvas, paint, true);
+				} else {
+					/** 
+					 * don't scale map when zooming in/out
+					 * because the effect of scaling map will cause wrong map resolution after zooming in/out
+					 * for following devices:
+					 * 240x320 (e.g. HTC Tattoo)
+					 * 480x800(e.g. Acer Liquid, Google Nexus One)
+					 * 480x854 (e.g. Motorola Droid)
+					 */
+					doDraw(canvas, paint, false);
+				}
 			}
 		}
+		
+		public boolean markers_DBfordisplay(){
+			boolean forMarkers = true;
+			for (int i2=0;i2<MarkerManager.markers_DB.size();i2++) {
+				for (int i = 0; i < 7; i++) {
+					for (int j = 0; j < 7; j++) {
+						if ((i > 1 && i < 5) && ((j > 1 && j < 5))) {
+							RawTile tile = pmap.getDefaultTile();
+							
+							int tileX = tile.x + (i - 2);
+							int tileY = tile.y + (j - 2);
+							
+							if(i2 < MarkerManager.markers_DB.size()){
+								if(MarkerManager.markers_DB.get(i2).tile.x ==tileX && MarkerManager.markers_DB.get(i2).tile.y ==tileY && MarkerManager.markers_DB.get(i2).tile.z ==z2){
+									markers_DB_check.add(MarkerManager.markers_DB.get(i2));
+								}			
+							}
+							/*if (markers_temp.get(0).tile.x ==tileX && markers_temp.get(0).tile.y ==tileY && markers_temp.get(0).tile.z ==z2){
+								forMarkers = true;
+							}*/
+							
+						}
+					}
+				}
+			}
+			if (forMarkers && markers_DB_check.size() == MarkerManager.markers_DB.size()){
+				markers_DB_check.clear();
+				return true;
+			}else{
+				markers_DB_check.clear();
+				return false;
+			}
+		}
+		
 
 		/**
 		 * Обработка касаний

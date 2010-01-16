@@ -42,7 +42,9 @@ public class MarkerManager {
 	
 	public static  HashMap<Integer,MarkerImage> images = new HashMap<Integer,MarkerImage>();
 		
-	private List<Marker> markers = new ArrayList<Marker>();
+	// private List<Marker> markers = new ArrayList<Marker>();
+	
+	public static List<Marker> markers = new ArrayList<Marker>();
 	
 	public static List<Marker_G> markers_G = new ArrayList<Marker_G>();
 	
