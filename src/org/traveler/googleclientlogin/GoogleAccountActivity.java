@@ -23,6 +23,7 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.traveler.xmpp.XMPPService;
 import org.traveler.xmpp.XMPPServiceFactory;
+import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
@@ -554,6 +555,7 @@ public class GoogleAccountActivity extends Activity {
 					xmppService.connect();
 					if (connection.isConnected()) {
 						xmppService.login(email, password);
+						xmppService.addConnectionListener(myConnectionListener);
 						xmppService.addPacketListener(myPacketListener, XMPPReceiver);
 						if (!connection.isAuthenticated()) {
 							sendAndroidHandlerMessage(XMPP_ErrorMessage, getString(R.string.msg_account_password_error));
@@ -584,6 +586,43 @@ public class GoogleAccountActivity extends Activity {
 			}
 		}.start();
 	}
+	
+	private ConnectionListener myConnectionListener = new ConnectionListener() {
+		@Override
+		public void connectionClosed() {
+			Log.i(TAG, "connectionClosed()");
+			mCheckBox_ConnectXMPP.setChecked(false);
+			mTextView_Message.setText("");
+			BigPlanet.clearNotification(BigPlanet.Notification_XMPP);
+		}
+
+		@Override
+		public void connectionClosedOnError(Exception e) {
+			Log.i(TAG, "connectionClosedOnError()");
+			mCheckBox_ConnectXMPP.setChecked(false);
+			mTextView_Message.setText("");
+			BigPlanet.clearNotification(BigPlanet.Notification_XMPP);
+		}
+
+		@Override
+		public void reconnectingIn(int seconds) {
+			Log.i(TAG, "reconnectingIn("+seconds+")");
+		}
+
+		@Override
+		public void reconnectionFailed(Exception e) {
+			Log.i(TAG, "reconnectionFailed()");
+		}
+
+		@Override
+		public void reconnectionSuccessful() {
+			Log.i(TAG, "reconnectionSuccessful()");
+			mCheckBox_ConnectXMPP.setChecked(true);
+			mTextView_Message.setText(R.string.msg_connected);
+			BigPlanet.setNotification(GoogleAccountActivity.this, 
+					BigPlanet.Notification_XMPP);
+		}
+	};
 	
 	private PacketListener myPacketListener = new PacketListener() {
 		@Override

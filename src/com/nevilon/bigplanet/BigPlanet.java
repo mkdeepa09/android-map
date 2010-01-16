@@ -530,6 +530,7 @@ public class BigPlanet extends Activity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		DBAdapter.close();
 		finishGPSLocationListener(true); // release the GPS resources
 		SmoothZoomEngine.sze = null; // release the variable
 		SmoothZoomEngine.stop = true; // stop the thread

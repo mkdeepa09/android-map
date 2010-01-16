@@ -3,6 +3,7 @@ package org.traveler.xmpp;
 import java.util.Collection;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
+import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.RosterEntry;
@@ -71,6 +72,12 @@ public class XMPPService {
 			for (RosterEntry entry : entries) {
 				System.out.println("Roster: "+entry.getUser()+" ("+entry.getType()+")");
 			}
+		}
+	}
+
+	public void addConnectionListener(ConnectionListener connectionListener) {
+		if (connection.isConnected()) {
+			connection.addConnectionListener(connectionListener);
 		}
 	}
 
