@@ -106,9 +106,7 @@ public class BigPlanet extends Activity {
 	
 	private static LocationManager locationManager;
 	
-	// 阿超//
-	//private Location currentLocation;
-	public static Location currentLocation;
+	private Location currentLocation;
 
 	private boolean inHome = false;
 	public static boolean isFollowMode = true; // default value is auto follow
@@ -116,6 +114,9 @@ public class BigPlanet extends Activity {
 	public static boolean isGPS_track_save = false;  // default false
 	public static boolean isMapInCenter = false;
 	public static boolean isDBdrawclear = false; // default false for DB clear
+	public static boolean autoDisplayDB = false;
+	public static boolean autoDisplayDBforMarker = false;
+	public static boolean autoDisplayDBFirst = false;
 	
 	private static String locationType = "";
 	
@@ -1125,32 +1126,21 @@ public class BigPlanet extends Activity {
 		 * 3 -> trackLeader
 		 */
 		Log.i("Message", "At addMarkerForDrawing........Type="+imageType);
-
+		
 		int zoom = PhysicMap.getZoomLevel();
 
-		double latTemp = 0, latMax = 0,latMin = 999, lonTemp = 0, lonMax = 0, lonMin = 999;
 		for (int i=0;i<placeList.size();i++)
 		{
 			Place place = placeList.get(i);
 			mm.addMarker(place, zoom, imageType, MarkerManager.MY_LOCATION_MARKER);
 			
-			if (imageType == 2){	
-				latTemp = place.getLat();
-				latMax = Math.max(latTemp, latMax);
-				latMin = Math.min(latTemp, latMin);
-				lonTemp = place.getLon();
-				lonMax = Math.max(lonTemp, lonMax);
-				lonMin = Math.min(lonTemp, lonMin);
-				//com.nevilon.bigplanet.core.geoutils.Point p = GeoUtils.toTileXY(latMax, lonMax, zoom);
-				//com.nevilon.bigplanet.core.geoutils.Point off = GeoUtils.getPixelOffsetInTile(latMax, lonMax, zoom);
-				//mapControl.goTo((int) p.x, (int) p.y, zoom, (int) off.x, (int) off.y);
-				int a = 1;
-			}
+			
 		}
-		
-
-		
-				
+		if (imageType == 2){	
+			autoDisplayDB = true;
+			autoDisplayDBforMarker = true;	
+			autoDisplayDBFirst = true;
+		}
 		if(!isDBdrawclear){
 			isDBdrawclear = true;
 		}
