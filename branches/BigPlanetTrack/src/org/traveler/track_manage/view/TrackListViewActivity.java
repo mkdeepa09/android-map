@@ -247,7 +247,8 @@ public class TrackListViewActivity extends ListActivity{
                 "Name: " + c.getString(1) + "\n" +
                 "Des: " + c.getString(2) + "\n" +
                 "Coordinate:  " + c.getString(3),
-                Toast.LENGTH_LONG).show();        
+                Toast.LENGTH_LONG).show();  
+        c.close();
     } 
 	
 	private void alert_dialog_selection(){

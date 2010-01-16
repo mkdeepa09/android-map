@@ -650,7 +650,7 @@ public class BigPlanet extends Activity {
 		 	
 		  ifHasTracks = true;	
 		}
-        
+        myCursor.close();
         return ifHasTracks;
 		
 		
