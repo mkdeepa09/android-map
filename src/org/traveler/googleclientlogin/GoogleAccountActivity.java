@@ -45,7 +45,6 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.InputMethodManager;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -173,9 +172,10 @@ public class GoogleAccountActivity extends Activity {
 			hideLayouts();
 		}
 		
-		InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE); ;
-		imm.hideSoftInputFromWindow(mEditText_Email.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-		imm.hideSoftInputFromWindow(mEditText_Pass.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+		mButton_UpdateGroupList.setFocusable(true);
+		mButton_UpdateGroupList.requestFocus();
+		mButton_UpdateGroupList.setFocusableInTouchMode(true);
+		mButton_UpdateGroupList.requestFocusFromTouch();
 	}
 	
 	@Override
