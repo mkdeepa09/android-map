@@ -28,6 +28,7 @@
 			<EditText
 				android:id="@+id/mEditText_Email"
 				android:hint="example@gmail.com"
+				android:inputType="textEmailAddress"
 				android:textAppearance="?android:attr/textAppearanceSmall"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"/>
@@ -46,6 +47,7 @@
 			<EditText
 				android:id="@+id/mEditText_Pass"
 				android:password="true"
+				android:inputType="textPassword"
 				android:textAppearance="?android:attr/textAppearanceSmall"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"/>
