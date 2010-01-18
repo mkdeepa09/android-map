@@ -96,7 +96,7 @@ public class GpsLocationStoringThread extends Thread {
             	Log.i("Message","trackPointNumber="+trackPointNumber);
 			
 				BigPlanet.DBAdapter.open();
-				long id = BigPlanet.DBAdapter.insertTrack(this.trackName, "no description", coordinates_buff.toString(), time_buff.toString(), elevation_buff.toString(),consumedTime
+				long id = BigPlanet.DBAdapter.insertTrack(this.trackName, "no track description", coordinates_buff.toString(), time_buff.toString(), elevation_buff.toString(),consumedTime
 						,totalDistance,averageSpeed,manximumSpeed,trackPointNumber,"GPS");
 				Log.i("Message", "Insert a new track successfully");
 				BigPlanet.DBAdapter.close();

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import org.traveler.track_manage.file.database.TravelDataBaseAdapter;
 import org.traveler.track_manage.file.operate.TrackPoint;
 import org.traveler.track_manage.view.TrackListViewActivity;
+import org.traveler.track_manage.view.TrackTabViewActivity;
 
 
 
@@ -124,7 +125,7 @@ public class DBRecordToGpxFile {
 	 				
 	 			}
 	 			finally{
-	 				TrackListViewActivity.myTrackExportDialog.dismiss();
+	 				TrackTabViewActivity.myTrackExportDialog.dismiss();
 	 			}
 	 		}// end of if
 	    	 
