@@ -211,7 +211,9 @@ public class GoogleAccountActivity extends Activity {
 		mCheckBox_ConnectXMPP.setVisibility(View.GONE);
 		mCheckBox_ConnectXMPP.setChecked(false);
 		mWebView.setVisibility(View.GONE);
-		progressDialog.dismiss();
+		if (progressDialog != null && progressDialog.isShowing()) {
+			progressDialog.dismiss();
+		}
 	}
 		
 	private void signin() {
