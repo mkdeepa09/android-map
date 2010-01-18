@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:id="@+id/ScrollView01"  
+                android:layout_width="fill_parent"  
+                android:layout_height="fill_parent"  
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                > 
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/get_info_layout_root"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:orientation="vertical"
+  android:background="#8DB6CD">
+  
+   <TextView android:text="@string/track_title_string" 
+		      android:id="@+id/track_title_view" 
+		      android:layout_width="wrap_content" 
+		      android:layout_height="wrap_content"
+		      android:textColor="#FFFFFF"
+		      >
+    </TextView>
+	<TextView android:text=""
+	          android:layout_marginTop="5dip" 
+		      android:id="@+id/track_title_content_view" 
+		      android:layout_width="fill_parent" 
+		      android:layout_height="wrap_content"
+		      android:background="#FFFFFF"
+		      android:cursorVisible="false"
+		      android:focusable="false"
+		      >
+    </TextView>
+    
+    <LinearLayout
+  		xmlns:android="http://schemas.android.com/apk/res/android"
+  		android:id="@+id/get_info_layout_root1"
+  		android:layout_width="wrap_content"
+  		android:layout_height="fill_parent"
+  		android:orientation="horizontal">
+    	<LinearLayout
+  			xmlns:android="http://schemas.android.com/apk/res/android"
+  			android:id="@+id/get_info_layout_root2"
+  			android:layout_width="wrap_content"
+  			android:layout_height="fill_parent"
+  			android:orientation="vertical">
+    		<TextView android:text="@string/track_distance_string"
+              	android:layout_marginTop="10dip" 
+		      	android:id="@+id/track_distance_view" 
+		      	android:layout_width="wrap_content" 
+		      	android:layout_height="wrap_content"
+		      	android:textColor="#FFFFFF"
+		      	>
+    		</TextView>
+			<TextView android:text=""
+	          	android:layout_marginTop="5dip"
+		      	android:id="@+id/track_distance_content_view" 
+		      	android:layout_width="150dip" 
+		      	android:layout_height="wrap_content"
+		      	android:background="#FFFFFF"
+		      	android:cursorVisible="false"
+		      	android:focusable="false"
+		      	>
+    		</TextView>
+    	</LinearLayout>
+    	<LinearLayout
+  			xmlns:android="http://schemas.android.com/apk/res/android"
+  			android:id="@+id/get_info_layout_root3"
+  			android:layout_width="wrap_content"
+  			android:layout_height="fill_parent"
+  			android:orientation="vertical"
+  			android:layout_marginLeft="5dip">
+    		<TextView android:text="@string/track_time_string"
+              android:layout_marginTop="10dip" 
+		      android:id="@+id/track_time_view" 
+		      android:layout_width="wrap_content" 
+		      android:layout_height="wrap_content"
+		      android:textColor="#FFFFFF"
+		      >
+    		</TextView>
+			<TextView android:text=""
+	          android:layout_marginTop="5dip" 
+		      android:id="@+id/track_time_content_view" 
+		      android:layout_width="150dip" 
+		      android:layout_height="wrap_content"
+		      android:background="#FFFFFF"
+		      android:cursorVisible="false"
+		      android:focusable="false"
+		      >
+    		</TextView>
+    	</LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+  		xmlns:android="http://schemas.android.com/apk/res/android"
+  		android:id="@+id/get_info_layout_root1"
+  		android:layout_width="wrap_content"
+  		android:layout_height="fill_parent"
+  		android:orientation="horizontal">
+    	<LinearLayout
+  			xmlns:android="http://schemas.android.com/apk/res/android"
+  			android:id="@+id/get_info_layout_root2"
+  			android:layout_width="wrap_content"
+  			android:layout_height="fill_parent"
+  			android:orientation="vertical">
+    		<TextView android:text="@string/track_speed_string"
+              android:layout_marginTop="10dip" 
+		      android:id="@+id/track_speed_view" 
+		      android:layout_width="wrap_content" 
+		      android:layout_height="wrap_content"
+		      android:textColor="#FFFFFF"
+		      		>
+    		</TextView>
+			<TextView android:text=""
+	          android:layout_marginTop="5dip" 
+		      android:id="@+id/track_speed_content_view" 
+		      android:layout_width="150dip" 
+		      android:layout_height="wrap_content"
+		      android:background="#FFFFFF"
+		      android:cursorVisible="false"
+		      android:focusable="false"
+		      		>
+    		</TextView>
+    	</LinearLayout>
+    	<LinearLayout
+  			xmlns:android="http://schemas.android.com/apk/res/android"
+  			android:id="@+id/get_info_layout_root2"
+  			android:layout_width="wrap_content"
+  			android:layout_height="fill_parent"
+  			android:layout_marginLeft="5dip"
+  			android:orientation="vertical">
+    		<TextView android:text="@string/track_maxSpeed_string"
+              android:layout_marginTop="10dip" 
+		      android:id="@+id/track_maxSpeed__view" 
+		      android:layout_width="wrap_content" 
+		      android:layout_height="wrap_content"
+		      android:textColor="#FFFFFF"
+		      		>
+    		</TextView>
+			<TextView android:text=""
+	          android:layout_marginTop="5dip" 
+		      android:id="@+id/track_maxSpeed_content_view" 
+		      android:layout_width="150dip" 
+		      android:layout_height="wrap_content"
+		      android:background="#FFFFFF"
+		      android:cursorVisible="false"
+		      android:focusable="false"
+		      		>
+    		</TextView>
+    	</LinearLayout>
+    </LinearLayout>
+    <TextView android:text="@string/track_pointNumber_string"
+              android:layout_marginTop="10dip" 
+		      android:id="@+id/track_pointNumber_view" 
+		      android:layout_width="wrap_content" 
+		      android:layout_height="wrap_content"
+		      android:textColor="#FFFFFF"
+		      >
+    </TextView>
+	<TextView android:text=""
+	          android:layout_marginTop="5dip" 
+		      android:id="@+id/track_pointNumber_content_view" 
+		      android:layout_width="fill_parent" 
+		      android:layout_height="wrap_content"
+		      android:background="#FFFFFF"
+		      android:cursorVisible="false"
+		      android:focusable="false"
+		      >
+    </TextView>
+    
+    <TextView android:text="@string/track_description_string"
+              android:layout_marginTop="10dip" 
+		      android:id="@+id/track_description_view" 
+		      android:layout_width="wrap_content" 
+		      android:layout_height="wrap_content"
+		      android:textColor="#FFFFFF"
+		      >
+    </TextView>
+	<TextView android:text=""
+	          android:layout_marginTop="5dip" 
+		      android:id="@+id/track_description_content_view" 
+		      android:layout_width="fill_parent" 
+		      android:layout_height="wrap_content"
+		      android:background="#FFFFFF"
+		      android:cursorVisible="false"
+		      android:focusable="false"
+		      android:singleLine="false"
+		      >
+    </TextView>
+    
+    
+  
+</LinearLayout>
+</ScrollView>

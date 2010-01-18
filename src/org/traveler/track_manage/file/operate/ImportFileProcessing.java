@@ -8,6 +8,7 @@ import org.traveler.track_manage.file.database.TravelDataBaseAdapter;
 import org.traveler.track_manage.file.database.TravelerTrackDataBaseHelper;
 import org.traveler.track_manage.view.ExtendedCheckBox;
 
+import com.nevilon.bigplanet.R;
 import com.nevilon.bigplanet.core.storage.SQLLocalStorage;
 
 
@@ -73,13 +74,14 @@ public class ImportFileProcessing {
 		return items;
 	}
 	
-	public void parseGPXFile(List<ExtendedCheckBox> extendedCheckBoxList, Handler mainHandler){
+	public void parseGPXFile(List<ExtendedCheckBox> extendedCheckBoxList, Handler mainHandler,String trackSource){
 		
 		myParseThread myParseThread = new myParseThread("GPXParseThread",extendedCheckBoxList);
 		myParseThread.setMainThreadHandler(mainHandler);
 		myParseThread.setGPXFileDirectory(GPXFileImportPath);
 		//myParseThread.setTrackDBHelper(DBHelper);
 		myParseThread.setTrackDBAdapter(DBAdapter);
+		myParseThread.setTrackSourceString(trackSource);
 		myParseThread.start();
 		
 	}

@@ -25,10 +25,12 @@ import org.traveler.track_manage.file.database.TravelerTrackDataBaseHelper;
 import org.traveler.track_manage.track.TrackContentAnalyser;
 import org.traveler.track_manage.view.ExtendedCheckBox;
 import org.traveler.track_manage.view.ExtendedCheckBoxListActivity;
+import org.traveler.track_manage.view.TrackTabViewActivity;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
+import com.nevilon.bigplanet.R;
 import com.nevilon.bigplanet.core.Place;
 
 
@@ -54,16 +56,24 @@ public class myParseThread extends Thread {
     public int count;
     private TravelerTrackDataBaseHelper trackDBHelper;
     private TravelDataBaseAdapter trackDBAdapter;
+    private static String trackSourceString;
+    
 
 	public myParseThread(String threadName,List<ExtendedCheckBox> fileParsingList) {
 		super(threadName);
 		// TODO Auto-generated constructor stub
+		
 		this.fileParsingList = fileParsingList;
 		mainThreadHandler = null;
 		failedFileList = new ArrayList<File>();
 		//trackDBHelper = null;
 		trackDBAdapter = null;
 		count = 0;
+	}
+	
+	public void setTrackSourceString(String source)
+	{
+		this.trackSourceString = source;
 	}
 	
 	public void setTrackDBAdapter(TravelDataBaseAdapter dbAdapter)
@@ -134,7 +144,7 @@ public class myParseThread extends Thread {
               */
          }
          finally{
-        	 ExtendedCheckBoxListActivity.myGPXParseDialog.dismiss();
+        	 TrackTabViewActivity.myGPXParseDialog.dismiss();
          }
 
          
@@ -261,7 +271,7 @@ public class myParseThread extends Thread {
 		                trackDBAdapter.open();
 		                long id;
 		                id = trackDBAdapter.insertTrack(trackName, trackDes, trackCoordinateBuffer.toString(), trackTimeBuffer.toString(), trackElevationBuffer.toString(),consumedTime,totalDistance,averageSpeed,manximumSpeed,trackPointNumber,
-		                		"File");
+		                		trackSourceString);
 		            	//this.trackDBHelper.insert(trackName,trackDes,trackCoordinateBuffer.toString() , trackTimeBuffer.toString(),trackElevationBuffer.toString());
 		                //this.trackDBHelper.insert("name","des","coordinate" , "time","elevation");
 		                Log.i("Message", "Insert a new track successfully");

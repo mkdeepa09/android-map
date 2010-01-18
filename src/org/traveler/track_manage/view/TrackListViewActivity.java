@@ -71,7 +71,7 @@ public class TrackListViewActivity extends ListActivity{
 	  private static String track_des;
 
 	  //private ProgressDialog myProgressDialog;
-	  private BaseAdapter listViewAdapter;
+	  private IconAdapter listViewAdapter;
 	  public static String mClickItemedText;
 	  public static ArrayList<Place> placeList = null;
 	  
@@ -356,6 +356,7 @@ public class TrackListViewActivity extends ListActivity{
 			
 			//DisplayTitle(myCursor);
 			listViewAdapter = new IconAdapter(this,myCursor);
+			listViewAdapter.setTrackSource(getString(R.string.track_source_string));
 			setListAdapter(listViewAdapter);
 		}
 		else
@@ -568,19 +569,8 @@ public class TrackListViewActivity extends ListActivity{
 		    	Log.i("Message","clean the description_edit_text");
 		  		break;
 		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
 		  }
-		   
-		 
-		 
-		 
-		 
+		   	 
 			super.onPrepareDialog(id, dialog);
 		}
 	 

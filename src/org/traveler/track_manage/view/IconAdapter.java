@@ -33,6 +33,7 @@ public class IconAdapter extends BaseAdapter {
 	private ArrayList<Double> trackManximumSpeedList;
 	private ArrayList<Long> trackPointNumberList;
 	private ArrayList<String> trackSourceList;
+	private String trackSource;
 	
 	private LayoutInflater mlin; //to get the Context's layout
 	private Bitmap trackIcon;
@@ -99,7 +100,7 @@ public class IconAdapter extends BaseAdapter {
 		// TODO Auto-generated method stub
 		if(curSor!=null)
 		{
-		//���n
+		
 			curSor.moveToPosition(position);
 		return curSor.getLong(0);
 		}
@@ -138,16 +139,16 @@ public class IconAdapter extends BaseAdapter {
 		//holder.icon.setBackgroundColor(Color.GREEN);
 		String track_source = generateTrackSourceString((String)trackSourceList.get(position));
 		holder.source.setText(track_source);
-		if(((String)trackSourceList.get(position)).equalsIgnoreCase("File"))
+		if(((String)trackSourceList.get(position)).equalsIgnoreCase(trackSource))
 			trackIcon=BitmapFactory.decodeResource(_ctx.getResources(),R.drawable.track_icon_flag_red );
 		else
 			trackIcon=BitmapFactory.decodeResource(_ctx.getResources(),R.drawable.track_icon_flag_blue );
 		holder.icon.setImageBitmap(trackIcon);
 		
 		long time = (long)trackConsumedTimeList.get(position);
-		String track_consumedTime = generateTimeString(time);
+		String track_consumedTime = generateTimeString(time,this._ctx);
 		float distance = trackDistanceList.get(position);
-		String track_distance = generateDistanceString(distance);
+		String track_distance = generateDistanceString(distance,this._ctx);
 		long trackPointNumber = trackPointNumberList.get(position);
 		String track_point_number = generateTrackNumberString(trackPointNumber);
 		//double averageSpeed = trackAverageSpeedList.get(position);
@@ -158,7 +159,14 @@ public class IconAdapter extends BaseAdapter {
 
 	}
 	
-	private String generateTimeString(long time)
+	public void setTrackSource(String trackSource)
+	{
+		
+		this.trackSource = trackSource;
+	}
+	
+	
+	public static String generateTimeString(long time, Context context)
 	{
 		
 		String timeString = "";
@@ -168,9 +176,9 @@ public class IconAdapter extends BaseAdapter {
 		//String time_string = myTime.toString();
 		String[] time_array = time_string.split(":");
 		Log.i("Message", "time_string="+time_string+",hr="+time_array[0]+",min="+time_array[1]+",sec="+time_array[2]);
-		String hr = _ctx.getString(R.string.hr_unit);
-		String min = _ctx.getString(R.string.min_unit);
-		String sec = _ctx.getString(R.string.sec_unit);
+		String hr = context.getString(R.string.hr_unit);
+		String min = context.getString(R.string.min_unit);
+		String sec = context.getString(R.string.sec_unit);
 		int time_hr = Integer.parseInt(time_array[0])-8;
 		String time_hr_str = Integer.toString(time_hr);
 		if(time_hr_str.equals("0"))
@@ -191,14 +199,41 @@ public class IconAdapter extends BaseAdapter {
 		
 	}
 	
-	private String generateDistanceString(float distance)
+	public static String generateDistanceString(float distance,Context context)
 	{
 	  String distanceString ="";
 	  NumberFormat formatter = new DecimalFormat("#");
 	    
-	  String distance_unit = _ctx.getString(R.string.meter_unit);
+	  String distance_unit = context.getString(R.string.meter_unit);
 	  distanceString = formatter.format(distance)+distance_unit;
 	  return distanceString;
+		
+		
+	}
+	
+	public static String generateSpeedString(double speed,Context context)
+	{
+	  String speedString ="";
+	  NumberFormat formatter = new DecimalFormat("#");
+	    
+	  String distance_unit = context.getString(R.string.speed_unit);
+	  speedString = formatter.format(speed)+distance_unit;
+	  return speedString;
+		
+		
+	}
+	
+	public static String generateDescriptionString(String description,Context context)
+	{
+	  Log.i("Message", "IconAdpter.generateDescriptionString is called...");
+	 
+	  if(description.equalsIgnoreCase("no track description"))// "no track description" is the default value if the track file has no description about it self, see 
+		                                                     // ParsedExampleDataSet.java
+	  {
+		  return context.getString(R.string.no_track_description);
+	  } 
+	  else
+	  return description;
 		
 		
 	}

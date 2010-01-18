@@ -15,7 +15,7 @@
 <string name="str_dialog_body">请稍待片刻...</string>
 <string name="track_importing_result">路径汇入情况</string>
 <string name="track_importing_successfully">成功!</string>
-<string name="import_no_items">目前尚无侦测到任何以GPX格式存在之路径档案!\n请将档案放置在tracks/import目录下,谢谢。</string>
+<string name="import_no_items">目前尚无侦测到任何以GPX格式存在之路径档案!\n请将档案放置在RMaps/tracks/import目录下,谢谢。</string>
 <string name="track_browse_view">浏览路径页面</string>
 <string name="browse_no_items">目前尚无任何汇入之路径。</string>
 <string name="some_error">部分档案内容有错误:</string>
@@ -32,7 +32,8 @@
 <string-array name="items_track_what_to_do_dialog">
 <item>编辑路径</item>
 <item>删除路径</item>
-<item>储存路径於SD卡</item>
+<item>检视更多资料</item><item>储存路径於SD卡</item>
+
 </string-array>
 
 <string name="sure_to_delete_track">您确定要删除此路径?</string>
@@ -56,4 +57,18 @@
 <string name="meter_unit">米</string>
 <string name="point_number_unit">点</string>
 <string name="source_text">来源</string>
+<string name="track_source_string">档案</string>
+<string name="import_fail">汇入失败</string>
+<string name="track_title_string">路径名称</string>
+<string name="track_distance_string">距离</string>
+<string name="track_time_string">时间</string>
+<string name="track_speed_string">平均速度</string>
+<string name="track_pointNumber_string">GPS标记点数</string>
+<string name="track_maxSpeed_string">最高速度</string>
+<string name="track_description_string">描述</string>
+<string name="whole_track_information_dialog_title">完整路径资讯</string>
+<string name="whole_track_information_dialog_body">此路经相关资讯如下：</string>
+<string name="speed_unit">米/秒</string>
+<string name="no_track_description">无路径描述</string>
+<string name="IMPORT_and_BROWSE_TRACK_MENU">汇入/浏览路径</string>
 </resources>

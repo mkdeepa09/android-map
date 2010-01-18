@@ -16,11 +16,11 @@
 <string name="str_dialog_title">正在匯入路徑</string>
 <string name="track_importing_result">路徑匯入情況</string>
 <string name="track_importing_successfully">成功!</string>
-<string name="import_no_items">目前尚無偵測到任何以GPX格式存在之路徑檔案!\n請將檔案放置在tracks/import目錄下,謝謝。</string>
+<string name="import_no_items">目前尚無偵測到任何以GPX格式存在之路徑檔案!\n請將檔案放置在RMaps/tracks/import目錄下,謝謝。</string>
 <string name="track_browse_view">瀏覽路徑頁面</string>
 <string name="browse_no_items">目前尚無任何匯入之路徑。</string>
 
-<string name="some_error">部分檔案內容有錯誤:</string>
+<string name="some_error">錯誤</string>
 <string name="OK">確定</string>
 <string name="some_successful">部分成功</string>
 <string name="select_all">選取全部</string>
@@ -36,7 +36,8 @@
 <string-array name="items_track_what_to_do_dialog">
 <item>編輯路徑</item>
 <item>刪除路徑</item>
-<item>儲存路徑於SD卡</item>
+<item>檢視更多資料</item><item>儲存路徑於SD卡</item>
+
 </string-array>
 
 
@@ -64,4 +65,19 @@
 <string name="point_number_unit">點</string>
 
 <string name="source_text">來源</string>
+<string name="track_source_string">檔案</string>
+<string name="import_fail">匯入失敗</string>
+
+<string name="track_title_string">路徑名稱</string>
+<string name="track_distance_string">距離</string>
+<string name="track_time_string">時間</string>
+<string name="track_speed_string">平均速度</string>
+<string name="track_pointNumber_string">GPS標記點數</string>
+<string name="track_maxSpeed_string">最高速度</string>
+<string name="track_description_string">描述</string>
+<string name="whole_track_information_dialog_title">完整路徑資訊</string>
+<string name="whole_track_information_dialog_body">此路經相關資訊如下：</string>
+<string name="speed_unit">米/秒</string>
+<string name="no_track_description">無路徑描述</string>
+<string name="IMPORT_and_BROWSE_TRACK_MENU">匯入/瀏覽路徑</string>
 </resources>

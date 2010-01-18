@@ -13,6 +13,7 @@ import org.traveler.track_manage.simulate.GpsLocationLogParsingThread;
 import org.traveler.track_manage.simulate.GpsTrackStorageSimulatorActivity;
 import org.traveler.track_manage.view.ExtendedCheckBoxListActivity;
 import org.traveler.track_manage.view.TrackListViewActivity;
+import org.traveler.track_manage.view.TrackTabViewActivity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -598,8 +599,9 @@ public class BigPlanet extends Activity {
 
 		/* Add by Taiyu */
 		SubMenu sub = menu.addSubMenu(5, 101, 0, R.string.TRACK_MANAGE_MENU).setIcon(R.drawable.track_manage);
-        sub.add(6, 102, 0, R.string.BROWSE_TRACK_MENU);
-        sub.add(6, 103, 1, R.string.IMPORT_TRACK_MENU);
+        //sub.add(6, 102, 0, R.string.BROWSE_TRACK_MENU);
+        //sub.add(6, 103, 1, R.string.IMPORT_TRACK_MENU);
+		sub.add(6, 103, 1, R.string.IMPORT_and_BROWSE_TRACK_MENU);
         //sub.add(6, 104, 2, R.string.RECORD_GPS_TRACK_MENU);
         sub.add(6, 105, 3, R.string.ERASE_LEADER_TRACK_MENU);
         sub.add(6, 106, 4, R.string.ERASE_RECORDED_TRACK_MENU);
@@ -633,7 +635,7 @@ public class BigPlanet extends Activity {
 		boolean useNet = Preferences.getUseNet();
 		menu.findItem(42).setEnabled(useNet);
 	    
-		menu.findItem(102).setEnabled(checkIfTrackExist());
+		//menu.findItem(102).setEnabled(checkIfTrackExist());
 		menu.findItem(105).setEnabled(checkMarkers(MarkerManager.markers_leader));
 		menu.findItem(106).setEnabled(checkMarkers(MarkerManager.saveTracks_G));
 		menu.findItem(107).setEnabled(checkMarkers(MarkerManager.markers_DB));
@@ -815,7 +817,8 @@ public class BigPlanet extends Activity {
 	
 	private void importTracks(){
 		Log.i("Message", "Press--Import Track function");
-		Intent importTrackIntent = new Intent(this, ExtendedCheckBoxListActivity.class);
+		//Intent importTrackIntent = new Intent(this, ExtendedCheckBoxListActivity.class);
+		Intent importTrackIntent = new Intent(this, TrackTabViewActivity.class);
 		startActivity(importTrackIntent);
 	}
 	
