@@ -58,7 +58,7 @@
 <string name="min_unit">min</string>
 <string name="sec_unit">sec</string>
 <string name="meter_unit">meter</string>
-<string name="point_number_unit">points</string>
+<string name="point_number_unit">GPS Points</string>
 <string name="source_text">source</string>
 <string name="track_source_string">File</string>
 <string name="import_fail">Fail to import files</string>
@@ -74,4 +74,5 @@
 <string name="speed_unit">meter/second</string>
 <string name="no_track_description">No Track's Description</string>
 <string name="IMPORT_and_BROWSE_TRACK_MENU">Import/Browse Track</string>
+<string name="kilometer_unit">km</string>
 </resources>

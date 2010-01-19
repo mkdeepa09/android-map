@@ -56,7 +56,7 @@ public class TrackTabViewActivity extends TabActivity{
 	private ListView myListView;
 	private List<String> gpxFileItems = null;
 	public static Context ctx;
-	private CheckBox selectAllCheckBox;
+	protected static CheckBox selectAllCheckBox;
 	private LayoutInflater mlin; //to get the Context's layout
 	private ExtendedCheckBoxListAdapter mListAdapter;
 	private IconAdapter listViewAdapter;

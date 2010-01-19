@@ -9,6 +9,7 @@ import org.traveler.track_manage.file.operate.TrackPoint;
 
 
 import android.location.Location;
+import android.util.Log;
 
 
 public class GpxFile extends FileHandle {
@@ -67,12 +68,29 @@ public class GpxFile extends FileHandle {
 	
 	/* Add by Taiyu */
 	public void saveLocation(TrackPoint trackPoint)throws IOException {
-		
+		String myTrackFormatString = conformToMyTrackFormat(trackPoint.getTime());
 		super.saveToFile(
 				"<trkpt lat=\""+trackPoint.getLatitude()+"\" lon=\""+trackPoint.getLongitude()+"\">\n"+
-				"<time>"+trackPoint.getTime()+"</time>\n"+
+				"<time>"+myTrackFormatString+"</time>\n"+
 				"<ele>"+trackPoint.getElevation()+"</ele>\n"+
 				"</trkpt>\n");
+	}
+	
+	private String conformToMyTrackFormat(String timeString)
+	{
+		
+		if(timeString.indexOf(" ")!= -1)
+		{   
+			Log.i("GpxFile","Find the non-formated time string="+timeString);
+			
+			timeString = timeString.replaceAll(" ", "T");
+			timeString = timeString.replaceAll("(\\.0)", "");
+			timeString = timeString + "Z";
+			Log.i("GpxFile", "After conformToMyTrackFormat="+timeString);
+			
+		}
+		
+		return timeString;
 	}
 
 }

@@ -97,10 +97,10 @@ public class TrackContentAnalyser {
 				 Location location = this.trackPlaceList.get(count).getLocation();
 				 Location previous_location = this.trackPlaceList.get(count-1).getLocation();
 				 float differ = location.distanceTo(previous_location);
-				 if(differ<=10)
+				 //if(differ<=10)
 					  totalDistance = totalDistance + location.distanceTo(previous_location);
-				 else
-					 totalDistance = totalDistance + 0;
+				 //else
+				//	 totalDistance = totalDistance + 0;
 				 Log.i("Message","differDistance="+location.distanceTo(previous_location)+"totalDistance="+totalDistance);
 				
 			}
@@ -173,14 +173,29 @@ public class TrackContentAnalyser {
 	private void manximumSpeedComputing(){
 		Log.i("Message","Computing manximumSpeed....");
 		Collections.sort(speedList);
+		double totalSpeed = 0;
 		for(Double speed: speedList)
 		{
 			Log.i("Message","speed="+speed);
-			
+			totalSpeed = totalSpeed+speed;
 		}
+		
+		double averageSpeed = totalSpeed / speedList.size();
 		Log.i("Message","MinSpeed="+speedList.get(0));
 		Log.i("Message","MaxSpeed="+speedList.get(speedList.size()-1));
-		this.manximumSpeed = speedList.get(speedList.size()-1);
+		for(int i = speedList.size()-1;i>=0;i--)
+		{
+			if((speedList.get(i)- averageSpeed)<2)
+			{  
+				Log.i("Message","i="+i+" speed="+speedList.get(i)+" averageSpeed="+averageSpeed+" difference="+(speedList.get(i)- averageSpeed));
+				this.manximumSpeed = speedList.get(i);
+				break;
+			}
+			else
+				this.manximumSpeed = 0;
+			
+		}
+		//this.manximumSpeed = speedList.get(speedList.size()-1);
 		
 	}
 	

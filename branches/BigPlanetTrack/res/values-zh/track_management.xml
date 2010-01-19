@@ -62,7 +62,7 @@
 <string name="min_unit">分</string>
 <string name="sec_unit">秒</string>
 <string name="meter_unit">米</string>
-<string name="point_number_unit">點</string>
+<string name="point_number_unit">GPS標記點</string>
 
 <string name="source_text">來源</string>
 <string name="track_source_string">檔案</string>
@@ -80,4 +80,5 @@
 <string name="speed_unit">米/秒</string>
 <string name="no_track_description">無路徑描述</string>
 <string name="IMPORT_and_BROWSE_TRACK_MENU">匯入/瀏覽路徑</string>
+<string name="kilometer_unit">公里</string>
 </resources>
