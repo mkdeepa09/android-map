@@ -68,6 +68,10 @@ public class ExtendedCheckBoxListView extends LinearLayout {
 			@Override
 			public void onClick(View v) {
 				mCheckBoxText.setChecked(getCheckBoxState());
+				if(!getCheckBoxState())
+				{
+					TrackTabViewActivity.selectAllCheckBox.setChecked(false);
+				}
 			}
          });         
          

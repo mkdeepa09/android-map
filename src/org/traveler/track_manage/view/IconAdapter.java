@@ -202,10 +202,16 @@ public class IconAdapter extends BaseAdapter {
 	public static String generateDistanceString(float distance,Context context)
 	{
 	  String distanceString ="";
-	  NumberFormat formatter = new DecimalFormat("#");
-	    
-	  String distance_unit = context.getString(R.string.meter_unit);
-	  distanceString = formatter.format(distance)+distance_unit;
+	  NumberFormat formatter = new DecimalFormat("#.##");
+	  if(distance>1000)
+	  {
+		 
+		  distanceString = formatter.format(distance/1000) +" "+ context.getString(R.string.kilometer_unit);
+	  }
+	  else{
+		  distanceString = formatter.format(distance)+" "+context.getString(R.string.meter_unit);
+	  }
+	  
 	  return distanceString;
 		
 		
@@ -214,10 +220,10 @@ public class IconAdapter extends BaseAdapter {
 	public static String generateSpeedString(double speed,Context context)
 	{
 	  String speedString ="";
-	  NumberFormat formatter = new DecimalFormat("#");
+	  NumberFormat formatter = new DecimalFormat("#.##");
 	    
-	  String distance_unit = context.getString(R.string.speed_unit);
-	  speedString = formatter.format(speed)+distance_unit;
+	  String speed_unit = context.getString(R.string.speed_unit);
+	  speedString = formatter.format(speed)+" "+speed_unit;
 	  return speedString;
 		
 		
@@ -243,7 +249,7 @@ public class IconAdapter extends BaseAdapter {
 		
 		String numberString = "";
 		String point_number_unit = _ctx.getString(R.string.point_number_unit);
-		numberString = number+point_number_unit;
+		numberString = number+" "+point_number_unit;
 		return numberString;
 		
 	}
