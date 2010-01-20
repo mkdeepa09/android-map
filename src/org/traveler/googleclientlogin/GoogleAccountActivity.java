@@ -21,6 +21,7 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
+import org.traveler.xmpp.XMPPEncoder;
 import org.traveler.xmpp.XMPPService;
 import org.traveler.xmpp.XMPPServiceFactory;
 import org.jivesoftware.smack.ConnectionListener;
@@ -563,9 +564,9 @@ public class GoogleAccountActivity extends Activity {
 				if (!connection.isAuthenticated()) {
 					xmppService.connect();
 					if (connection.isConnected()) {
-						xmppService.login(email, password);
 						xmppService.addConnectionListener(myConnectionListener);
 						xmppService.addPacketListener(myPacketListener, XMPPReceiver);
+						xmppService.login(email, password);
 						if (!connection.isAuthenticated()) {
 							sendAndroidHandlerMessage(XMPP_ErrorMessage, getString(R.string.msg_account_password_error));
 						} else {
@@ -687,8 +688,8 @@ public class GoogleAccountActivity extends Activity {
 				String gps = body.substring("gps:".length());
 				String[] array = gps.split(",");
 				try {
-					Double lon = Double.parseDouble(array[0]);
-					Double lat = Double.parseDouble(array[1]);
+					Double lon = Double.parseDouble(XMPPEncoder.decodeDigit(array[0]));
+					Double lat = Double.parseDouble(XMPPEncoder.decodeDigit(array[1]));
 					Place place = new Place();
 					place.setLon(lon);
 					place.setLat(lat);
