@@ -14,6 +14,7 @@ import org.jivesoftware.smack.filter.FromContainsFilter;
 import org.jivesoftware.smack.filter.PacketFilter;
 import org.jivesoftware.smack.filter.PacketTypeFilter;
 import org.jivesoftware.smack.packet.Message;
+import org.jivesoftware.smack.packet.Presence;
 
 /**
  * @author tytung
@@ -71,6 +72,14 @@ public class XMPPService {
 			Collection<RosterEntry> entries = roster.getEntries();
 			for (RosterEntry entry : entries) {
 				System.out.println("Roster: "+entry.getUser()+" ("+entry.getType()+")");
+			}
+			RosterEntry entry = roster.getEntry(xmppReceiver);
+			if (entry == null) {
+				Presence presence = new Presence(Presence.Type.subscribe);
+				presence.setFrom(connection.getUser()); // must be full XMPP address of the user
+				presence.setTo(xmppReceiver);
+				connection.sendPacket(presence);
+				System.out.println(presence.toXML());
 			}
 		}
 	}

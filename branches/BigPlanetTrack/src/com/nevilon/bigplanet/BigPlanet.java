@@ -11,9 +11,9 @@ import org.traveler.track_manage.file.database.GpsLocationStoringThread;
 import org.traveler.track_manage.file.database.TravelDataBaseAdapter;
 import org.traveler.track_manage.simulate.GpsLocationLogParsingThread;
 import org.traveler.track_manage.simulate.GpsTrackStorageSimulatorActivity;
-import org.traveler.track_manage.view.ExtendedCheckBoxListActivity;
 import org.traveler.track_manage.view.TrackListViewActivity;
 import org.traveler.track_manage.view.TrackTabViewActivity;
+import org.traveler.xmpp.XMPPEncoder;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -30,7 +30,6 @@ import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.database.Cursor;
 import android.graphics.Point;
 import android.location.Criteria;
 import android.location.Location;
@@ -642,23 +641,6 @@ public class BigPlanet extends Activity {
 		return true;
 	}
 	
-	
-	private boolean checkIfTrackExist(){
-		
-		boolean ifHasTracks = false;
-		
-		DBAdapter.open();
-		Cursor myCursor = DBAdapter.getAllTracks();
-        if(myCursor.moveToFirst()){
-		 	
-		  ifHasTracks = true;	
-		}
-        myCursor.close();
-        return ifHasTracks;
-		
-		
-	}
-	
 	public boolean checkMarkers(List<Marker_G> list) {
 		if(list.size()>0){
 			return true;
@@ -1024,7 +1006,7 @@ public class BigPlanet extends Activity {
 					GoogleAccountActivity.xmppService.isConnected()) {
 				if (GoogleAccountActivity.isLeader) {
 					String groupname = GoogleAccountActivity.Groupname;
-					String gps = longitude+","+latitude;
+					String gps = XMPPEncoder.encodeDigit(longitude)+","+XMPPEncoder.encodeDigit(latitude);
 					String message = "group:"+groupname+";"+"gps:"+gps;
 					Log.i("onLocationChanged", "xmppService.sendMessage("+ message +")");
 					try {
