@@ -1,5 +1,9 @@
 package org.traveler.track_manage.file.database;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -114,6 +118,15 @@ public class GpsLocationStoringThread extends Thread {
 		   else
 		   {
 			    
+			    String obj = "LocationList size <= 0";
+				 if(mainThreadHandler != null)
+				 {
+					 m  = mainThreadHandler.obtainMessage(FAIL, 0, 1, obj);
+			     
+			    	 mainThreadHandler.sendMessage(m);
+				 }
+	       	     else
+	       	    	 throw new Error("mainHandler is Null");
 		   }
 			
 		}// end of 	if(this.locationList != null)
@@ -146,7 +159,18 @@ public class GpsLocationStoringThread extends Thread {
      	    else
      		  throw new Error("mainHandler is Null");
      		
-		    e.printStackTrace();
+		   Log.e("Error", "Save the error message into the file(/sdcard/RMaps/tracks/error_log/error.txt)");
+		   try {
+			   
+			    //BufferedWriter out = new BufferedWriter(new FileWriter("/sdcard/RMaps/tracks/error_log/error.txt"));
+			    PrintWriter pw = new PrintWriter(new FileWriter("/sdcard/RMaps/tracks/error_log/error.txt"));
+			    e.printStackTrace(pw);
+			    pw.close(); 
+			    //out.close();
+			} catch (IOException e1) {
+			}
+ 
+		   e.printStackTrace();
 	  }
 	  finally
 	  {
