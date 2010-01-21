@@ -101,11 +101,9 @@ public class MapControl extends RelativeLayout {
 	
 	private Context context;
 	
-	int z2 = 0;
+	int z2 = 3;
 	
 	private List<Marker> markers_temp = new ArrayList<Marker>();
-	
-	private List<Marker_G> markers_DB_check = new ArrayList<Marker_G>();
 
 	/**
 	 * Конструктор
@@ -413,7 +411,6 @@ public class MapControl extends RelativeLayout {
 									+ (int) marker.getOffset().y
 									- marker.getMarkerImage().getOffsetY(), paint);
 						}
-						int a = 0;
 					}
 				}
 			}
@@ -637,21 +634,23 @@ public class MapControl extends RelativeLayout {
 				BigPlanet.autoDisplayDBforMarker = false;
 				
 				if(BigPlanet.autoDisplayDBFirst){
-					invokeGoToMyLocation(markers_temp.get(0).place.getLat(), markers_temp.get(0).place.getLon(), 1);
+					invokeGoToMyLocation(markers_temp.get(0).place.getLat(), markers_temp.get(0).place.getLon(), 3);
 					BigPlanet.autoDisplayDBFirst = false;
 				}else{
 					boolean check = markers_DBfordisplay();
 					
 					if (z2<13 && !check){
-						z2 = z2+1;
+						z2 = z2+1;	
 						//invokeGoToMyLocation(MarkerManager.markers_DB.get(1).place.getLat(), MarkerManager.markers_DB.get(1).place.getLon(), z2);
 						invokeGoToMyLocation(markers_temp.get(0).place.getLat(), markers_temp.get(0).place.getLon(), z2);
+							
 					}
 					else{
+						int z3 = z2+2;
+						invokeGoToMyLocation(markers_temp.get(0).place.getLat(), markers_temp.get(0).place.getLon(), z3);
 						BigPlanet.autoDisplayDB = false;
 						BigPlanet.autoDisplayDBforMarker = true;
-						invokeGoToMyLocation(markers_temp.get(0).place.getLat(), markers_temp.get(0).place.getLon(), z2+1);
-						z2 = 1;
+						z2 = 3;
 						if (this.getHeight() == 480-50) {
 							/**
 							 * scale map when zooming in/out
@@ -700,7 +699,9 @@ public class MapControl extends RelativeLayout {
 		
 		public boolean markers_DBfordisplay(){
 			boolean forMarkers = true;
-			for (int i2=0;i2<MarkerManager.markers_DB.size();i2++) {
+			int num = Math.round(MarkerManager.markers_DB.size()/10)+1;
+			int countDB = 0;
+			for (int i2=0;i2<num;i2++) {
 				for (int i = 0; i < 7; i++) {
 					for (int j = 0; j < 7; j++) {
 						if ((i > 1 && i < 5) && ((j > 1 && j < 5))) {
@@ -708,12 +709,11 @@ public class MapControl extends RelativeLayout {
 							
 							int tileX = tile.x + (i - 2);
 							int tileY = tile.y + (j - 2);
+
+							if(MarkerManager.markers_DB.get(i2*10).tile.x == tileX && MarkerManager.markers_DB.get(i2*10).tile.y ==tileY && MarkerManager.markers_DB.get(i2*10).tile.z ==z2){
+								countDB = countDB +1 ;
+							}		
 							
-							if(i2 < MarkerManager.markers_DB.size()){
-								if(MarkerManager.markers_DB.get(i2).tile.x ==tileX && MarkerManager.markers_DB.get(i2).tile.y ==tileY && MarkerManager.markers_DB.get(i2).tile.z ==z2){
-									markers_DB_check.add(MarkerManager.markers_DB.get(i2));
-								}			
-							}
 							/*if (markers_temp.get(0).tile.x ==tileX && markers_temp.get(0).tile.y ==tileY && markers_temp.get(0).tile.z ==z2){
 								forMarkers = true;
 							}*/
@@ -722,11 +722,9 @@ public class MapControl extends RelativeLayout {
 					}
 				}
 			}
-			if (forMarkers && markers_DB_check.size() == MarkerManager.markers_DB.size()){
-				markers_DB_check.clear();
+			if (forMarkers && countDB == num){
 				return true;
 			}else{
-				markers_DB_check.clear();
 				return false;
 			}
 		}
@@ -844,7 +842,6 @@ public class MapControl extends RelativeLayout {
 		updateScreen();
 	}
 	public int FindMaxSize(int a, int b, int c,int d){
-		return Math.max(Math.max(Math.max(a, b),c),d);
-		
+		return Math.max(Math.max(Math.max(a, b),c),d);		
 	}
 }
