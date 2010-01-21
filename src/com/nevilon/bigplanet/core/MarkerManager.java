@@ -162,9 +162,18 @@ public class MarkerManager {
 					it.remove();
 				}
 			}
-			if(!BigPlanet.isGPS_track ){
+			//if(!BigPlanet.isGPS_track ){
+			if(markers.size()>0){
+				double lat = markers.get(0).place.getLat();
+				double lon = markers.get(0).place.getLon();
+				if ((marker.place.getLat() != lat) || (marker.place.getLon() != lon)){
+					markers.add(marker);
+					int a =1;
+				}	
+			}else{
 				markers.add(marker);
 			}
+			//}
 		}
 		else if(trackType == 2){
 			// clear lastTime DB
@@ -228,7 +237,7 @@ public class MarkerManager {
 	
 	public List<Marker_G> getMarkers_G_type(int x, int y, int z, int i, int tracktype){
 		// tracktype : 1 -> track, 2 -> trackSave, 3 -> trackDB, 4 -> trackLeader //
-		List<Marker_G> result_G = new ArrayList<Marker_G>();	
+		List<Marker_G> result_G = new ArrayList<Marker_G>();
 		if(tracktype == 1){
 			if(markers_G.get(i).tile.x ==x && markers_G.get(i).tile.y ==y && markers_G.get(i).tile.z ==z){
 				Iterator<Marker_G> it = result_G.iterator();
