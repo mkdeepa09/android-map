@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -669,23 +670,7 @@ public class MapControl extends RelativeLayout {
 						BigPlanet.autoDisplayDB = false;
 						BigPlanet.autoDisplayDBforMarker = true;
 						z2 = 3;
-						if (this.getHeight() == 480-50) {
-							/**
-							 * scale map when zooming in/out
-							 * for 320x480 (e.g. HTC Dream, HTC Magic, HTC Hero, Samsung i7500)
-							 */
-							doDraw(canvas, paint, true);
-						} else {
-							/** 
-							 * don't scale map when zooming in/out
-							 * because the effect of scaling map will cause wrong map resolution after zooming in/out
-							 * for following devices:
-							 * 240x320 (e.g. HTC Tattoo)
-							 * 480x800(e.g. Acer Liquid, Google Nexus One)
-							 * 480x854 (e.g. Motorola Droid)
-							 */
-							doDraw(canvas, paint, false);
-						}
+						invokeDoDraw(canvas);
 					}
 				}
 				
@@ -695,23 +680,32 @@ public class MapControl extends RelativeLayout {
 					MarkerManager.markers.add(markers_temp.get(0));
 					BigPlanet.autoDisplayDBforMarker = false;
 				}
-				if (this.getHeight() == 480-50) {
-					/**
-					 * scale map when zooming in/out
-					 * for 320x480 (e.g. HTC Dream, HTC Magic, HTC Hero, Samsung i7500)
-					 */
-					doDraw(canvas, paint, true);
-				} else {
-					/** 
-					 * don't scale map when zooming in/out
-					 * because the effect of scaling map will cause wrong map resolution after zooming in/out
-					 * for following devices:
-					 * 240x320 (e.g. HTC Tattoo)
-					 * 480x800(e.g. Acer Liquid, Google Nexus One)
-					 * 480x854 (e.g. Motorola Droid)
-					 */
-					doDraw(canvas, paint, false);
-				}
+				invokeDoDraw(canvas);
+			}
+		}
+		
+		void invokeDoDraw(Canvas canvas) {
+			int orientation = getResources().getConfiguration().orientation;
+			int height = 480;
+			if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+				height = 320;
+			}
+			if (this.getHeight() == height-50) {
+				/**
+				 * scale map when zooming in/out
+				 * for 320x480 (e.g. HTC Dream, HTC Magic, HTC Hero, Samsung i7500)
+				 */
+				doDraw(canvas, paint, true);
+			} else {
+				/** 
+				 * don't scale map when zooming in/out
+				 * because the effect of scaling map will cause wrong map resolution after zooming in/out
+				 * for following devices:
+				 * 240x320 (e.g. HTC Tattoo)
+				 * 480x800(e.g. Acer Liquid, Google Nexus One)
+				 * 480x854 (e.g. Motorola Droid)
+				 */
+				doDraw(canvas, paint, false);
 			}
 		}
 		

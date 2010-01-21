@@ -465,26 +465,27 @@ public class BigPlanet extends Activity {
 				goToMyLocation(lat, lon, zoom);
 			} else {
 				// center map
-				if (isFollowMode && !isMapInCenter) {
-					if (currentLocation != null) {
-						Log.i("BP", "%% goToMyLocation");
-						Log.i("BP", "%% "+currentLocation.getProvider()+" "
-								+currentLocation.getLongitude()+", "+currentLocation.getLatitude());
-						isMapInCenter = true;
-						int zoom = PhysicMap.getZoomLevel();
-						double lat = currentLocation.getLatitude();
-						double lon = currentLocation.getLongitude();
-						com.nevilon.bigplanet.core.geoutils.Point p = GeoUtils.toTileXY(lat, lon, zoom);
-						com.nevilon.bigplanet.core.geoutils.Point off = GeoUtils.getPixelOffsetInTile(lat, lon, zoom);
-						mapControl.goTo((int) p.x, (int) p.y, zoom, (int) off.x, (int) off.y);
-					}
-				} else {
-					// receiving leader' GPS
-					mapControl.invalidate();
-				}
+				centerMap();
 			}
 			// refresh the activity title
 			setActivityTitle(BigPlanet.this);
+		}
+	}
+	
+	void centerMap() {
+		if (isFollowMode && !isMapInCenter) {
+			if (currentLocation != null) {
+				isMapInCenter = true;
+				int zoom = PhysicMap.getZoomLevel();
+				double lat = currentLocation.getLatitude();
+				double lon = currentLocation.getLongitude();
+				com.nevilon.bigplanet.core.geoutils.Point p = GeoUtils.toTileXY(lat, lon, zoom);
+				com.nevilon.bigplanet.core.geoutils.Point off = GeoUtils.getPixelOffsetInTile(lat, lon, zoom);
+				mapControl.goTo((int) p.x, (int) p.y, zoom, (int) off.x, (int) off.y);
+			}
+		} else {
+			// receiving leader' GPS
+			mapControl.invalidate();
 		}
 	}
 
@@ -502,6 +503,8 @@ public class BigPlanet extends Activity {
 		super.onConfigurationChanged(newConfig);
 		System.gc();
 		configMapControl(mapControl.getPhysicalMap().getDefaultTile());
+		isMapInCenter = false;
+		centerMap();
 	}
 	
 	@Override
