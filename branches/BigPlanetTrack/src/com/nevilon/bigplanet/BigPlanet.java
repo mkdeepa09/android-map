@@ -154,8 +154,8 @@ public class BigPlanet extends Activity {
 				{
 				   case GpsLocationStoringThread.SUCCESSFULLY:
 					    Intent myIntent = new Intent();
-				        myIntent.setClass(BigPlanet.this, TrackListViewActivity.class);
-				        Log.i("Message", "calling TrackListViewActivity");
+				        myIntent.setClass(BigPlanet.this, TrackTabViewActivity.class);
+				        Log.i("Message", "calling TrackTabViewActivity");
 				        startActivity(myIntent);
 						break;
 						

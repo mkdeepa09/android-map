@@ -135,11 +135,11 @@ public class TrackContentAnalyser {
 					 speed = 0;
 				 }
 				 else
-				 speed = distance / (time/1000);
+				 speed = ((distance / (time/1000))*3600)/1000; // km/hr
 				 //totalDistance = totalDistance + location.distanceTo(next_location);
 				 Log.i("Message","time="+time+"s");
 				 Log.i("Message","distance="+distance+"m");
-				 Log.i("Message","count="+count+",lat="+location.getLatitude()+",lon="+location.getLongitude()+",speed="+speed+"m/s");
+				 Log.i("Message","count="+count+",lat="+location.getLatitude()+",lon="+location.getLongitude()+",speed="+speed+"km/hr");
 				 Log.i("Message","Add speed="+speed+",into arrayList");
 				 speedList.add(speed);
 				

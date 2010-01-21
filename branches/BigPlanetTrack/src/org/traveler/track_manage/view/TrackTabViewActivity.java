@@ -212,7 +212,15 @@ public class TrackTabViewActivity extends TabActivity{
         mTabHost.addTab(mTabHost.newTabSpec("import_tab").setIndicator(getString(R.string.IMPORT_TRACK_MENU),getResources().getDrawable(R.drawable.track_import_icon)).setContent(R.id.myRelativeLayout));
         mTabHost.addTab(mTabHost.newTabSpec("browse_tab").setIndicator(getString(R.string.BROWSE_TRACK_MENU),getResources().getDrawable(R.drawable.track_broswe_icon)).setContent(R.id.broswe_linear_layout));    
         //mTabHost.addTab(mTabHost.newTabSpec("tab_test3").setIndicator("TAB 3").setContent(R.id.textview3));
-        mTabHost.setCurrentTab(0);
+        if(checkIfDBHasTracks())
+        {
+        	mTabHost.setCurrentTab(1);
+        }
+        else
+        {
+        	mTabHost.setCurrentTab(0);
+        }
+        
         TabWidget tw = getTabWidget(); 
         for (int i=0; i<tw.getChildCount(); i++) { 
             RelativeLayout relLayout = (RelativeLayout)tw.getChildAt(i); 
@@ -222,6 +230,7 @@ public class TrackTabViewActivity extends TabActivity{
             tv.setTextSize(12.0f);
 
         } 
+        
 
 		
        
@@ -235,7 +244,25 @@ public class TrackTabViewActivity extends TabActivity{
         
     }
     
-    
+    private boolean checkIfDBHasTracks(){
+    	
+    	BigPlanet.DBAdapter.open();
+		Cursor myCursor = BigPlanet.DBAdapter.getAllTracks();
+		if(myCursor.moveToFirst()){
+			
+			Log.i("Message", "DB has track records");
+			BigPlanet.DBAdapter.close();
+			return true;
+			
+		}
+		else
+		{
+			Log.i("Message", "DB has no track records");
+			BigPlanet.DBAdapter.close();
+			return false;
+		}
+		
+    }
    
     
     @Override
@@ -619,7 +646,7 @@ public class TrackTabViewActivity extends TabActivity{
 						                 );
 						      
 						     
-									fp.parseGPXFile(mListAdapter.getListItems(),mainHandler,getString(R.string.track_source_string));
+									fp.parseGPXFile(mListAdapter.getListItems(),mainHandler,"File");
 								
 							}});
 						builder.create().show();
@@ -644,7 +671,7 @@ public class TrackTabViewActivity extends TabActivity{
 				                 );
 				      
 				     
-							fp.parseGPXFile(mListAdapter.getListItems(),getMainHandler(),getString(R.string.track_source_string));
+							fp.parseGPXFile(mListAdapter.getListItems(),getMainHandler(),"File");
 							
 					}
 					
@@ -793,7 +820,7 @@ public class TrackTabViewActivity extends TabActivity{
 			Log.i("Message", "DB has track records");
 			myTextView.setVisibility(View.GONE);
 			listViewAdapter = new IconAdapter(this,myCursor);
-			listViewAdapter.setTrackSource(getString(R.string.track_source_string));
+			//listViewAdapter.setTrackSource(getString(R.string.track_source_string));
 			myListView.setAdapter(listViewAdapter);
 			
 		}

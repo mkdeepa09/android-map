@@ -1,12 +1,16 @@
 package org.traveler.track_manage.file.database;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.traveler.track_manage.track.TrackContentAnalyser;
 
@@ -45,24 +49,27 @@ public class GpsLocationStoringThread extends Thread {
 		if(this.locationList != null)
 		{
 			Log.i("Message", "Processing GpsLocationList.......");
-		 if(this.locationList.size()>0)	
-		  { 	Location location = this.locationList.get(0); //取第一個Location
-				coordinates_buff.append(location.getLatitude()+","+location.getLongitude()+";");
-				Timestamp timestamp = new Timestamp(location.getTime());
-				this.trackName = timestamp.toString();// use the first time as the track's name
+		 if(this.locationList.size()>1)	
+		  { 	
+			 
+				java.util.Date current=new java.util.Date();
+				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				this.trackName = formatter.format(current);
 				Log.i("Message","trackName="+this.trackName);
-				time_buff.append(timestamp.toString()+";");
-				elevation_buff.append(location.getAltitude()+";");
-			
-				//處理第二個之後的Location
-				for(int i =1;i<this.locationList.size();i++)
+				
+				for(int i =0;i<this.locationList.size();i++)
 				{
-				
-					coordinates_buff.append(locationList.get(i).getLatitude()+","+locationList.get(i).getLongitude()+";");
-					timestamp = new Timestamp(locationList.get(i).getTime());
-					time_buff.append(timestamp.toString()+";");
-					elevation_buff.append(locationList.get(i).getAltitude()+";");
-				
+				    if(locationList.get(i)==null || locationList.get(i).getLatitude()==0 || locationList.get(i).getLongitude()==0)
+				    {
+				    	Log.i("GpsLocationStoringThread", "locationList.get(i)==null || Latitude==0 ||Longitude()==0");
+				    }
+				    else
+				    {	
+				    	coordinates_buff.append(locationList.get(i).getLatitude()+","+locationList.get(i).getLongitude()+";");
+				    	timestamp = new Timestamp(locationList.get(i).getTime());
+				    	time_buff.append(timestamp.toString()+";");
+				    	elevation_buff.append(locationList.get(i).getAltitude()+";");
+				    }
 				
 				}
 				
@@ -111,9 +118,12 @@ public class GpsLocationStoringThread extends Thread {
 					m  = mainThreadHandler.obtainMessage(SUCCESSFULLY, 1, 1, obj);
 		    
            	 		mainThreadHandler.sendMessage(m);
+           	 	    //throw new Exception("Just Test, Not Thing");
 				}
+				
+				
 				else
-					throw new Error("mainHandler is Null");
+					throw new Exception("mainHandler is Null");
 		   	}// end of this.locationList.size()>0
 		   else
 		   {
@@ -126,7 +136,7 @@ public class GpsLocationStoringThread extends Thread {
 			    	 mainThreadHandler.sendMessage(m);
 				 }
 	       	     else
-	       	    	 throw new Error("mainHandler is Null");
+	       	    	 throw new Exception("mainHandler is Null");
 		   }
 			
 		}// end of 	if(this.locationList != null)
@@ -140,37 +150,40 @@ public class GpsLocationStoringThread extends Thread {
 		    	 mainThreadHandler.sendMessage(m);
 			 }
        	     else
-       	    	 throw new Error("mainHandler is Null");
+       	    	 throw new Exception("mainHandler is Null");
 			 Log.e("Error", "LocationList is Null");
 		 }
 		
 		
 	  }
 	  catch(Exception e){
-		  
+		  Log.e("Error", "Save the error message into the file(/sdcard/RMaps/tracks/error_log/error.txt)");
 		    String obj = "Some exceptions occur";
+		   Log.i("GpsLocationStoringThread", "Save the error message into the file(/sdcard/RMaps/tracks/error_log/error.txt)");
+		   try {
+			   File error_file_path = new File("/sdcard/RMaps/tracks/error_log/");
+			   if(!error_file_path.exists())	error_file_path.mkdirs();
+			   File error_file = new File("/sdcard/RMaps/tracks/error_log/error.txt");
+			    
+			   //error_file.mkdir();//BufferedWriter out = new BufferedWriter(new FileWriter("/sdcard/RMaps/tracks/error_log/error.txt"));
+			    PrintWriter pw = new PrintWriter(new FileWriter(error_file));
+			    e.printStackTrace(pw);
+			    pw.close(); 
+			    //out.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+ 
+		   e.printStackTrace();
 		   
 		   if(mainThreadHandler != null)
 		    {
 		       m  = mainThreadHandler.obtainMessage(FAIL, 2, 1, obj);
 		    
-         	  mainThreadHandler.sendMessage(m);
+        	  mainThreadHandler.sendMessage(m);
 		    }
-     	    else
-     		  throw new Error("mainHandler is Null");
-     		
-		   Log.e("Error", "Save the error message into the file(/sdcard/RMaps/tracks/error_log/error.txt)");
-		   try {
-			   
-			    //BufferedWriter out = new BufferedWriter(new FileWriter("/sdcard/RMaps/tracks/error_log/error.txt"));
-			    PrintWriter pw = new PrintWriter(new FileWriter("/sdcard/RMaps/tracks/error_log/error.txt"));
-			    e.printStackTrace(pw);
-			    pw.close(); 
-			    //out.close();
-			} catch (IOException e1) {
-			}
- 
-		   e.printStackTrace();
+    	    else
+    		  throw new Error("mainHandler is Null");
 	  }
 	  finally
 	  {

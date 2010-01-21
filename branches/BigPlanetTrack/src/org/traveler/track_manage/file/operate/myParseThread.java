@@ -267,7 +267,7 @@ public class myParseThread extends Thread {
 		            	
 		                
 		                
-		                
+		            	Log.i("myParseThread", "Track Source="+trackSourceString);
 		                trackDBAdapter.open();
 		                long id;
 		                id = trackDBAdapter.insertTrack(trackName, trackDes, trackCoordinateBuffer.toString(), trackTimeBuffer.toString(), trackElevationBuffer.toString(),consumedTime,totalDistance,averageSpeed,manximumSpeed,trackPointNumber,
