@@ -60,7 +60,7 @@
 <string name="meter_unit">meter</string>
 <string name="point_number_unit">GPS Points</string>
 <string name="source_text">source</string>
-<string name="track_source_string">File</string>
+<string name="track_source_string_file">Source:File</string>
 <string name="import_fail">Fail to import files</string>
 <string name="track_title_string">Track Title</string>
 <string name="track_distance_string">Distance</string>
@@ -69,10 +69,11 @@
 <string name="track_pointNumber_string">GPS Points</string>
 <string name="track_maxSpeed_string">MaxSpeed</string>
 <string name="track_description_string">Description</string>
-<string name="whole_track_information_dialog_title">Track's Complete Information</string>
+<string name="whole_track_information_dialog_title">Track Complete Information</string>
 <string name="whole_track_information_dialog_body">The whole information about the track is as below :</string>
-<string name="speed_unit">meter/second</string>
+<string name="speed_unit">km/hr</string>
 <string name="no_track_description">No Track's Description</string>
 <string name="IMPORT_and_BROWSE_TRACK_MENU">Import/Browse Track</string>
 <string name="kilometer_unit">km</string>
+<string name="track_source_string_gps">Source:GPS</string>
 </resources>

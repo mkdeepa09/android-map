@@ -356,7 +356,7 @@ public class TrackListViewActivity extends ListActivity{
 			
 			//DisplayTitle(myCursor);
 			listViewAdapter = new IconAdapter(this,myCursor);
-			listViewAdapter.setTrackSource(getString(R.string.track_source_string));
+			//listViewAdapter.setTrackSource(getString(R.string.track_source_string));
 			setListAdapter(listViewAdapter);
 		}
 		else

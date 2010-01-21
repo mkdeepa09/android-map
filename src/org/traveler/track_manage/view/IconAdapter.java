@@ -137,12 +137,19 @@ public class IconAdapter extends BaseAdapter {
 		//holder.des.setTextColor(Color.CYAN);
 		
 		//holder.icon.setBackgroundColor(Color.GREEN);
-		String track_source = generateTrackSourceString((String)trackSourceList.get(position));
-		holder.source.setText(track_source);
-		if(((String)trackSourceList.get(position)).equalsIgnoreCase(trackSource))
+		//String track_source = generateTrackSourceString((String)trackSourceList.get(position));
+		String track_source = (String)trackSourceList.get(position);
+		Log.i("IconAdapter", "Track Source="+track_source);
+		if((track_source).equalsIgnoreCase("File"))
+		{
 			trackIcon=BitmapFactory.decodeResource(_ctx.getResources(),R.drawable.track_icon_flag_red );
-		else
+			holder.source.setText(_ctx.getString(R.string.track_source_string_file));
+		}
+		else // source:GPS
+		{
 			trackIcon=BitmapFactory.decodeResource(_ctx.getResources(),R.drawable.track_icon_flag_blue );
+			holder.source.setText(_ctx.getString(R.string.track_source_string_gps));
+		}
 		holder.icon.setImageBitmap(trackIcon);
 		
 		long time = (long)trackConsumedTimeList.get(position);

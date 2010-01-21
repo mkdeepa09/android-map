@@ -54,10 +54,10 @@
 <string name="hr_unit">时</string>
 <string name="min_unit">分</string>
 <string name="sec_unit">秒</string>
-<string name="meter_unit">米</string>
+<string name="meter_unit">公尺</string>
 <string name="point_number_unit">GPS标记点</string>
 <string name="source_text">来源</string>
-<string name="track_source_string">档案</string>
+<string name="track_source_string_file">来源:档案</string>
 <string name="import_fail">汇入失败</string>
 <string name="track_title_string">路径名称</string>
 <string name="track_distance_string">距离</string>
@@ -68,8 +68,9 @@
 <string name="track_description_string">描述</string>
 <string name="whole_track_information_dialog_title">完整路径资讯</string>
 <string name="whole_track_information_dialog_body">此路经相关资讯如下：</string>
-<string name="speed_unit">米/秒</string>
+<string name="speed_unit">公里/小时</string>
 <string name="no_track_description">无路径描述</string>
 <string name="IMPORT_and_BROWSE_TRACK_MENU">汇入/浏览路径</string>
 <string name="kilometer_unit">公里</string>
+<string name="track_source_string_gps">来源:GPS</string>
 </resources>

@@ -81,6 +81,7 @@ public class ImportFileProcessing {
 		myParseThread.setGPXFileDirectory(GPXFileImportPath);
 		//myParseThread.setTrackDBHelper(DBHelper);
 		myParseThread.setTrackDBAdapter(DBAdapter);
+		Log.i("ImportFileProcessing", "Track Source="+trackSource);
 		myParseThread.setTrackSourceString(trackSource);
 		myParseThread.start();
 		

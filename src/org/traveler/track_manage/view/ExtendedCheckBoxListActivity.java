@@ -296,7 +296,7 @@ public class ExtendedCheckBoxListActivity extends Activity {
 						                 );
 						      
 						     
-									fp.parseGPXFile(mListAdapter.getListItems(),getMainHandler(),getString(R.string.track_source_string));
+									fp.parseGPXFile(mListAdapter.getListItems(),getMainHandler(),"File");
 								
 							}});
 						builder.create().show();
@@ -321,7 +321,7 @@ public class ExtendedCheckBoxListActivity extends Activity {
 				                 );
 				      
 				     
-							fp.parseGPXFile(mListAdapter.getListItems(),getMainHandler(),getString(R.string.track_source_string));
+							fp.parseGPXFile(mListAdapter.getListItems(),getMainHandler(),"File");
 						
 						
 						
