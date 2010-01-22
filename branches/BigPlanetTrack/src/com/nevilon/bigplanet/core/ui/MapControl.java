@@ -446,7 +446,7 @@ public class MapControl extends RelativeLayout {
 							
 							if(markers_G_draw && i2 < MarkerManager.markers_G.size()){
 								paint.setColor(Color.BLUE);
-								paint.setStrokeWidth(5);
+								paint.setStrokeWidth(3);
 								List<Marker_G> markers_G = markerManager.getMarkers_G_type(tileX, tileY, z, i2, 1);
 									
 								for (Marker_G marker_G : markers_G) {
@@ -484,7 +484,7 @@ public class MapControl extends RelativeLayout {
 							}
 							if(saveTracks_G_draw && i2 < MarkerManager.saveTracks_G.size()){
 								paint.setColor(Color.GREEN);
-								paint.setStrokeWidth(5);
+								paint.setStrokeWidth(3);
 								List<Marker_G> SaveTracks_G = markerManager.getMarkers_G_type(tileX, tileY, z, i2, 2);
 								for (Marker_G SaveTrack_G : SaveTracks_G) {
 									if(count_Tracks_G == 0){
@@ -523,7 +523,7 @@ public class MapControl extends RelativeLayout {
 							
 							if(markers_DB_draw && i2 < MarkerManager.markers_DB.size()){
 								paint.setColor(Color.CYAN);
-								paint.setStrokeWidth(5);
+								paint.setStrokeWidth(3);
 								List<Marker_G> markers_DB = markerManager.getMarkers_G_type(tileX, tileY, z, i2, 3);
 								for (Marker_G marker_DB : markers_DB) {
 									if(count_DB == 0){
@@ -561,7 +561,7 @@ public class MapControl extends RelativeLayout {
 							}
 							if(markers_leader_draw && i2 <= MarkerManager.markers_leader.size()){
 								paint.setColor(Color.RED);
-								paint.setStrokeWidth(5);
+								paint.setStrokeWidth(3);
 								List<Marker_G> markers_leader = markerManager.getMarkers_G_type(tileX, tileY, z, i2, 4);
 								
 								for (Marker_G marker_leader : markers_leader) {
@@ -665,8 +665,8 @@ public class MapControl extends RelativeLayout {
 							
 					}
 					else{
-						int z3 = z2+2;
-						invokeGoToMyLocation(markers_temp.get(0).place.getLat(), markers_temp.get(0).place.getLon(), z3);
+						//int z3 = z2+2;
+						//invokeGoToMyLocation(markers_temp.get(0).place.getLat(), markers_temp.get(0).place.getLon(), z3);
 						BigPlanet.autoDisplayDB = false;
 						BigPlanet.autoDisplayDBforMarker = true;
 						z2 = 3;
