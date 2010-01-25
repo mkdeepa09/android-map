@@ -1,13 +1,11 @@
 package com.nevilon.bigplanet.core;
 
-
 import com.nevilon.bigplanet.core.storage.SQLLocalStorage;
 
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Point;
-
 
 /**
  * Предназначен для хранения настроек
@@ -38,6 +36,9 @@ public class Preferences {
 	public static final String MAP_SOURCE = "MAP_SOURCE";
 
 	public static final String NETWORK_MODE = "NETWORK_MODE";
+
+	public static final String GPS_OFFSET_X = "GPS_OffsetX";
+	public static final String GPS_OFFSET_Y = "GPS_OffsetY";
 
 	public static void init(Application app) {
 		prefs = app.getSharedPreferences("global", Context.MODE_PRIVATE);
@@ -89,6 +90,18 @@ public class Preferences {
 		return new Point(x, y);
 	}
 
+	public static void putGPSOffset(Point offset) {
+		put(Preferences.GPS_OFFSET_X, offset.x);
+		put(Preferences.GPS_OFFSET_Y, offset.y);
+	}
+
+	public static Point getGPSOffset() {
+		// Taiwan = (0, 0), only China need to set these values
+		int x = prefs.getInt(Preferences.GPS_OFFSET_X, 0);
+		int y = prefs.getInt(Preferences.GPS_OFFSET_Y, 0);
+		return new Point(x, y);
+	}
+
 	public static void putSourceId(int sourceId) {
 		if(sourceId==-1){
 			throw new IllegalArgumentException();
@@ -124,13 +137,12 @@ public class Preferences {
 		if(value.getClass() == Boolean.class){
 			editor.putBoolean(name, (Boolean)value);
 		}
-		if(value.getClass() == String.class){
+		else if(value.getClass() == String.class){
 			editor.putString(name, (String)value);
 		}
-		if(value.getClass() == Integer.class){
+		else if(value.getClass() == Integer.class){
 			editor.putInt(name, ((Integer)value).intValue());
 		}
-		
 		
 		editor.commit();
 		
