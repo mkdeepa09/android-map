@@ -44,9 +44,11 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.nevilon.bigplanet.core.BigPlanetApp;
 import com.nevilon.bigplanet.core.MarkerManager;
@@ -111,6 +113,8 @@ public class BigPlanet extends Activity {
 	
 	private static ImageView scaleImageView;
 
+	private Point myGPSOffset;
+	
 	/**
 	 * Конструктор
 	 */
@@ -173,6 +177,7 @@ public class BigPlanet extends Activity {
 		}
 		
 		if (hasSD) {
+			myGPSOffset = Preferences.getGPSOffset();
 			strSQLiteName = Preferences.getSQLiteName();
 			setActivityTitle(BigPlanet.this);
 		}
@@ -277,7 +282,7 @@ public class BigPlanet extends Activity {
 			// see MapControl zoomPanel.setOnZoomOutClickListener
 			if (intent.getBooleanExtra(MapControl.FIX_ZOOM, false)) {
 				Log.i("BP", "%% "+MapControl.FIX_ZOOM);
-				initializeMap();
+				configMapControl(mapControl.getPhysicalMap().getDefaultTile());
 				onResume();
 			}
 			// center map
@@ -413,7 +418,8 @@ public class BigPlanet extends Activity {
 		sub.add(4, 42, 1, R.string.CACHE_MAP_MENU);
 		sub.add(4, 43, 2, R.string.MAP_SOURCE_MENU);
 		sub.add(4, 44, 3, R.string.SQLiteDB_MENU);
-		sub.add(4, 45, 10, R.string.ABOUT_MENU);
+		sub.add(4, 45, 4, R.string.GPS_OFFSET_MENU);
+		sub.add(4, 49, 10, R.string.ABOUT_MENU);
 
 		return true;
 	}
@@ -541,6 +547,9 @@ public class BigPlanet extends Activity {
 			selectSQLiteDBFile();
 			break;
 		case 45:
+			selectGPSOffset();
+			break;
+		case 49:
 			showAbout();
 			break;
 		}
@@ -695,10 +704,10 @@ public class BigPlanet extends Activity {
 	private final float minDistance = 5; // m
 	
 	class MyLocationListener implements LocationListener {
-		String locationType;
+		String myLocationType;
 		
 		MyLocationListener(String locationType) {
-			this.locationType = locationType;
+			this.myLocationType = locationType;
 		}
 		
 		public void onLocationChanged(Location location) {
@@ -708,24 +717,24 @@ public class BigPlanet extends Activity {
 			goToMyLocation(location, PhysicMap.getZoomLevel());
 			currentLocation = location;
 			inHome = true;
-			locationType = location.getProvider();
+			BigPlanet.locationType = location.getProvider();
 			setActivityTitle(BigPlanet.this);
 			// gpsLocationListener has higher priority than networkLocationListener
-			if (locationType.equals("gps")) {
+			if (myLocationType.equals("gps")) {
 				locationManager.removeUpdates(networkLocationListener);
 			}
 		}
 		
 		public void onProviderDisabled(String provider) {
 			Log.i("Location", provider + " is disabled.");
-			if (locationType.equals("gps")) {
+			if (myLocationType.equals("gps")) {
 				locationManager.requestLocationUpdates(provider, minTime, minDistance, networkLocationListener);
 			}
 		}
 		
 		public void onProviderEnabled(String provider) {
 			Log.i("Location", provider + " is enabled.");
-			if (locationType.equals("gps")) {
+			if (myLocationType.equals("gps")) {
 				locationManager.requestLocationUpdates(provider, minTime, minDistance, gpsLocationListener);
 			} else {
 				locationManager.requestLocationUpdates(provider, minTime, minDistance, networkLocationListener);
@@ -755,8 +764,8 @@ public class BigPlanet extends Activity {
 	}
 
 	private void goToMyLocation(Location location, int zoom) {
-		double lat = location.getLatitude();
-		double lon = location.getLongitude();
+		double lat = location.getLatitude() + myGPSOffset.y*Math.pow(10, -5);
+		double lon = location.getLongitude() + myGPSOffset.x*Math.pow(10, -5);
 		com.nevilon.bigplanet.core.geoutils.Point p = GeoUtils.toTileXY(lat, lon, zoom);
 		com.nevilon.bigplanet.core.geoutils.Point off = GeoUtils.getPixelOffsetInTile(lat, lon, zoom);
 		mapControl.goTo((int) p.x, (int) p.y, zoom, (int) off.x, (int) off.y);
@@ -766,7 +775,7 @@ public class BigPlanet extends Activity {
 		place.setLon(lon);
 		mm.addMarker(place, zoom, true, MarkerManager.MY_LOCATION_MARKER);
 	}
-	
+		
 	/* End of the GPS LocationListener code */
 
 	private void showSearch() {
@@ -1014,6 +1023,127 @@ public class BigPlanet extends Activity {
 		scrollPanel.addView(mainPanel);
 		mSQLiteDBFileDialog.setContentView(scrollPanel);
 		mSQLiteDBFileDialog.show();
+	}
+	
+	private void selectGPSOffset() {
+		final Dialog mGPSOffsetDialog;
+		mGPSOffsetDialog = new Dialog(this);
+		mGPSOffsetDialog.setCancelable(true);
+		mGPSOffsetDialog.setTitle(R.string.GPS_OFFSET_MENU);
+		
+		final LinearLayout mainPanel = new LinearLayout(this);
+		mainPanel.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+				LayoutParams.FILL_PARENT));
+		mainPanel.setOrientation(LinearLayout.VERTICAL);
+		
+		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT,
+				LayoutParams.WRAP_CONTENT);
+
+		final TextView mTextView = new TextView(this);
+		mTextView.setPadding(5, 0, 5, 5);
+		mTextView.setText(R.string.OFFSET_MESSAGE);
+		mainPanel.addView(mTextView);
+		
+		String msg;
+		
+		final TextView mTextViewX = new TextView(this);
+		mTextViewX.setPadding(5, 5, 5, 0);
+		msg = getString(R.string.OFFSET_X).replace("%s", ""+toGPSOffset(0));
+		mTextViewX.setText(msg);
+		mainPanel.addView(mTextViewX);
+		final SeekBar seekBarX = new SeekBar(this);
+		seekBarX.setLayoutParams(params);
+		seekBarX.setPadding(5, 0, 5, 0);
+		seekBarX.setMax(400);
+		seekBarX.setKeyProgressIncrement(1);
+		seekBarX.setProgress((int) (myGPSOffset.x/10 + 200));
+		seekBarX.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress,
+					boolean fromUser) {
+				myGPSOffset.x = (int) ((progress-200) * 10);
+				String msg = getString(R.string.OFFSET_X).replace("%s", ""+toGPSOffset(0));
+				mTextViewX.setText(msg);
+			}
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+			}
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+			}
+		});
+		mainPanel.addView(seekBarX);
+		
+		final TextView mTextViewY = new TextView(this);
+		mTextViewY.setPadding(5, 5, 5, 0);
+		msg = getString(R.string.OFFSET_Y).replace("%s", ""+toGPSOffset(1));
+		mTextViewY.setText(msg);
+		mainPanel.addView(mTextViewY);
+		final SeekBar seekBarY = new SeekBar(this);
+		seekBarY.setLayoutParams(params);
+		seekBarY.setPadding(5, 0, 5, 0);
+		seekBarY.setMax(400);
+		seekBarY.setKeyProgressIncrement(1);
+		seekBarY.setProgress((int) (myGPSOffset.y/10 + 200));
+		seekBarY.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress,
+					boolean fromUser) {
+				myGPSOffset.y = (int) ((progress-200) * 10);
+				String msg = getString(R.string.OFFSET_Y).replace("%s", ""+toGPSOffset(1));
+				mTextViewY.setText(msg);
+			}
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+			}
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+			}
+		});
+		mainPanel.addView(seekBarY);
+		
+		final Button saveButton = new Button(this);
+		saveButton.setText(R.string.SAVE_BUTTON);
+		saveButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				Point savedGPSOffset = new Point(
+						(int) (myGPSOffset.x),
+						(int) (myGPSOffset.y));
+				Preferences.putGPSOffset(savedGPSOffset);
+				goToMyLocation(currentLocation, PhysicMap.getZoomLevel());
+				mGPSOffsetDialog.dismiss();
+			}
+		});
+		mainPanel.addView(saveButton);
+		
+		mGPSOffsetDialog.setContentView(mainPanel);
+		mGPSOffsetDialog.show();
+	}
+	
+	private float toGPSOffset(int type) {
+		float distance;
+		if (type == 0) { // lon
+			Location EndLocation = getLocation(myGPSOffset.x * Math.pow(10, -5), 0);
+			distance = currentLocation.distanceTo(EndLocation);
+			if (myGPSOffset.x < 0)
+				distance = -distance;
+		} else { // lat
+			Location EndLocation = getLocation(0, myGPSOffset.y * Math.pow(10, -5));
+			distance = currentLocation.distanceTo(EndLocation);
+			if (myGPSOffset.y < 0)
+				distance = -distance;
+		}
+		return distance;
+	}
+	
+	private Location getLocation(double latOffset, double lonOffset) {
+		double startLatitude = currentLocation.getLatitude();
+		double startLongitude = currentLocation.getLongitude();
+		Location endLocation = new Location("");
+		endLocation.setLatitude(startLatitude + latOffset);
+		endLocation.setLongitude(startLongitude + lonOffset);
+		return endLocation;
 	}
 	
 	public static void setActivityTitle(Activity activity) {

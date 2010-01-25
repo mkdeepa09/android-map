@@ -52,6 +52,11 @@
     <string name="SELECT_SQLite_DATABASE">Select SQLite DB for saving maps</string>
     <string name="SELECT_SQLite_Folder">The folder %s includes:</string>
     
+    <string name="GPS_OFFSET_MENU">Adjust map offset</string>
+    <string name="OFFSET_MESSAGE">The below moved distances are just estimated values.</string>
+    <string name="OFFSET_X">Shift map east %s m.</string>
+    <string name="OFFSET_Y">Shift map south %s m.</string>
+    
     <string name="DOWNLOAD_MESSAGE_PATTERN">{0} tile(s) of {1} downloaded({2}KB), {3} error(s)</string>
 
     <string name="REGION_RADIUS_TITLE">Select radius of region</string>

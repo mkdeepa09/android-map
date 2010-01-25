@@ -52,6 +52,11 @@
     <string name="SELECT_SQLite_DATABASE">选择SQLite地图资料库</string>
     <string name="SELECT_SQLite_Folder">目录 %s 下包括：</string>
     
+    <string name="GPS_OFFSET_MENU">修正地图偏移</string>
+    <string name="OFFSET_MESSAGE">底下的地图移动距离仅为估计值。</string>
+    <string name="OFFSET_X">地图东移 %s 公尺。</string>
+    <string name="OFFSET_Y">地图南移 %s 公尺。</string>
+    
     <string name="DOWNLOAD_MESSAGE_PATTERN">共 {1} 个地图小档案，\n已检查(或下载) {0} 个 ({2}KB)，\n{3} 个错误。</string>
 
     <string name="REGION_RADIUS_TITLE">选择区域半径</string>

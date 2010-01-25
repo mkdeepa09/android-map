@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -112,7 +113,6 @@ public class MapControl extends RelativeLayout {
 		this.markerManager = markerManager;
 		buildView(width, height, startTile);
 		
-		
 		final Handler updateControlsHandler = new Handler() {
 
 			@Override
@@ -147,7 +147,7 @@ public class MapControl extends RelativeLayout {
 
 		});
 	}
-
+	
 	public int getMapMode() {
 		return mapMode;
 	}
@@ -356,20 +356,19 @@ public class MapControl extends RelativeLayout {
 					tmpBitmap = pmap.getCell(i - 2, j - 2);
 					if (tmpBitmap != null) {
 						isNew = false;
-						cs.drawBitmap(tmpBitmap, (i - 2) * TILE_SIZE
-								+ pmap.getGlobalOffset().x, (j - 2) * TILE_SIZE
-								+ pmap.getGlobalOffset().y, paint);
+						cs.drawBitmap(tmpBitmap, 
+								(i - 2) * TILE_SIZE + pmap.getGlobalOffset().x, 
+								(j - 2) * TILE_SIZE + pmap.getGlobalOffset().y, paint);
 					}
 				} else {
 					if (pmap.scaleFactor == 1) {
-						cs.drawBitmap(CELL_BACKGROUND, (i - 2) * TILE_SIZE
-								+ pmap.getGlobalOffset().x, (j - 2) * TILE_SIZE
-								+ pmap.getGlobalOffset().y, paint);
+						cs.drawBitmap(CELL_BACKGROUND, 
+								(i - 2) * TILE_SIZE + pmap.getGlobalOffset().x, 
+								(j - 2) * TILE_SIZE + pmap.getGlobalOffset().y, paint);
 					} else {
-						cs.drawBitmap(EMPTY_BACKGROUND, (i - 2) * TILE_SIZE
-								+ pmap.getGlobalOffset().x, (j - 2) * TILE_SIZE
-								+ pmap.getGlobalOffset().y, paint);
-
+						cs.drawBitmap(EMPTY_BACKGROUND, 
+								(i - 2) * TILE_SIZE + pmap.getGlobalOffset().x, 
+								(j - 2) * TILE_SIZE + pmap.getGlobalOffset().y, paint);
 					}
 				}
 			}
@@ -381,26 +380,21 @@ public class MapControl extends RelativeLayout {
 				for (int j = 0; j < 7; j++) {
 					if ((i > 1 && i < 5) && ((j > 1 && j < 5))) {
 						RawTile tile = pmap.getDefaultTile();
-						int z =PhysicMap.getZoomLevel();
+						int z = PhysicMap.getZoomLevel();
 						int tileX = tile.x + (i - 2);
 						int tileY = tile.y + (j - 2);
-						List<Marker> markers = markerManager.getMarkers(tileX,
-								tileY, z);
+						List<Marker> markers = markerManager.getMarkers(tileX, tileY, z);
 						for (Marker marker : markers) {
 							cs.drawBitmap(marker.getMarkerImage().getImage(),
-									(i - 2)
-											* TILE_SIZE
-											+ pmap.getGlobalOffset().x
-											+ (int) marker.getOffset().x
-											- marker.getMarkerImage()
-													.getOffsetX(), (j - 2)
-											* TILE_SIZE
-											+ pmap.getGlobalOffset().y
-											+ (int) marker.getOffset().y
-											- marker.getMarkerImage()
-													.getOffsetY(), paint);
+									(i - 2) * TILE_SIZE 
+									+ pmap.getGlobalOffset().x
+									+ (int) marker.getOffset().x
+									- marker.getMarkerImage().getOffsetX(), 
+									(j - 2) * TILE_SIZE 
+									+ pmap.getGlobalOffset().y
+									+ (int) marker.getOffset().y
+									- marker.getMarkerImage().getOffsetY(), paint);
 						}
-
 					}
 				}
 			}
@@ -452,7 +446,12 @@ public class MapControl extends RelativeLayout {
 		@Override
 		protected void onDraw(Canvas canvas) {
 			super.onDraw(canvas);
-			if (this.getHeight() == 480-50) {
+			int orientation = getResources().getConfiguration().orientation;
+			int height = 480;
+			if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+				height = 320;
+			}
+			if (this.getHeight() == height-50) {
 				// scale map when zooming in/out
 				// for 320x480 (e.g. HTC Magic, Hero)
 				doDraw(canvas, paint, true);
