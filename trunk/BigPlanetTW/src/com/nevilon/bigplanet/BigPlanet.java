@@ -781,7 +781,7 @@ public class BigPlanet extends Activity {
 	private void showSearch() {
 		onSearchRequested();
 	}
-
+	
 	private void showAbout() {
 		String about = getString(R.string.ABOUT_MESSAGE).replace("{url}", getString(R.string.ABOUT_URL));
 		TextView tv = new TextView(this);
@@ -977,8 +977,16 @@ public class BigPlanet extends Activity {
 		File mapsDBFolder = new File(SQLLocalStorage.DATA_PATH);
 		if (mapsDBFolder.exists() && mapsDBFolder.isDirectory()) {
 			String[] files = mapsDBFolder.list();
+//			for (int i = 0; i < files.length; i++) {
+//				Log.i("sqlitedb", files[i]);
+//			}
+			java.util.Arrays.sort(files);
+			String[] filesSorted = new String[files.length];
 			for (int i = 0; i < files.length; i++) {
-				File sqliteFile = new File(mapsDBFolder, files[i]);
+				filesSorted[files.length-1-i] = files[i];
+			}
+			for (int i = 0; i < filesSorted.length; i++) {
+				File sqliteFile = new File(mapsDBFolder, filesSorted[i]);
 				if (sqliteFile.isFile()) {
 					String strSQLiteName = sqliteFile.getName();
 					if (strSQLiteName.endsWith(".sqlitedb")) {
