@@ -4,7 +4,7 @@ import android.app.Application;
 
 public class BigPlanetApp extends Application {
 
-	public static final boolean isDemo = false;
+	public static boolean isDemo = false;
 	
 	public BigPlanetApp() {
 		super();

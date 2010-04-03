@@ -2,12 +2,10 @@
 <resources>
       
    <string name="try_demo_title">试用版的限制</string>
-   <string name="try_demo_message">抱歉，在试用版中您不能下载此缩放层级的地图。 
-   请至 Android Market 购买完整版。</string> 
+   <string name="try_demo_message">抱歉，在试用版中您不能执行此功能。</string> 
     
    <string name="this_is_demo_title">试用版</string>
-   <string name="this_is_demo_message">此为试用版，所以您必须等待7秒后才能使用该程式。 
-   如果您不想等待，请至  Android Market 购买完整版。</string> 
+   <string name="this_is_demo_message">此为试用版，所以您必须等待7秒后才能使用该程式。</string> 
     
     <string name="search_label">地点</string>
     <string name="search_hint">例如，北京</string>

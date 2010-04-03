@@ -297,10 +297,12 @@ public class MapControl extends RelativeLayout {
 
 	public synchronized void updateScreen() {
 		if (main != null) {
-			main.postInvalidate();
-			Intent i = new Intent("com.nevilon.bigplanet.INTENTS.UpdateScreen");
-			i.putExtra("FixZoomOut", false);
-			context.sendBroadcast(i);
+			if (BigPlanet.verify()) {
+				main.postInvalidate();
+				Intent i = new Intent("com.nevilon.bigplanet.INTENTS.UpdateScreen");
+				i.putExtra("FixZoomOut", false);
+				context.sendBroadcast(i);
+			}
 		}
 	}
 
@@ -399,7 +401,6 @@ public class MapControl extends RelativeLayout {
 				}
 			}
 		}
-
 		if (isScalable) {
 			Matrix matr = new Matrix();
 			matr.postScale((float) pmap.scaleFactor, (float) pmap.scaleFactor,
@@ -440,7 +441,6 @@ public class MapControl extends RelativeLayout {
 		public Panel(Context context) {
 			super(context);
 			paint = new Paint();
-
 		}
 
 		@Override

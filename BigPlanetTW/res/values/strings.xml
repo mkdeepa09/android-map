@@ -2,12 +2,10 @@
 <resources>
       
    <string name="try_demo_title">Limitation of demo version</string>
-   <string name="try_demo_message">Sorry, You can't download map with this zoom level
-		 in demo version. Please, purchase full version at Android Market.</string> 
+   <string name="try_demo_message">Sorry, You cannot do it in demo version.</string> 
     
    <string name="this_is_demo_title">Demo version</string>
-   <string name="this_is_demo_message">This is demo version, so you must wait 7 sec before start. 
-   If you don't want to wait, you can purchase full version at Android Market.</string> 
+   <string name="this_is_demo_message">This is demo version, so you must wait 7 seconds before start.</string> 
     
     <string name="search_label">Place Name</string>
     <string name="search_hint">e.g., Taipei</string>
