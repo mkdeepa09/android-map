@@ -1,6 +1,8 @@
 package com.nevilon.bigplanet;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,6 +58,7 @@ import com.nevilon.bigplanet.core.PhysicMap;
 import com.nevilon.bigplanet.core.Place;
 import com.nevilon.bigplanet.core.Preferences;
 import com.nevilon.bigplanet.core.RawTile;
+import com.nevilon.bigplanet.core.SHA1Hash;
 import com.nevilon.bigplanet.core.db.DAO;
 import com.nevilon.bigplanet.core.db.GeoBookmark;
 import com.nevilon.bigplanet.core.geoutils.GeoUtils;
@@ -82,6 +85,8 @@ public class BigPlanet extends Activity {
 
 	private Toast textMessage;
 
+	public static String identifier = null;
+	
 	/*
 	 * Графический движок, реализующий карту
 	 */
@@ -170,7 +175,7 @@ public class BigPlanet extends Activity {
 			scaleImageView.setImageResource(R.drawable.scale1);
 			mapControl.addView(scaleImageView);
 			
-			if (BigPlanetApp.isDemo) {
+			if (!verify(identifier)) {
 				showTrialDialog(R.string.this_is_demo_title, R.string.this_is_demo_message);
 			}
 			setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
@@ -448,6 +453,7 @@ public class BigPlanet extends Activity {
 		height = height - 50; // minus the space of the status bar
 		
 		if (mapControl == null) {
+			identifier = getString(R.string.ABOUT_URL);
 			mapControl = new MapControl(this, width, height, tile, mm);
 			mapControl.setOnMapLongClickListener(new OnMapLongClickListener() {
 
@@ -544,7 +550,11 @@ public class BigPlanet extends Activity {
 			selectMapSource();
 			break;
 		case 44:
-			selectSQLiteDBFile();
+			if (BigPlanetApp.isDemo) {
+				showTrialDialog(R.string.try_demo_title, R.string.try_demo_message);
+			} else {
+				selectSQLiteDBFile();
+			}
 			break;
 		case 45:
 			selectGPSOffset();
@@ -623,6 +633,25 @@ public class BigPlanet extends Activity {
 			}
 
 		}.start();
+	}
+
+	public static boolean verify() {
+		return verify(identifier);
+	}
+	
+	private static boolean verify(String key) {
+		boolean result = false;
+		try {
+			if (!SHA1Hash.encode(key).equalsIgnoreCase("671b82291403cf7bc530b40bb302dd08fb4a3ce0")) {
+				BigPlanetApp.isDemo = true;
+				result = true;
+			}
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return !result;
 	}
 
 	/* Begin of the GPS LocationListener code */
@@ -791,24 +820,38 @@ public class BigPlanet extends Activity {
 		tv.setGravity(Gravity.CENTER);
 		tv.setText(about);
 		tv.setTextSize(12f);
+		PackageInfo info;
 		String versionName = "";
+		String packageNum = "";
 		try {
 			String PACKAGE_NAME = BigPlanet.class.getPackage().getName();
-			PackageInfo info = getPackageManager().getPackageInfo(PACKAGE_NAME, 0);
+			info = getPackageManager().getPackageInfo(PACKAGE_NAME, 0);
 			versionName = info.versionName;
+			packageNum = SHA1Hash.encode(info.packageName);
+			packageNum = packageNum.substring(packageNum.length()-4);
 		} catch (PackageManager.NameNotFoundException e) {
-	    }	
-		new AlertDialog.Builder(this).setTitle(getString(R.string.ABOUT_TITLE)+" "+versionName)
+			e.printStackTrace();
+	    } catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		try {
+			if (Integer.parseInt(packageNum)==8435) {
+				new AlertDialog.Builder(this).setTitle(getString(R.string.ABOUT_TITLE)+" "+versionName)
 				.setView(tv).setIcon(R.drawable.globe).setPositiveButton(
 						R.string.OK_LABEL,
 						new DialogInterface.OnClickListener() {
-
+	
 							public void onClick(DialogInterface dialog,
 									int whichButton) {
-
+	
 							}
-
+	
 						}).show();
+			}
+		} catch (NumberFormatException e) {
+		}
 	}
 
 	private void showAllGeoBookmarks() {
