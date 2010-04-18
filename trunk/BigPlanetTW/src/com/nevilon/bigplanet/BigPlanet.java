@@ -27,6 +27,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.text.util.Linkify;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -117,8 +118,10 @@ public class BigPlanet extends Activity {
 	public static RelativeLayout mAutoFollowRelativeLayout;
 	
 	private static ImageView scaleImageView;
-
+	
 	private Point myGPSOffset;
+	
+	public static float density;
 	
 	/**
 	 * Конструктор
@@ -322,6 +325,10 @@ public class BigPlanet extends Activity {
 		super.onConfigurationChanged(newConfig);
 		System.gc();
 		configMapControl(mapControl.getPhysicalMap().getDefaultTile());
+		if (isFollowMode && currentLocation != null)
+			goToMyLocation(currentLocation, PhysicMap.getZoomLevel());
+		else
+			mapControl.updateScreen();
 	}
 	
 	@Override
@@ -445,12 +452,13 @@ public class BigPlanet extends Activity {
 	private void configMapControl(RawTile tile) {
 		WindowManager wm = this.getWindowManager();
 		Display display = wm.getDefaultDisplay();
-		int height = display.getHeight();
 		int width = display.getWidth();
-//		if(height==480){
-//			height =430;
-//		}
+		int height = display.getHeight();
 		height = height - 50; // minus the space of the status bar
+		
+		DisplayMetrics dm = new DisplayMetrics();
+		wm.getDefaultDisplay().getMetrics(dm);
+		density = dm.density;
 		
 		if (mapControl == null) {
 			identifier = getString(R.string.ABOUT_URL);

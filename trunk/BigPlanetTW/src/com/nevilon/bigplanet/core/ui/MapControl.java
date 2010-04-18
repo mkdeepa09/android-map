@@ -4,7 +4,6 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -446,12 +445,12 @@ public class MapControl extends RelativeLayout {
 		@Override
 		protected void onDraw(Canvas canvas) {
 			super.onDraw(canvas);
-			int orientation = getResources().getConfiguration().orientation;
-			int height = 480;
-			if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-				height = 320;
-			}
-			if (this.getHeight() == height-50) {
+			/*
+			 *   High density (240), hdpi : 1.5
+			 * Medium density (160), ldpi : 1
+			 *    Low density (120), mdpi : 0.75
+			 */
+			if (BigPlanet.density == 1) {
 				// scale map when zooming in/out
 				// for 320x480 (e.g. HTC Magic, Hero)
 				doDraw(canvas, paint, true);
