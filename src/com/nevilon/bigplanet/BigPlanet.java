@@ -22,7 +22,6 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Proxy;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -170,14 +169,7 @@ public class BigPlanet extends Activity {
 			if (!mapsDBFolder.exists())
 				mapsDBFolder.mkdirs();
 			mapsDBFolder = null;
-			
-			String proxyHost = Proxy.getDefaultHost();
-			int proxyPort = Proxy.getDefaultPort();
-			if (proxyHost != null && proxyPort != -1) { 
-				System.setProperty("http.proxyHost", proxyHost);
-				System.setProperty("http.proxyPort", Integer.toString(proxyPort));
-				Log.i("Proxy", proxyHost+":"+proxyPort);
-			}
+
 			initializeMap();
 			/* Create a ImageView with a auto-follow icon. */
 			mapControl.addView(mAutoFollowRelativeLayout); // We can just run it once.
